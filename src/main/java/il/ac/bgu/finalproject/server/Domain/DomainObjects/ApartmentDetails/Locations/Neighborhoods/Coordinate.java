@@ -1,29 +1,29 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.Neighborhoods;
 
 public class Coordinate {
-    private double Longitude;
-    private double Latitude;
+    private double longitude;
+    private double latitude;
 
     public Coordinate(){}
     public Coordinate(double longitude, double latitude) {
-        Longitude = longitude;
-        Latitude = latitude;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public double getLongitude() {
-        return Longitude;
+        return longitude;
     }
 
     public void setLongitude(double longitude) {
-        Longitude = longitude;
+        this.longitude = longitude;
     }
 
     public double getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(double latitude) {
-        Latitude = latitude;
+        this.latitude = latitude;
     }
 
 
