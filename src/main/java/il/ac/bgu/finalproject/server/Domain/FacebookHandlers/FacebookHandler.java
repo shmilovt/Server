@@ -4,6 +4,8 @@ import com.restfb.*;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
 import com.restfb.types.Post;
+import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -34,14 +36,19 @@ public class FacebookHandler {
     public static void GetFeed(int sinceWeeks,String groupId) {
         long sinceDate = DateToUnixTime(GetDateOfNumOfWeeksBefore(sinceWeeks));
         Connection<Post> postFeed = fbClient.fetchConnection(groupId + "/feed", Post.class, Parameter.with("since", sinceDate), Parameter.with("limit", 100));
-
+        DataBaseConnection dbConn = new DataBaseConnection();
+        List<String> post;
         for (List<Post> postPage : postFeed)
             for (Post apost : postPage) {
-                // here to call IsExist?
-                // if y
-                // here to call IsEdited?
-                // if n
-                // add
+                post=dbConn.getPost(apost.getId());
+                if(post!=null) {
+                    if (post.get(2).compareTo(apost.getMessage()) != 0) {
+                        dbConn.update(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
+                        //send to nlp
+                    }
+                }
+                else
+                    dbConn.addPost(apost.getId(),apost.getUpdatedTime().toString(),apost.getMessage());
                 if (apost.getMessage() != null)
                     System.out.println(apost.getMessage());
             }
@@ -56,6 +63,7 @@ public class FacebookHandler {
 
     public static void IsDeleted(List<String> ids)
     {
+        DataBaseConnection dbConn = new DataBaseConnection();
         try {
             fbClient.fetchObjects(ids, JsonObject.class, Parameter.with("fields", "id"));
         }catch(FacebookOAuthException e)
@@ -63,15 +71,11 @@ public class FacebookHandler {
             if(e.getErrorCode()==803)
             {
                 ids.remove(GetIdFromExceptionMessage(e.getMessage()));
-                // call to procedure to delete from database.
+                dbConn.deletePost(GetIdFromExceptionMessage(e.getMessage()));
                 IsDeleted(ids);
             }
         }
     }
 }
-
-
 // DO WE NEED CACHE?
 // will we have all ids in collection? or i have to req from DB?
-
-
