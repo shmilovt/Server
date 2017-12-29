@@ -36,18 +36,19 @@ import java.util.List;
 
 public class NLPImp  implements NLPInterface{
 
-    public static int extractPhoneNumber(String str) {
-        //Pattern p1 = Pattern.compile("0\\d\\s*-?\\s*\\d{7}||0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4}");
-        //Pattern p = Pattern.compile("0\\d{8}||05\\d{8}||05\\d{1}\\s*-\\s*\\d{3}\\s*-\\s*\\d{4}||05\\d{1}\\s*-\\s*\\d{7}||0\\d{1}\\s*-\\s*\\d{7}");
-        Pattern p = Pattern.compile("[^\\d\\s]*0[2346789]\\s*-?\\s*\\d{7}[^\\d\\s]*||[^\\d\\s]*0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4}[^\\d\\s]*");
+    public static List<String> extractPhoneNumber(String str) {
+        List<String> phoneArray= new ArrayList<String>();
+        Pattern p = Pattern.compile("(0[2346789]\\s*-?\\s*\\d{7}|0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4})");
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            //System.out.println(m.group());
-            System.out.println("Phone Number: "+m.group().replaceAll("[\\D]", ""));
-            return m.end();
+        int count=0;
+        String temp;
+        while(m.find()) {
+            count++;
+            temp=str.substring(m.start(),m.end());
+            phoneArray.add(temp.replaceAll("\\D",""));
+            System.out.println("Phone Number: "+count+")  "+temp.replaceAll("\\D",""));
         }
-        return 0;
+        return phoneArray;
     }
 
     public static int extractAddress(String str, List<String> streets) {
@@ -69,90 +70,90 @@ public class NLPImp  implements NLPInterface{
         return 0;
     }
 
-    public static int extractStreetName(String str, List<String> streets) {
-        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)");
+    public static String extractStreetName(String str, List<String> streets) {
+        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)([^\\d\\s]*)");
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
+        boolean b = m.lookingAt();
         if (b && (streets.contains(m.group()) || streets.contains("" + m.group(1) + m.group(2) + m.group(5) + m.group(4) + m.group(3)) ||
                 streets.contains("" + m.group(3) + m.group(2) + m.group(5) + m.group(4) + m.group(1)) ||
                 streets.contains("" + m.group(3) + m.group(2) + m.group(1) + m.group(4) + m.group(5)) ||
                 streets.contains("" + m.group(5) + m.group(2) + m.group(1) + m.group(4) + m.group(3)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(3) + m.group(4) + m.group(1)) ||
-                streets.contains("" + m.group(1) + m.group(2) + m.group(5)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(5)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(1)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(3)))) {
-            System.out.println(m.group());
-            return m.end();
-
+                streets.contains("" + m.group(5) + m.group(2) + m.group(3) + m.group(4) + m.group(1)))) {
+            String temp = "" + m.group(1) + m.group(2) + m.group(3) + m.group(4) + m.group(5);
+            return temp;
         }
-        if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(3)) ||
+        else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(5)) ||
+                streets.contains("" + m.group(5) + m.group(2) + m.group(1)))) {
+            String temp = "" + m.group(1) + m.group(2) + m.group(5);
+            return temp;
+        }
+        else if (b && (streets.contains("" + m.group(5) + m.group(2) + m.group(3)) ||
+                streets.contains("" + m.group(3) + m.group(2) + m.group(5)))) {
+            String temp = "" + m.group(3) + m.group(2) + m.group(5);
+            return temp;
+        }
+        else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(3)) ||
                 streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
             String temp = "" + m.group(1) + m.group(2) + m.group(3);
-            System.out.println(temp);
-            return temp.length();
+            return temp;
         }
-        p = Pattern.compile("(\\S+)(\\s)(\\S+)");
+        p = Pattern.compile("(\\S+)(\\s)(\\S+)([^\\d\\s]*)");
         m = p.matcher(str);
-        b = m.matches();
+        b = m.lookingAt();
         if (b && (streets.contains(m.group()) || streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            System.out.println(m.group());
-            return m.end();
-
+            return m.group(1) + m.group(2) + m.group(3);
         }
-        p = Pattern.compile("\\S+");
+        p = Pattern.compile("(\\S+)([^\\d\\s]*)");
         m = p.matcher(str);
-        b = m.matches();
-        if (b && streets.contains(m.group())) {
-            System.out.println(m.group());
-            return m.end();
-
+        b = m.lookingAt();
+        if (b && streets.contains(m.group(1))) {
+            return m.group(1);
         }
-        return 0;
+        return "";
     }
 
-    public static int extractStreetNameNumber(String str, List<String> streets) {
-        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)");
+
+    public static String extractStreetNameNumber(String str, List<String> streets) {
+        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)"); //([^\d\s]*)
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
+        boolean b = m.lookingAt();
+        String temp;
         if (b && (streets.contains(m.group()) || streets.contains("" + m.group(1) + m.group(2) + m.group(5) + m.group(4) + m.group(3)) ||
                 streets.contains("" + m.group(3) + m.group(2) + m.group(5) + m.group(4) + m.group(1)) ||
                 streets.contains("" + m.group(3) + m.group(2) + m.group(1) + m.group(4) + m.group(5)) ||
                 streets.contains("" + m.group(5) + m.group(2) + m.group(1) + m.group(4) + m.group(3)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(3) + m.group(4) + m.group(1)) ||
-                streets.contains("" + m.group(1) + m.group(2) + m.group(5)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(1))
-                //streets.contains(""+m.group(3)+m.group(2)+m.group(5))||
-                //streets.contains(""+m.group(5)+m.group(2)+m.group(3))     we will see them soon
-        )) {
-            System.out.println("The Address Is: "+m.group());
-            return m.end();
-
-        }
-        if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(3)) ||
+                streets.contains("" + m.group(5) + m.group(2) + m.group(3) + m.group(4) + m.group(1)))) {
+            temp = "" + m.group(1) + m.group(2)+ m.group(3) + m.group(4) + m.group(5)+ m.group(6);
+            return temp;
+        } else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(5)) ||
+                streets.contains("" + m.group(5) + m.group(2) + m.group(1)))) {
+            temp = "" + m.group(1) + m.group(2) + m.group(5)+ m.group(6);
+            return temp;
+        } else if (b && (streets.contains("" + m.group(5) + m.group(2) + m.group(3)) ||
+                streets.contains("" + m.group(3) + m.group(2) + m.group(5)))) {
+            temp = "" + m.group(3) + m.group(2) + m.group(5)+ m.group(6);
+            return temp;
+        } else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(3)) ||
                 streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            String temp = "" + m.group(1) + m.group(2) + m.group(3) + m.group(6);
-            System.out.println("The Address Is: "+temp);
-            return temp.length();
+            temp = "" + m.group(1) + m.group(2) + m.group(3)+ m.group(6);
+            return temp;
         }
-        p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s?\\d{1,3})");
+        p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)");
         m = p.matcher(str);
-        b = m.matches();
+        b = m.lookingAt();
         if (b && (streets.contains(m.group()) || streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            System.out.println("The Address Is: "+m.group());
-            return m.end();
-
+            temp = "" + m.group(1) + m.group(2) + m.group(3)+ m.group(4);
+            return temp;
         }
-        p = Pattern.compile("(\\S+)(\\s?\\d{1,3})");
+        p = Pattern.compile("(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)");
         m = p.matcher(str);
-        b = m.matches();
+        b = m.lookingAt();
         if (b && streets.contains(m.group(1))) {
-            System.out.println("The Address Is: "+m.group());
-            return m.end();
-
+            return m.group(1)+m.group(2);
         }
-        return 0;
+        return "";
     }
+
 
     public static int extractStreetCombine2(String str, List<String> streets) {
         //Pattern p4 = Pattern.compile("(ב?רחוב||כתובת):?\\s?.*");
@@ -261,140 +262,6 @@ public class NLPImp  implements NLPInterface{
             return m.end();
         }
         return 0;
-    }
-
-    public static void workOnAPost(String postText, List<String> streets) {
-        if (postText != null) {
-            String temp1;
-            String temp2;
-            String tempPre;
-            boolean cont = true;
-            temp1 = postText;
-            int s;
-            int index;
-            int counter = 0;
-            //while (cont || temp1.length() > 0) {
-
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractPhoneNumber(temp2);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    System.out.println("---> temp2.substring(s) while  s= " + s);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counterPhoneNumber= " + counter);
-
-            counter = 0;
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractStreetNameNumber(temp2, streets);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counter= " + counter);
-
-            counter = 0;
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractStreetName(temp2, streets);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counter= " + counter);
-
-            counter = 0;
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractStreetName(temp2, streets);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counter= " + counter);
-
-            counter = 0;
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractNeighborhood(temp2);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counter= " + counter);
-
-            counter = 0;
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractNRooms(temp2);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counter= " + counter);
-
-            counter = 0;
-            temp2 = temp1;
-            index = 0;
-            while (temp2.length() > 0) {
-                s = extractPrices(temp2);
-                if (s == 0) {
-                    temp2 = temp2.substring(1);
-                    index = index + 1;
-                } else {
-                    counter++;
-                    tempPre = temp1.substring(0, index);
-                    temp2 = temp2.substring(s);
-                    temp1 = tempPre + temp2;
-                }
-            }
-            //System.out.println("counter= " + counter);
-
-        }
     }
 
 
@@ -518,9 +385,44 @@ public class NLPImp  implements NLPInterface{
         }
     }
 
+
+    public static void workOnAPost(String postText, List<String> streets) {
+        if (postText != null) {
+            postText=postText.replaceAll("\\n"," ");
+            postText=postText.replaceAll("[,;'\"]","");
+            String s;
+            int num;
+
+            String line= postText;
+            /*if (extractStreetNameNumberNM(line,streets))
+                extractStreetNameNM(line,streets);
+            extractPrices(line);
+            extractNeighborhood(line);
+            extractNRooms(line);
+            */
+            ///*
+            extractPhoneNumber(line);
+            while (line.length() > 0) {
+                if ((s=extractStreetNameNumber(line, streets)) == "") {
+                    if ((s=extractStreetName(line, streets))=="") {
+                        line = line.substring(1);
+                    }else {
+                        System.out.println("extractStreetName: "+s);
+                        line = line.substring(s.length());
+                    }
+                }else {
+                    System.out.println("extractStreetName+Number: "+s);
+                    line = line.substring(s.length());
+                }
+            }
+        }
+    }
+
+
     @Override
     public void extractApartment(String str) {
-
+        System.out.println("NLP Results:");
+        workOnAPost(str ,loadStreets());
     }
 
     public static class FacebookHandler {

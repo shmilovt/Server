@@ -6,7 +6,7 @@ import java.util.List;
 
 public class DataBaseConnection {
 
-    private Connection conn = null;
+    private static Connection conn = null;
 
     public void connect()
     {
@@ -26,7 +26,7 @@ public class DataBaseConnection {
                 conn.close();
             }
         } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+            //System.out.println(ex.getMessage());
         }
     }
 
@@ -35,13 +35,13 @@ public class DataBaseConnection {
             String sql = "INSERT INTO Facebook(id,date,message) VALUES(?,?,?)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, "123123123");
-            pstmt.setString(2, "3123123123");
-            pstmt.setString(3, "DASDASDAS");
+            pstmt.setString(1, id);
+            pstmt.setString(2, date);
+            pstmt.setString(3, message);
             pstmt.executeUpdate();
             //System.out.println("Added");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
     }
 
@@ -59,9 +59,9 @@ public class DataBaseConnection {
 
             // update
         pstmt.executeUpdate();
-        System.out.println("update done");
+       // System.out.println("update done");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
         }
     }
 
@@ -73,22 +73,22 @@ public class DataBaseConnection {
     public List<String> getPost(String id) {
         try {
             List<String> post = new LinkedList<String>();
-            String sql = "SELECT * FROM Facebook where id =" +id;
+            String sql = "SELECT * FROM Facebook where id =" + "'" + id + "'";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
             post.add(rs.getString(1));
             post.add(rs.getString(2));
             post.add(rs.getString(3));
-            System.out.println(rs.getString(3));
-
+            //System.out.println(rs.getString(3));
             return post;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //System.out.println(e.getMessage());
             return null;
         }
     }
 
     public void deletePost(String id) {
+      //  System.out.println("Hello deletePost");
         String sql = "DELETE FROM facebook WHERE id = ?";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -96,20 +96,36 @@ public class DataBaseConnection {
             pstmt.executeUpdate();
         }
         catch(SQLException e){
+           // System.out.println("Hello deletePost failed");
+
+        }
+    }
+
+    /***
+     * @return null if there is no posts in DB or List<String> of posts else
+     */
+    public List<String> GetAllPostsId() {
+        String sql = "SELECT id FROM facebook";
+        List<String> post = new LinkedList<String>();
+        try {
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            while (rs.next())
+                post.add(rs.getString(1));
+            return post;
+        }
+        catch(SQLException e){
+            return null;
         }
     }
 
         /**
          * @param args the command line arguments
          */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
-        //a.getPost("12313123");
-        //a.update("123123123","ttttt","this is this is");
-        //a.deletePost("123123123");
-        //a.getPost("123123123");
-       // a.disConnect();
     }
 }
 
