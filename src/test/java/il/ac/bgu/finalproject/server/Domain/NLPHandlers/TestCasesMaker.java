@@ -29,7 +29,7 @@ public class TestCasesMaker {
             try {
                 while((line = br.readLine()) != null)
                 {
-                    if(line.equals("********************")){
+                    if(line.equals("********************") || line.equals("******************** ")){
 
                         lst.add(new TestCase<>(temp , new AnalyzedResult()));
                         temp = "";
