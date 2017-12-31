@@ -13,6 +13,7 @@ public class ApartmentDetails {
     private Set<Contact> contacts;
 
 
+
     public ApartmentDetails(){}
     public ApartmentDetails(ApartmentLocation apartmentLocation) {
         this.apartmentLocation = apartmentLocation;

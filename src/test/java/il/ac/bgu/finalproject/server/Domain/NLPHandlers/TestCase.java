@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 
+
 public class TestCase< I, O> {
     private I input;
     private O output;

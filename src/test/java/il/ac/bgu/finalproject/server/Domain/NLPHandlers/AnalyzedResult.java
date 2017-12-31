@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+
 public class AnalyzedResult {
     private String street = "";
     private String neighborhood = "" ;

@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 import java.util.List;
 import java.util.Set;
 
+
 public class ApartmentDetailsDTO {
     private ApartmentLocationDTO apartmentLocation;
     private double cost;

@@ -112,6 +112,7 @@ public class NLPImpTest {
 
 
 
+
     @Test
     public void extractApartmentTest_Size(){
         List<AssertionError> errors = new ArrayList<>();
