@@ -8,6 +8,7 @@ import java.util.List;
 public class ApartmentDetails {
     private ApartmentLocation apartmentLocation;
     private double cost;
+    private double size;
     private List<Contact> contacts;
 
 
@@ -15,6 +16,7 @@ public class ApartmentDetails {
     public ApartmentDetails(ApartmentLocation apartmentLocation) {
         this.apartmentLocation = apartmentLocation;
         this.cost = -1;
+        this.size = -1;
         contacts = new ArrayList<>();
     }
 
@@ -22,6 +24,7 @@ public class ApartmentDetails {
         this.apartmentLocation = apartmentLocation;
         this.contacts = contacts;
         this.cost = -1;
+        this.size = -1;
 
     }
 
@@ -29,6 +32,14 @@ public class ApartmentDetails {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
+        this.size = -1;
+    }
+
+    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, double size, List<Contact> contacts) {
+        this.apartmentLocation = apartmentLocation;
+        this.cost = cost;
+        this.contacts = contacts;
+        this.size = size;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -54,4 +65,13 @@ public class ApartmentDetails {
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
+
+    public double getSize() {
+        return size;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
+    }
+
 }

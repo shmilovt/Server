@@ -7,6 +7,7 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.types.Post;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
 
 import java.nio.file.*;
 import java.util.Calendar;
@@ -420,9 +421,11 @@ public class NLPImp  implements NLPInterface{
 
 
     @Override
-    public void extractApartment(String str) {
+    public ApartmentDetails extractApartment(String str) {
         System.out.println("NLP Results:");
         workOnAPost(str ,loadStreets());
+
+        return new ApartmentDetails();
     }
 
     public static class FacebookHandler {
