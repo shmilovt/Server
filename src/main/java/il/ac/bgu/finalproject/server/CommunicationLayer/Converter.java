@@ -13,7 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Converter {
 
@@ -26,8 +28,8 @@ public class Converter {
         ApartmentLocationDTO apartmentLocationDTO = convertToDTO(apartmentDetails.getApartmentLocation());
         double cost = apartmentDetails.getCost();
 
-        List<ContactDTO> contactDTOList = new ArrayList<>();
-        List<Contact> contactList = apartmentDetails.getContacts();
+        Set<ContactDTO> contactDTOList = new HashSet<>();
+        Set<Contact> contactList = apartmentDetails.getContacts();
         for(Contact contact : contactList ){
             contactDTOList.add(new ContactDTO(contact.getName(),contact.getPhone()));
         }

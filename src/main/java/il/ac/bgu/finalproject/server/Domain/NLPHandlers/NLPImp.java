@@ -47,7 +47,8 @@ public class NLPImp  implements NLPInterface{
             count++;
             temp=str.substring(m.start(),m.end());
             phoneArray.add(temp.replaceAll("\\D",""));
-            System.out.println("Phone Number: "+count+")  "+temp.replaceAll("\\D",""));
+            //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
+           // System.out.println("Phone Number: "+count+")  "+temp.replaceAll("\\D",""));
         }
         return phoneArray;
     }
@@ -387,7 +388,7 @@ public class NLPImp  implements NLPInterface{
     }
 
 
-    public static void workOnAPost(String postText, List<String> streets) {
+    public static void workOnAPost(String postText, List<String> streets) { //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
         if (postText != null) {
             postText=postText.replaceAll("\\n"," ");
             postText=postText.replaceAll("[,;'\"]","");
@@ -408,11 +409,13 @@ public class NLPImp  implements NLPInterface{
                     if ((s=extractStreetName(line, streets))=="") {
                         line = line.substring(1);
                     }else {
-                        System.out.println("extractStreetName: "+s);
+                        //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
+                        //System.out.println("extractStreetName: "+s);
                         line = line.substring(s.length());
                     }
                 }else {
-                    System.out.println("extractStreetName+Number: "+s);
+                    //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
+                   // System.out.println("extractStreetName+Number: "+s);
                     line = line.substring(s.length());
                 }
             }
@@ -422,7 +425,6 @@ public class NLPImp  implements NLPInterface{
 
     @Override
     public ApartmentDetails extractApartment(String str) {
-        System.out.println("NLP Results:");
         workOnAPost(str ,loadStreets());
 
         return new ApartmentDetails();

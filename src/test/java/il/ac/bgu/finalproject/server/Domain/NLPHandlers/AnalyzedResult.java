@@ -2,18 +2,17 @@ package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Contact;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class AnalyzedResult {
-    private String street;
-    private String neighborhood ;
-    private int buildingNumber;
-    private List<String> phones ;
-    private double cost;
-    private double size;
+    private String street = "";
+    private String neighborhood = "" ;
+    private int buildingNumber = -1 ;
+    private Set<String> phones = new HashSet<>() ;
+    private double cost = -1;
+    private double size = -1;
 
     public AnalyzedResult() {}
 
@@ -22,7 +21,7 @@ public class AnalyzedResult {
         street = "";
         neighborhood = "";
         buildingNumber =  -1;
-        phones  = new ArrayList<>();
+        phones  = new HashSet<>();
         cost = -1;
         size = -1;
 
@@ -36,7 +35,7 @@ public class AnalyzedResult {
                     neighborhood = apartmentDetails.getApartmentLocation().getNeighborhood();
             }
             if(apartmentDetails.getContacts()!=null) {
-                phones = new ArrayList<>();
+                phones = new HashSet<>();
                 for (Contact contact : apartmentDetails.getContacts()) {
                     phones.add(contact.getPhone());
                 }
@@ -46,7 +45,7 @@ public class AnalyzedResult {
         }
     }
 
-    public AnalyzedResult(String street, String neighborhood, int buildingNumber, List<String> phones, double cost, int size) {
+    public AnalyzedResult(String street, String neighborhood, int buildingNumber, Set<String> phones, double cost, int size) {
         this.street = street;
         this.neighborhood = neighborhood;
         this.buildingNumber = buildingNumber;
@@ -97,11 +96,11 @@ public class AnalyzedResult {
         this.buildingNumber = buildingNumber;
     }
 
-    public List<String> getPhones() {
+    public Set<String> getPhones() {
         return phones;
     }
 
-    public void setPhones(List<String> phones) {
+    public void setPhones(Set<String> phones) {
         this.phones = phones;
     }
 
@@ -135,9 +134,9 @@ public class AnalyzedResult {
 
     public String getAddress() {
         return
-                "street "+ street +
-                ", number " + buildingNumber +
-                ", neighbor " + neighborhood ;
+                "street: "+ street +
+                ", building number: " + buildingNumber +
+                ", neighborhood: " + neighborhood ;
 
 
     }

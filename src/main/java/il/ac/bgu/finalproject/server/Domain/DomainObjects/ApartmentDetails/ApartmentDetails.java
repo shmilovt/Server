@@ -2,14 +2,15 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.ApartmentLocation;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ApartmentDetails {
     private ApartmentLocation apartmentLocation;
     private double cost;
     private double size;
-    private List<Contact> contacts;
+    private Set<Contact> contacts;
 
 
     public ApartmentDetails(){}
@@ -17,10 +18,10 @@ public class ApartmentDetails {
         this.apartmentLocation = apartmentLocation;
         this.cost = -1;
         this.size = -1;
-        contacts = new ArrayList<>();
+        contacts = new HashSet<>();
     }
 
-    public ApartmentDetails(ApartmentLocation apartmentLocation, List<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.contacts = contacts;
         this.cost = -1;
@@ -28,14 +29,14 @@ public class ApartmentDetails {
 
     }
 
-    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, List<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
         this.size = -1;
     }
 
-    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, double size, List<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
@@ -58,11 +59,11 @@ public class ApartmentDetails {
         this.cost = cost;
     }
 
-    public List<Contact> getContacts() {
+    public Set<Contact> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<Contact> contacts) {
+    public void setContacts(Set<Contact> contacts) {
         this.contacts = contacts;
     }
 

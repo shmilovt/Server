@@ -1,14 +1,15 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
 import java.util.List;
+import java.util.Set;
 
 public class ApartmentDetailsDTO {
     private ApartmentLocationDTO apartmentLocation;
     private double cost;
-    private List<ContactDTO> contacts;
+    private Set<ContactDTO> contacts;
 
     public ApartmentDetailsDTO(){}
-    public ApartmentDetailsDTO(ApartmentLocationDTO apartmentLocation, double cost, List<ContactDTO> contacts) {
+    public ApartmentDetailsDTO(ApartmentLocationDTO apartmentLocation, double cost, Set<ContactDTO> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
@@ -30,11 +31,11 @@ public class ApartmentDetailsDTO {
         this.cost = cost;
     }
 
-    public List<ContactDTO> getContacts() {
+    public Set<ContactDTO> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<ContactDTO> contacts) {
+    public void setContacts(Set<ContactDTO> contacts) {
         this.contacts = contacts;
     }
 }
