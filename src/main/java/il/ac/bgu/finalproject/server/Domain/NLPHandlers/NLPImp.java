@@ -9,7 +9,6 @@ public class NLPImp implements NLPInterface {
      * @param word2
      * @return minimum number of operations required to transform one string into the other.
      */
-    
     private static int minDistance(String word1, String word2) {
         int len1 = word1.length();
         int len2 = word2.length();
@@ -55,7 +54,7 @@ public class NLPImp implements NLPInterface {
     }
 
     public static void main(String[] args) {
-
+        minDistance("יהודה הלוי","הלוי");
     }
 
 }
