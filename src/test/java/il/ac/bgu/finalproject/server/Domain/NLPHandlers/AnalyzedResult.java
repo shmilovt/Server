@@ -18,9 +18,71 @@ public class AnalyzedResult
     private int numberOfMates= -1;
     private Set<String> furniture = new HashSet<>() ;
     private Set<String> phones = new HashSet<>() ;
-    private Set<String> additions = new HashSet<>() ;
     private double cost = -1;
     private int timeFromUni = -1;
+    private int garden= 0;
+    private int balcony= 0;
+    private int protectedSpace= 0;
+    private int wareHouse= 0;
+    private int pets= 0;
+    private int seperatedShowerToilet = 0;
+    private int roomType = 0;
+
+    public int getGarden() {
+        return garden;
+    }
+
+    public void setGarden(int garden) {
+        this.garden = garden;
+    }
+
+    public int getBalcony() {
+        return balcony;
+    }
+
+    public void setBalcony(int balcony) {
+        this.balcony = balcony;
+    }
+
+    public int getProtectedSpace() {
+        return protectedSpace;
+    }
+
+    public void setProtectedSpace(int protectedSpace) {
+        this.protectedSpace = protectedSpace;
+    }
+
+    public int getWareHouse() {
+        return wareHouse;
+    }
+
+    public void setWareHouse(int wareHouse) {
+        this.wareHouse = wareHouse;
+    }
+
+    public int getPets() {
+        return pets;
+    }
+
+    public void setPets(int pets) {
+        this.pets = pets;
+    }
+
+    public int getSeperatedShowerToilet() {
+        return seperatedShowerToilet;
+    }
+
+    public void setSeperatedShowerToilet(int seperatedShowerToilet) {
+        this.seperatedShowerToilet = seperatedShowerToilet;
+    }
+
+    public int getRoomType() {
+        return roomType;
+    }
+
+    public void setRoomType(int roomType) {
+        this.roomType = roomType;
+    }
 
     public String getNeighborhood() {
         return neighborhood;
@@ -92,14 +154,6 @@ public class AnalyzedResult
 
     public void setPhones(Set<String> phones) {
         this.phones = phones;
-    }
-
-    public Set<String> getAdditions() {
-        return additions;
-    }
-
-    public void setAdditions(Set<String> additions) {
-        this.additions = additions;
     }
 
     public double getCost() {
