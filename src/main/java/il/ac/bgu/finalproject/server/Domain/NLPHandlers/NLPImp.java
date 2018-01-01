@@ -39,7 +39,7 @@ public class NLPImp  implements NLPInterface{
 
     public static List<String> extractPhoneNumber(String str) {
         List<String> phoneArray= new ArrayList<String>();
-        Pattern p = Pattern.compile("(0[2346789]\\s*-?\\s*\\d{7}|0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4})");
+        Pattern p = Pattern.compile("(0[2346789]\\s*-?\\s*\\d{7}|0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4})([^\\d\\s]*)");
         Matcher m = p.matcher(str);
         int count=0;
         String temp;
@@ -73,7 +73,7 @@ public class NLPImp  implements NLPInterface{
     }
 
     public static String extractStreetName(String str, List<String> streets) {
-        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)([^\\d\\s]*)");
+        Pattern p = Pattern.compile("(\\S+)(\\s+)(\\S+)(\\s+)(\\S+)([^\\d\\s]*)");
         Matcher m = p.matcher(str);
         boolean b = m.lookingAt();
         if (b && (streets.contains(m.group()) || streets.contains("" + m.group(1) + m.group(2) + m.group(5) + m.group(4) + m.group(3)) ||
@@ -99,7 +99,7 @@ public class NLPImp  implements NLPInterface{
             String temp = "" + m.group(1) + m.group(2) + m.group(3);
             return temp;
         }
-        p = Pattern.compile("(\\S+)(\\s)(\\S+)([^\\d\\s]*)");
+        p = Pattern.compile("(\\S+)(\\s+)(\\S+)([^\\d\\s]*)");
         m = p.matcher(str);
         b = m.lookingAt();
         if (b && (streets.contains(m.group()) || streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
@@ -160,7 +160,7 @@ public class NLPImp  implements NLPInterface{
     public static int extractStreetCombine2(String str, List<String> streets) {
         //Pattern p4 = Pattern.compile("(ב?רחוב||כתובת):?\\s?.*");
         //Pattern p5 = Pattern.compile("( ב(\\S*\\s\\S*)||(ב?רחוב||ב?כתובת)(\\S*\\s))");
-        Pattern p1 = Pattern.compile("(ב?רחוב ||ב?כתובת )");
+        Pattern p1 = Pattern.compile("(ב?רחוב||ב?כתובת)"+"(\\s*)");
 
         //Pattern p3 = Pattern.compile("(ב?רחוב ||ב?כתובת )||ב"+p2.pattern());
         //Pattern p6 = Pattern.compile("(ב?רחוב||ב?כתובת)");
@@ -179,7 +179,8 @@ public class NLPImp  implements NLPInterface{
     }
 
     public static int extractNRooms(String str) {
-        Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d) חדרים");
+        //Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d) חדרים");
+        Pattern p = Pattern.compile("(([הב]?דיר[תה])?)"+"(\\s*)"+"(\\d[,-/.]?\\d|שני?|שלושה?|ארבעה?|חמי?שה?|\\d)"+"(\\s*)"+"(חד(רים)?'?)");
         //Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d) חדרים");
         //Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d)[( חדר)(חדרי?ם?)]");
         Matcher m = p.matcher(str);
@@ -256,7 +257,7 @@ public class NLPImp  implements NLPInterface{
     }
 
     public static int extractNeighborhood(String str) {
-        Pattern p = Pattern.compile("ש?[בה]?שכונ[הת] (יא||הרכס||רבין||נוו?ה[ -]נוי||נחל[ -]בקע||רמות||[אבגדהוט]'?)][,.]?");
+        Pattern p = Pattern.compile("(ש?[בה]?שכונ[הת]|ב)(\\s*)(יא||הרכס||רבין||נוו?ה[ -]נוי||נחל[ -]בקע||רמות||[אבגדהוט])('?[,.]?)");
         Matcher m = p.matcher(str);
         boolean b = m.matches();
         if (b) {
@@ -463,10 +464,12 @@ public class NLPImp  implements NLPInterface{
             List<Post> postPage = (List)var5.next();
             Iterator var7 = postPage.iterator();
             while(var7.hasNext()) {
-                System.out.println("********************** HERE COMES A POST **********************");
                 Post aPost = (Post)var7.next();
-                System.out.println(aPost.getMessage());
-                workOnAPost(aPost.getMessage(),loadStreets());
+                if (aPost.getMessage()!=null) {
+                    System.out.println("********************** HERE COMES A POST **********************");
+                    System.out.println(aPost.getMessage());
+                    workOnAPost(aPost.getMessage(), loadStreets());
+                }
             }
         }
     }
