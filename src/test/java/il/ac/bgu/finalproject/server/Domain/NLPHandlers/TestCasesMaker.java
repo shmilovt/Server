@@ -15,7 +15,7 @@ public class TestCasesMaker {
         String temp = "";
         FileReader fr = null;
         BufferedReader br  = null;
-        String filepath = "C:\\Users\\TAMIR\\IdeaProjects\\Server\\src\\test\\resources\\posts.txt";
+        String filepath = "C:\\Users\\Shavit\\IdeaProjects\\Server\\src\\test\\resources\\posts.txt";
 
             try {
                 fr = new FileReader(filepath);

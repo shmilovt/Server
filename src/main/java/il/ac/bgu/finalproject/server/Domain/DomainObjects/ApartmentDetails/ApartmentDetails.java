@@ -3,13 +3,12 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.ApartmentLocation;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ApartmentDetails {
     private ApartmentLocation apartmentLocation;
     private double cost;
-    private double size;
+    private int size;
     private Set<Contact> contacts;
 
 
@@ -37,7 +36,7 @@ public class ApartmentDetails {
         this.size = -1;
     }
 
-    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, int size, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
@@ -68,11 +67,11 @@ public class ApartmentDetails {
         this.contacts = contacts;
     }
 
-    public double getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(double size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
