@@ -54,7 +54,11 @@ public class NLPImp implements NLPInterface {
     }
 
     public static void main(String[] args) {
-        minDistance("יהודה הלוי","הלוי");
+       String s="***הרחוב השקט ביותר בב\"ש***\nשרעבי 21, שכונה ג',קרוב לרכבת צפון, פארק ההייטק, 12 דקות לאוניברסיטה דירת 4 חדרים, 3 סוויטות מפוארות ומרוהטות לחלוטין, ממוזגת, 80 מ\"ר, קומה 3,\nשכ\"ד 1100 ש\"ח לשותף, 3300 ₪ לכל הדירה.\nלפרטים נוספים בפרטי או בוואטסאפ ל- 052-4848-414\n";
+        EnvList l = new EnvList(s);
+
+       // for(int i=0;i<23;i++)
+            System.out.println(s.charAt(31));//minDistance("יהודה הלוי","הלוי"));
     }
 
 }

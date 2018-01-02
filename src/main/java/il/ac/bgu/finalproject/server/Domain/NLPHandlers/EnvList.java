@@ -8,13 +8,22 @@ public class EnvList extends LinkedList<Environment> {
         String[] splitedPost = post.split("[\\n,.]");
         int offset=0;
         int index=0;
+        char a;
         for(String str: splitedPost)
         {
-            if(str.compareTo("")!=0) {
-                this.add(new Environment(str, offset,index));
-                offset = offset + str.split("\\s").length;
-                index++;
+            if(str.compareTo("")!=0)
+            {
+                if(str.length()<post.length()) {
+                    this.add(new Environment(str, offset, index, post.charAt(offset + str.length())));
+                    offset = offset + str.length();
+                    if (post.length() > offset + 1)
+                        offset++;
+                    index++;
+                }
             }
+            else
+                offset++;
+
         }
     }
 
@@ -24,7 +33,7 @@ public class EnvList extends LinkedList<Environment> {
             String str = "";
             for (int i = skipAmount; i >= 0; i--)
                 str = str + this.get(env.getIndex() - i).getEnvString();
-            return new Environment(str, this.get(env.getIndex() - skipAmount).getOffset(), -1);
+            return new Environment(str, this.get(env.getIndex() - skipAmount).getOffset(), -1,',');
         }
         return null;
     }
@@ -35,7 +44,7 @@ public class EnvList extends LinkedList<Environment> {
             String str = "";
             for (int i = 0; i <= skipAmount; i++)
                 str = str + this.get(env.getIndex() + i).getEnvString();
-            return new Environment(str, env.getOffset(), -1);
+            return new Environment(str, env.getOffset(), -1,',');
         }
         return null;
     }
