@@ -33,7 +33,7 @@ public class EnvList extends LinkedList<Environment> {
             String str = "";
             for (int i = skipAmount; i >= 0; i--)
                 str = str + this.get(env.getIndex() - i).getEnvString();
-            return new Environment(str, this.get(env.getIndex() - skipAmount).getOffset(), -1,',');
+            return new Environment(str, this.get(env.getIndex() - skipAmount).getOffset(), -1,env.getDelimeter());
         }
         return null;
     }
@@ -44,10 +44,8 @@ public class EnvList extends LinkedList<Environment> {
             String str = "";
             for (int i = 0; i <= skipAmount; i++)
                 str = str + this.get(env.getIndex() + i).getEnvString();
-            return new Environment(str, env.getOffset(), -1,',');
+            return new Environment(str, env.getOffset(), -1,this.get(env.getIndex() + skipAmount).getDelimeter());
         }
         return null;
     }
-
-
 }
