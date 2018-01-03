@@ -37,6 +37,37 @@ import java.util.List;
 
 public class NLPImp  implements NLPInterface{
 
+    public static int minmaxNumber (String text, int min, int max){
+        Pattern p = Pattern.compile("([^\\d\\s]*)(\\d+)([^\\d\\s]*)");
+        Matcher m = p.matcher(text);
+        int num;
+        String temp;
+        while(m.find()) {
+            temp = text.substring(m.start(), m.end()).replaceAll("\\D", "");
+            num = Integer.parseInt(temp);
+            if ((num > min) && (num < max))
+                return num;
+        }
+        return -1;
+    }
+    public static String rootAndWord (String root, String word){
+        String reg="ו?(הו?|מו?|א|י|תו?|נ)?"+root.charAt(0);
+        String temp=root;
+        for (int i=1; i<root.length();i++){
+            reg=reg+"[וי]?";
+            reg=reg+root.charAt(i);
+        }
+        reg=reg+"(ה|ות?|ים?|ת[יםן]?|נ[וה])?";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(word);
+        String temp2;
+        while(m.find()) {
+            temp2=word.substring(m.start(),m.end());
+            return temp2;
+        }
+        return "";
+    }
+
     public static List<String> extractPhoneNumber(String str) {
         List<String> phoneArray= new ArrayList<String>();
         Pattern p = Pattern.compile("(0[2346789]\\s*-?\\s*\\d{7}|0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4})([^\\d\\s]*)");
