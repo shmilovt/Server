@@ -13,7 +13,7 @@ public class NLPImp implements NLPInterface {
         AnalyzedDS ads= new AnalyzedDS(l);
         ApartmentDetails ap = new ApartmentDetails();
         Set<Contact> c = new HashSet<>();
-        Set<String> ss = ads.GetResultsByClassify(Classify.NUMERIC);
+        Set<String> ss = ads.GetResultsByClassify(Classify.PHONE);
         for(String stri :ss)
             c.add(new Contact("aa", stri));
         ap.setContacts(c);

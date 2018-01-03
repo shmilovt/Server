@@ -4,7 +4,7 @@ public enum Classify {
     FURNITURE,
     STREET,
     NEIGHBORHOOD,
-    NUMERIC,
+    PHONE,
     PREPOSITION,
     NAME,
 

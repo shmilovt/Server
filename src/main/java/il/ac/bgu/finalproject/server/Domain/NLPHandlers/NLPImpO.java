@@ -48,7 +48,7 @@ public class NLPImpO implements NLPInterface{
             temp=str.substring(m.start(),m.end());
             phoneArray.add(temp.replaceAll("\\D",""));
             //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
-           // System.out.println("Phone Number: "+count+")  "+temp.replaceAll("\\D",""));
+           // System.out.println("PHONE Number: "+count+")  "+temp.replaceAll("\\D",""));
         }
         return phoneArray;
     }
@@ -237,7 +237,7 @@ public class NLPImpO implements NLPInterface{
         boolean b = m.matches();
         if (b) {
             //System.out.println(m.group());
-            System.out.println("Phone Number: "+m.group().replaceAll("[\\D]", ""));
+            System.out.println("PHONE Number: "+m.group().replaceAll("[\\D]", ""));
             return m.group().replaceAll("[\\D]", "").length();
         }
         return 0;
