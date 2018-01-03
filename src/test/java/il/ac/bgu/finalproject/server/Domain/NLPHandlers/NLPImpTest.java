@@ -30,7 +30,7 @@ public class NLPImpTest {
     @BeforeClass
     public static void setup(){
         Gson gson = new Gson();
-        String filename = "C:\\Users\\TAMIR\\IdeaProjects\\Server\\src\\test\\resources\\NLPImpTestCases.json";
+        String filename = "C:\\Users\\Shavit\\IdeaProjects\\Server\\src\\test\\resources\\NLPImpTestCases.json";
         try {
             JsonElement json = gson.fromJson(new FileReader(filename), JsonElement.class);
             String result = gson.toJson(json);

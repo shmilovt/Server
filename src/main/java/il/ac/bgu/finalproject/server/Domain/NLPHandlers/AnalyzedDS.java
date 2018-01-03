@@ -1,35 +1,29 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 
-import java.util.Dictionary;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 
 public class AnalyzedDS {
-    Dictionary<Classify,Dictionary<Integer,Set<String>>> g;
+    private Dictionary<Classify,Dictionary<Integer,Set<String>>> g;
+    private EnvList envLst;
 
-    public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, Set<String>>> g) {
+    public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, Set<String>>> g , EnvList env) {
         this.g = g;
+        this.envLst=env;
     }
 
-    public AnalyzedDS(int numOfEnv)
+    public AnalyzedDS(EnvList envL)
     {
+        this.envLst=envL;
+        int size = envL.size();
         this.g = new Hashtable<Classify,Dictionary<Integer,Set<String>>>();
-        g.put(Classify.FURNITURE, new Hashtable<Integer,Set<String>>());
-        g.put(Classify.NAME, new Hashtable<Integer,Set<String>>());
-        g.put(Classify.NEIGHBORHOOD, new Hashtable<Integer,Set<String>>());
-        g.put(Classify.NUMERIC, new Hashtable<Integer,Set<String>>());
-        g.put(Classify.PREPOSITION, new Hashtable<Integer,Set<String>>());
-        g.put(Classify.STREET, new Hashtable<Integer,Set<String>>());
-        for(int i=0;i<numOfEnv;i++)
-        {
-            g.get(Classify.FURNITURE).put(i,new HashSet<String>());
-            g.get(Classify.NAME).put(i,new HashSet<String>());
-            g.get(Classify.NEIGHBORHOOD).put(i,new HashSet<String>());
-            g.get(Classify.NUMERIC).put(i,new HashSet<String>());
-            g.get(Classify.PREPOSITION).put(i,new HashSet<String>());
-            g.get(Classify.STREET).put(i,new HashSet<String>());
-        }
+        Classify[] classifyCategories = Classify.values();
+        for(Classify c: classifyCategories)
+            g.put(c, new Hashtable<Integer,Set<String>>());
+        for(Classify c: classifyCategories)
+            for(int i=0;i<size;i++)
+                g.get(c).put(i,new HashSet<String>());
+        Analyzer analyzer = new Analyzer(this);
+        analyzer.analyze();
     }
 
     public void Insert(Classify classify,int envNum,String value)
@@ -55,6 +49,35 @@ public class AnalyzedDS {
         for(int i=0;i<size;i++)
             str=str + toString(classify,i) + "\n";
         return str;
+    }
+
+    // get classify and return all the envs(probably will be ints) that included.
+    public List<Integer> GetEnvsIndex(Classify classify)
+    {
+        List<Integer> indexLst = new LinkedList<Integer>();
+        int c = g.get(classify).size();
+        for(int i=0;i<c;i++)
+            if(!g.get(classify).get(i).isEmpty())
+                indexLst.add(i);
+        return indexLst;
+    }
+
+    public Set<String> GetResultsByClassify(Classify classify)
+    {
+        Set<String> aSet = new TreeSet<String>();
+        int c = g.get(classify).size();
+        for(int i=0;i<c;i++)
+            if(!g.get(classify).get(i).isEmpty())
+                aSet.addAll(g.get(classify).get(i));
+        return aSet;
+    }
+
+    public EnvList getEnvLst() {
+        return envLst;
+    }
+
+    public void setEnvLst(EnvList envLst) {
+        this.envLst = envLst;
     }
 
 }
