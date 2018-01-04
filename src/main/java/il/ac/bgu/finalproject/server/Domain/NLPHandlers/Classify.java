@@ -7,5 +7,6 @@ public enum Classify {
     PHONE,
     PREPOSITION,
     NAME,
-
+    PRICE,
+    WORD_PRICE,
 }

@@ -1,6 +1,8 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Contact;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.ApartmentLocation;
+
 import java.io.*;
 import java.util.*;
 
@@ -11,7 +13,9 @@ public class NLPImp implements NLPInterface {
 
         EnvList l = new EnvList(str);
         AnalyzedDS ads= new AnalyzedDS(l);
+
         ApartmentDetails ap = new ApartmentDetails();
+        ApartmentLocation a = new ApartmentLocation();
         Set<Contact> c = new HashSet<>();
         Set<String> ss = ads.GetResultsByClassify(Classify.PHONE);
         for(String stri :ss)
@@ -22,7 +26,7 @@ public class NLPImp implements NLPInterface {
 
 
     public static void main(String[] args) throws IOException {
-        String s = "***הרחוב השקט ביותר בב\"ש***\nשרעבי 21, שכונה ג',קרוב לרכבת צפון, פארק ההייטק, 12 דקות לאוניברסיטה דירת 4 חדרים, 3 סוויטות מפוארות ומרוהטות לחלוטין, ממוזגת, 80 מ\"ר, קומה 3,\nשכ\"ד 1100 ש\"ח לשותף, 3300 ₪ לכל הדירה.\nלפרטים נוספים בפרטי או בוואטסאפ ל- 052-4848414\n";
+        String s = "מחפשים שותף/ שותפה !\n\nרגר 139, קומה 3, 84 מ\"ר, מתפנה חדר ענקי !!!!\nבדירה משופצת , דקה הליכה איטית לשער רגר!\nבדירה שירותים ומקלחת + שירותים נפרדים, דוד שמש + חשמל, מטבח מאובזר ומכונת כביסה. בכל חדר מזגן נפרד.  בחדר שמתפנה נשאר ארון ובסיס למיטה. אופציה לשולחן !\nללא עישון וללא בע\"ח\n\nכניסה מיידית, חוזה עד 31.8, 1050 ש\"ח !!!\nלפרטים ותיאומים מוזמנים לפנות אלי בהודעות !\n";
         NLPImp n = new NLPImp();
         n.extractApartment(s);
     }
