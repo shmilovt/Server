@@ -11,6 +11,7 @@ public class AnalyzedDS {
         this.envLst=env;
     }
 
+
     public AnalyzedDS(EnvList envL)
     {
         this.envLst=envL;
@@ -22,6 +23,14 @@ public class AnalyzedDS {
         for(Classify c: classifyCategories)
             for(int i=0;i<size;i++)
                 g.get(c).put(i,new HashSet<String>());
+        Analyzer analyzer = new Analyzer(this);
+        analyzer.analyze();
+    }
+
+
+    public AnalyzedDS(Environment env)
+    {
+        EnvList e = new EnvList(env);
         Analyzer analyzer = new Analyzer(this);
         analyzer.analyze();
     }
@@ -70,6 +79,21 @@ public class AnalyzedDS {
             if(!g.get(classify).get(i).isEmpty())
                 aSet.addAll(g.get(classify).get(i));
         return aSet;
+    }
+
+    public Set<String> GetResultsByClassifyAndIndex(Classify classify,int index)
+    {
+        Set<String> aSet = new TreeSet<String>();
+            if(!g.get(classify).get(index).isEmpty())
+                aSet.addAll(g.get(classify).get(index));
+        return aSet;
+    }
+
+
+    public int getNumberOfGapAccourences(int min,int max)
+    {
+        Analyzer analyzer = new Analyzer(this);
+        return analyzer.NumberOfGapAccourence(min,max);
     }
 
     public EnvList getEnvLst() {

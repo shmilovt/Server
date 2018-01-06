@@ -89,6 +89,7 @@ public class NLPImpTest {
             ApartmentDetails apartmentDetails = nlp.extractApartment(testCase.getInput());
             AnalyzedResult analyzedResult = new AnalyzedResult(apartmentDetails);
             AnalyzedResult expectedResult = testCase.getOutput();
+
             try{
             assertEquals((int)(analyzedResult.getCost() - expectedResult.getCost()) , 0);
             passCost ++;
@@ -147,6 +148,7 @@ public class NLPImpTest {
         int passPhones = 0;
         for (TestCase<String, AnalyzedResult> testCase: testCases) {
             ApartmentDetails apartmentDetails = nlp.extractApartment(testCase.getInput());
+            System.out.println(apartmentDetails.getContacts().toString());
             AnalyzedResult analyzedResult = new AnalyzedResult(apartmentDetails);
             AnalyzedResult expectedResult = testCase.getOutput();
             try{
@@ -154,6 +156,7 @@ public class NLPImpTest {
             passPhones ++ ;
             System.out.println(getPassMessage_Phones(testCase.getInput(), analyzedResult));}
             catch(AssertionError e){
+
                 errors.add(new AssertionError(getAssertionErrorMessage_Phones(testCase.getInput(), analyzedResult, testCase.getOutput())));
             }
         }
@@ -242,7 +245,6 @@ public class NLPImpTest {
         String message = "";
         message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
         message = message + input + "\n";
-
 
         if(output.getCost() == expected.getCost()) {
             isPassColor = ANSI_GREEN;
