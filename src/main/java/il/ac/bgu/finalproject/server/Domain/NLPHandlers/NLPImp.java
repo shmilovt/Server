@@ -1,8 +1,13 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Contact;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.Address;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.ApartmentLocation;
+
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NLPImp implements NLPInterface {
 
@@ -117,7 +122,7 @@ public class NLPImp implements NLPInterface {
         //Envs with only phones
         for (int i : phoneWithoutName)
         {
-            Set<String> phones = ads.GetResultsByClassifyAndIndex(Classify.PHONE, i);
+            List<String> phones = ads.GetResultsByClassifyAndIndex(Classify.PHONE, i);
             for (String p : phones)
                 contactList.add(new Contact("", p));
         }
@@ -134,16 +139,18 @@ public class NLPImp implements NLPInterface {
         suspicious = intersectList(priceList,priceWordList);
 
         if (suspicious.size() == 0) // assume that price and wordPrice must exist.
-            return price;
+        {
+            return -1;
+        }
         else if (suspicious.size() == 1) {
-            Set<String> res = ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0));
+            List<String> res = ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0));
             if (res.size() == 1)
                 price = Integer.parseInt(res.iterator().next());
             else //exist 2 prices or more in the same env
             {
                 Iterator<String> iterator = res.iterator();
-                Set<String> rommateWords = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE, suspicious.get(0));
-                Set<String> priceWords = ads.GetResultsByClassifyAndIndex(Classify.WORD_PRICE, suspicious.get(0));
+                List<String> rommateWords = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE, suspicious.get(0));
+                List<String> priceWords = ads.GetResultsByClassifyAndIndex(Classify.WORD_PRICE, suspicious.get(0));
                 rommateWords.retainAll(priceWords);
 
                 if (rommateList.contains(suspicious.get(0)) && !rommateWords.isEmpty())//nearest price to rommate word
@@ -177,8 +184,19 @@ public class NLPImp implements NLPInterface {
             suspicious.retainAll(rommateList);
             if (suspicious.size() == 1)
                 return Integer.parseInt(ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0)).iterator().next());
-            else // more than one env with rommanteWord priceWord and price
-                System.out.println("Rare price decision path");
+            else // more than one env with rommanteWord priceWord and price or sus is empty
+            {
+                List<String> l = new LinkedList<>();
+                List<Integer> l1 = new LinkedList<>();
+
+                for(int i=0;i<priceList.size();i++)
+                    l.addAll(ads.GetResultsByClassifyAndIndex(Classify.PRICE, priceList.get(i)));
+                int min = Integer.parseInt(l.get(0));
+                for(String str:l)
+                    if(min > Integer.parseInt(str))
+                        min = Integer.parseInt(str);
+                return min;
+            }
         }
         return price;
     }
@@ -225,17 +243,40 @@ public class NLPImp implements NLPInterface {
         int size = 0;
         List<Integer> sizeList = ads.GetEnvsIndex(Classify.SIZE_APARTMENT);
         List<Integer> sizeWordList = ads.GetEnvsIndex(Classify.WORD_SIZE);
-        // List<Integer> gardenList = ads.GetEnvsIndex(Classify.GARDEN);
-        // sizeList.retainAll(gardenList);
+        List<Integer> streetWordList = ads.GetEnvsIndex(Classify.STREET);
+        List<Integer> toRemoveFromSizeLst = intersectList(streetWordList,sizeList);
+        for(int i:toRemoveFromSizeLst)
+        {
+            String str = ads.getEnvLst().get(i).getEnvString();
+            Pattern p = Pattern.compile("([3456789])(\\d+)(\\s)(\\S+)(\\s)(מ)");
+            Pattern p2 = Pattern.compile("([12])(\\d)(\\d+)(\\s)(\\S+)(\\s)(מ)");
+            Matcher m = p.matcher(str);
+            Matcher m2 = p2.matcher(str);
+              if (m.find() || m2.find()) {
+                        toRemoveFromSizeLst.remove(toRemoveFromSizeLst.indexOf(i));
+                        break;
+                    }
+        }
+        toRemoveFromSizeLst = minusList(intersectList(streetWordList,sizeList),toRemoveFromSizeLst);
+        sizeList = minusList(sizeList, toRemoveFromSizeLst);
         List<Integer> sizeAndWordSize = intersectList(sizeList,sizeWordList);
-        int occourence = ads.getNumberOfGapAccourences(40,270);
+        int occourence = ads.getNumberOfGapAccourences(30,270);
         if(sizeAndWordSize.size()==0)
             return -1;
         if(sizeAndWordSize.size()==1)
         {
             List<String> sizeL = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.SIZE_APARTMENT, sizeAndWordSize.get(0)));
             if (occourence == 1)
-                return Integer.parseInt(sizeL.get(0));
+            {
+                    List<String> gardenL = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.GARDEN, sizeAndWordSize.get(0)));
+                    if (gardenL.isEmpty())
+                        return Integer.parseInt(sizeL.get(0));
+                    int dis = distance(ads.getEnvLst().get(sizeAndWordSize.get(0)).getEnvString(), gardenL.get(0), sizeL.get(0));
+                    if (dis < -1)
+                        return Integer.parseInt(sizeL.get(0));
+                return -1;
+            }
+
             else
             {
                 int max=Integer.parseInt(sizeL.get(0));
@@ -273,6 +314,92 @@ public class NLPImp implements NLPInterface {
         }
     }
 
+    private String neighborhoodDecision(AnalyzedDS ads)
+    {
+        List<Integer> neighborhoodList = ads.GetEnvsIndex(Classify.NEIGHBORHOOD);
+        List<Integer> phoneList = ads.GetEnvsIndex(Classify.PHONE);
+
+        neighborhoodList = minusList(neighborhoodList,phoneList);
+        if(!neighborhoodList.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.NEIGHBORHOOD,neighborhoodList.get(0)).iterator().next();
+        return "";
+    }
+
+
+    private String streetDecision(AnalyzedDS ads)
+    {
+        List<Integer> badList = ads.GetEnvsIndex(Classify.PHONE);
+        badList.addAll(ads.GetEnvsIndex(Classify.LOCATION));
+        List<Integer> blackList = ads.GetEnvsIndex(Classify.BLACKLIST);
+        List<Integer> streetList = ads.GetEnvsIndex(Classify.STREET);
+        List<Integer> streetWord = ads.GetEnvsIndex(Classify.WORD_STREET);
+        List<Integer> streetAndStreetWord = intersectList(streetList,streetWord);
+        List<Integer> apartmentNumber = ads.GetEnvsIndex(Classify.APARTMENT_NUMBER);
+        List<Integer> streetAndApNumber = intersectList(apartmentNumber,streetList);
+        streetAndStreetWord = minusList(minusList(streetAndStreetWord,badList),blackList);
+        streetList = intersectList(streetList,streetWord);
+        if(!streetAndApNumber.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET,streetAndApNumber.get(0)).iterator().next();
+        if(!streetAndStreetWord.isEmpty()) {
+            List<Integer> locationWord = ads.GetEnvsIndex(Classify.WORD_LOCATION);
+            List<Integer> locationWordAndStreet = intersectList(locationWord,streetAndStreetWord);
+            if(!locationWordAndStreet.isEmpty()) {
+                List<String> streets = ads.GetResultsByClassifyAndIndex(Classify.STREET, locationWordAndStreet.get(0));
+                List<String> location = ads.GetResultsByClassifyAndIndex(Classify.WORD_LOCATION, locationWordAndStreet.get(0));
+                if(streets.size()==1)
+                    return location.get(0) + " " + streets.get(0);
+                else if(streets.size() == 2)
+                    return streets.get(0) + " " + location.get(0) + " " + streets.get(1);
+                else
+                    return streets.get(1) + " " + location.get(0) + " " + streets.get(2);
+            }
+                return ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndStreetWord.get(0)).iterator().next();
+        }
+        if(!streetList.isEmpty()) {
+            List<String> streetSet = ads.GetResultsByClassifyAndIndex(Classify.STREET, streetList.get(0));
+            List<String> locationSet = ads.GetResultsByClassifyAndIndex(Classify.LOCATION, streetList.get(0));
+            if(!locationSet.isEmpty())
+                if (locationSet.contains("מרכז אורן") || locationSet.contains("אוניברסיטת בן גוריון"))
+                    if(streetSet.contains("אורן"))
+                        streetSet.remove("אורן");
+                    else
+                        streetSet.remove("שדרות בן גרויון");
+            if(!streetSet.isEmpty())
+                return streetSet.iterator().next();
+        }
+        List<Integer> locationWord = ads.GetEnvsIndex(Classify.WORD_LOCATION);
+        List<Integer> streetAndWordLocation = intersectList(locationWord,ads.GetEnvsIndex(Classify.STREET));
+        if(!streetAndWordLocation.isEmpty())
+        {
+            List<String> streets = ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndWordLocation.get(0));
+            if(streets.size()>1)
+                return ads.GetResultsByClassifyAndIndex(Classify.WORD_LOCATION, streetAndWordLocation.get(0)).iterator().next() + " " + streets.get(0) + " - " + streets.get(1);
+        }
+        List<Integer> envsWithStreetWithoutWordLocationAndPhone = minusList(minusList(minusList(ads.GetEnvsIndex(Classify.STREET),ads.GetEnvsIndex(Classify.WORD_LOCATION)),ads.GetEnvsIndex(Classify.PHONE)),blackList);
+        if(!envsWithStreetWithoutWordLocationAndPhone.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET, envsWithStreetWithoutWordLocationAndPhone.get(0)).iterator().next();
+
+        List<Integer> location = ads.GetEnvsIndex(Classify.LOCATION);
+        List<Integer> locationAndWordLocation = intersectList(location,locationWord);
+        if(!locationAndWordLocation.isEmpty())
+        {
+            return ads.GetResultsByClassifyAndIndex(Classify.WORD_LOCATION, locationAndWordLocation.get(0)).iterator().next() + ads.GetResultsByClassifyAndIndex(Classify.LOCATION, locationAndWordLocation.get(0)).iterator().next();
+        }
+        List<Integer> streetAndNotPhone = minusList(minusList(ads.GetEnvsIndex(Classify.STREET),ads.GetEnvsIndex(Classify.PHONE)),blackList);
+        if(!streetAndNotPhone.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndNotPhone.get(0)).iterator().next();
+        return "";
+    }
+
+    private int apartmentNumberDecision(AnalyzedDS ads) {
+        List<Integer> apartmentNumberList = ads.GetEnvsIndex(Classify.APARTMENT_NUMBER);
+        List<Integer> phoneList = ads.GetEnvsIndex(Classify.PHONE);
+        apartmentNumberList = minusList(apartmentNumberList,phoneList);
+        if(!apartmentNumberList.isEmpty())
+            return Integer.parseInt(ads.GetResultsByClassifyAndIndex(Classify.APARTMENT_NUMBER,apartmentNumberList.get(0)).iterator().next());
+        return -1;
+    }
+
         @Override
     public ApartmentDetails extractApartment(String str) {
 
@@ -280,7 +407,8 @@ public class NLPImp implements NLPInterface {
         AnalyzedDS ads= new AnalyzedDS(l);
 
         ApartmentDetails ap = new ApartmentDetails();
-        Dictionary<Integer,Integer> gardenDic = gardenDecision(ads);
+       /*
+       Dictionary<Integer,Integer> gardenDic = gardenDecision(ads);
         System.out.println("************************");
         if(gardenDic.isEmpty())
             System.out.println("GARDEN NOT EXIST");
@@ -288,10 +416,17 @@ public class NLPImp implements NLPInterface {
             System.out.println("SIZE  " + gardenDic.get(1));
             //int size = gardenDic.get(1);
         System.out.println("************************");
-
+*/
         ap.setSize(sizeDecision(ads));
         ap.setContacts(phoneDecision(ads));
         ap.setCost(priceDecision(ads));
+        ApartmentLocation apl = new ApartmentLocation();
+        apl.setNeighborhood(neighborhoodDecision(ads));
+            Address ad= new Address();
+            ad.setStreet(streetDecision(ads));
+            ad.setNumber(apartmentNumberDecision(ads));
+        apl.setAddress(ad);
+        ap.setApartmentLocation(apl);
 
         return ap;
     }
@@ -301,9 +436,11 @@ public class NLPImp implements NLPInterface {
         //String s = "מחפשים שותף/ שותפה !\n\nרגר 139, קומה 3, 84 מ\"ר, מתפנה חדר ענקי !!!!\nבדירה משופצת , דקה הליכה איטית לשער רגר!\nבדירה שירותים ומקלחת + שירותים נפרדים, דוד שמש + חשמל, מטבח מאובזר ומכונת כביסה. בכל חדר מזגן נפרד.  בחדר שמתפנה נשאר ארון ובסיס למיטה. אופציה לשולחן !\nללא עישון וללא בע\"ח\n\nכניסה מיידית, חוזה עד 31.8, 1050 ש\"ח !!!\nלפרטים ותיאומים מוזמנים לפנות אלי בהודעות !\n";
         //String s = "***החדר הכי גדול ושווה מתפנה***\nמתפנה בעקבות הפסקת לימודים (לא שלי)\n350 מטר משער רגר. 6 דקות משער 90. רגר 130 כניסה ' דירה 5.\nדירה גדולה ומרווחת,צנרת חדשה, דוד חדש, מזגנים בכל החדרים כולל בסלון וטלוויזיה ענקית, מטבח גדול ומרווח, סלון גדול לארח חברים עם בריזה מטורפת, שירותים נפרדים ומקלחת נפרדת עם מרפסת סגורה ובה מכונת כביסה.\nבחדר נשאר מיטה, ארון, כיסא ושולחן רק להביא מזוודה (:\nוכל התענוג הזה רק ב1100 שקלים!! ללא שקרים רק בואו ותראו!!\nבדירה נשארים שני שותפים מקסימים.\nכניסה מיידית!! אבל גמישים.\nלפנות רק אם זה רלוונטי אליכם כדי שנחסוך זמן יקר גם לשותפים וגם לכם (:\nשאלות נוספות יכולים לפנות אליי בפרטי או בטלפון 0524744888 וכמובן לתאם ולבוא לראותת (:\n";
 
-
+        /*String b="(BOMBA)";
+        System.out.println(b.replaceAll("[()]",""));
         String s = "להשכרה קוטג' 3 חדרים בשכונת נחל עשן\n\nממוזגת\nמשופצת\nכניסה מיידית\n65 מ\"ר\nגינה 230 מ\"ר\n\nריהוט: מקרר.\n\nמחיר: רק ב3,500.\n\nטלפון: 052-477-8940\n";
+
         NLPImp n = new NLPImp();
-        n.extractApartment(s);
+        n.extractApartment(s);*/
     }
 }

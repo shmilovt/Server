@@ -3,10 +3,10 @@ package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 import java.util.*;
 
 public class AnalyzedDS {
-    private Dictionary<Classify,Dictionary<Integer,Set<String>>> g;
+    private Dictionary<Classify,Dictionary<Integer,List<String>>> g;
     private EnvList envLst;
 
-    public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, Set<String>>> g , EnvList env) {
+    public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, List<String>>> g , EnvList env) {
         this.g = g;
         this.envLst=env;
     }
@@ -16,13 +16,13 @@ public class AnalyzedDS {
     {
         this.envLst=envL;
         int size = envL.size();
-        this.g = new Hashtable<Classify,Dictionary<Integer,Set<String>>>();
+        this.g = new Hashtable<Classify,Dictionary<Integer,List<String>>>();
         Classify[] classifyCategories = Classify.values();
         for(Classify c: classifyCategories)
-            g.put(c, new Hashtable<Integer,Set<String>>());
+            g.put(c, new Hashtable<Integer,List<String>>());
         for(Classify c: classifyCategories)
             for(int i=0;i<size;i++)
-                g.get(c).put(i,new HashSet<String>());
+                g.get(c).put(i,new LinkedList<>());
         Analyzer analyzer = new Analyzer(this);
         analyzer.analyze();
     }
@@ -71,22 +71,22 @@ public class AnalyzedDS {
         return indexLst;
     }
 
-    public Set<String> GetResultsByClassify(Classify classify)
+    public List<String> GetResultsByClassify(Classify classify)
     {
-        Set<String> aSet = new TreeSet<String>();
+        List<String> resList = new LinkedList<>();
         int c = g.get(classify).size();
         for(int i=0;i<c;i++)
             if(!g.get(classify).get(i).isEmpty())
-                aSet.addAll(g.get(classify).get(i));
-        return aSet;
+                resList.addAll(g.get(classify).get(i));
+        return resList;
     }
 
-    public Set<String> GetResultsByClassifyAndIndex(Classify classify,int index)
+    public List<String> GetResultsByClassifyAndIndex(Classify classify,int index)
     {
-        Set<String> aSet = new TreeSet<String>();
+        List<String> resList = new LinkedList<>();
             if(!g.get(classify).get(index).isEmpty())
-                aSet.addAll(g.get(classify).get(index));
-        return aSet;
+                resList.addAll(g.get(classify).get(index));
+        return resList;
     }
 
 
