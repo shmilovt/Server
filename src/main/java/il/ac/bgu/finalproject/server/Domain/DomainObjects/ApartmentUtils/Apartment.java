@@ -1,33 +1,27 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails;
 
-import java.util.ArrayList;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.ApartmentLocation;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-public class Apartment {
-    private List<String> postIDs ;
-    private ApartmentLocation apartmentLocation ;
+public class ApartmentDetails {
+    private ApartmentLocation apartmentLocation;
     private double cost;
-    private double size;
+    private int size;
     private Set<Contact> contacts;
 
 
-    public Apartment(){
-      postIDs = new ArrayList<>();
-      apartmentLocation = new ApartmentLocation();
-      cost = -1;
-      size = -1;
-      contacts = new HashSet<>();
-    }
-    public Apartment(ApartmentLocation apartmentLocation) {
+
+    public ApartmentDetails(){}
+    public ApartmentDetails(ApartmentLocation apartmentLocation) {
         this.apartmentLocation = apartmentLocation;
         this.cost = -1;
         this.size = -1;
         contacts = new HashSet<>();
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, Set<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.contacts = contacts;
         this.cost = -1;
@@ -35,14 +29,14 @@ public class Apartment {
 
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
         this.size = -1;
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
+    public ApartmentDetails(ApartmentLocation apartmentLocation, double cost, int size, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
@@ -73,19 +67,12 @@ public class Apartment {
         this.contacts = contacts;
     }
 
-    public double getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(double size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
-    public List<String> getPostIDs() {
-        return postIDs;
-    }
-
-    public void setPostIDs(List<String> postID) {
-        this.postIDs = postID;
-    }
 }
