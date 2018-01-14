@@ -199,7 +199,7 @@ public class AnalyzedResult
                 }
             }
             cost = apartment.getCost();
-            size = apartment.getSize();
+            size = (int)apartment.getSize();
         }
     }
 

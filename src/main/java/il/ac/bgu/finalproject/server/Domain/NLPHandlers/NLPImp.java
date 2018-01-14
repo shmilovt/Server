@@ -1,527 +1,458 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
-
-
-import com.restfb.Connection;
-import com.restfb.ConnectionIterator;
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.types.Post;
 import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.*;
-
-//import java.util.Logger;
-import java.io.IOException;
-//package com.vogella.eclipse.ide.first;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
 import java.io.*;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-//import java.util.logging;
+public class NLPImp implements NLPInterface {
 
-import java.util.regex.*;
-import java.util.ArrayList;
 
-public class NLPImp  implements NLPInterface{
-
-    public static List<String> extractPhoneNumber(String str) {
-        List<String> phoneArray= new ArrayList<String>();
-        Pattern p = Pattern.compile("(0[2346789]\\s*-?\\s*\\d{7}|0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4})");
-        Matcher m = p.matcher(str);
-        int count=0;
-        String temp;
-        while(m.find()) {
-            count++;
-            temp=str.substring(m.start(),m.end());
-            phoneArray.add(temp.replaceAll("\\D",""));
-            //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
-           // System.out.println("Phone Number: "+count+")  "+temp.replaceAll("\\D",""));
+    private static int distance(String str, String a, String b) {
+        int aIndex = -1;
+        int bIndex = -1;
+        int minDistance = Integer.MAX_VALUE;
+        String[] aS = str.toLowerCase().split("[ \t]+");
+        int i = 0;
+        for (String t : aS) {
+            if (t.equals(a)) {
+                aIndex = i;
+            }
+            if (t.equals(b)) {
+                bIndex = i;
+            }
+            if (aIndex != -1 && bIndex != -1) {
+                minDistance = minDistance > Math.abs(bIndex - aIndex) ? bIndex - aIndex : minDistance;
+            }
+            i++;
         }
-        return phoneArray;
+        if (aIndex == -1 || bIndex == -1)
+            return -1;
+        else
+            return minDistance;
     }
 
-    public static int extractAddress(String str, List<String> streets) {
-        //Pattern p = Pattern.compile("(ב?רחוב||כתובת):?\\s?.*");
-        //Pattern p = Pattern.compile("( ב(\\S*\\s\\S*)||(ב?רחוב||ב?כתובת)(\\S*\\s))");
-        Pattern p2 = Pattern.compile("(מצדה)");
-        Pattern p1 = Pattern.compile("(\\s\\S*)");
-        Pattern p = Pattern.compile("(ב?רחוב||ב?כתובת)" + p2.pattern());
-        //Pattern p = Pattern.compile("(ב?רחוב||ב?כתובת)");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            System.out.println("RECOGNIZED:");
-            System.out.println(m.group());
-            //System.out.println(m.group(2));
-            //if (streets.contains(m.group(2)))
-            return m.end();
-        }
-        return 0;
+    private List<Integer> minusList(List<Integer> a,List<Integer> b)
+    {
+        List<Integer> tmp = new LinkedList<Integer>();
+        for(int index: a)
+            tmp.add(index);
+        tmp.removeAll(b);
+        return tmp;
     }
 
-    public static String extractStreetName(String str, List<String> streets) {
-        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)([^\\d\\s]*)");
-        Matcher m = p.matcher(str);
-        boolean b = m.lookingAt();
-        if (b && (streets.contains(m.group()) || streets.contains("" + m.group(1) + m.group(2) + m.group(5) + m.group(4) + m.group(3)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(5) + m.group(4) + m.group(1)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(1) + m.group(4) + m.group(5)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(1) + m.group(4) + m.group(3)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(3) + m.group(4) + m.group(1)))) {
-            String temp = "" + m.group(1) + m.group(2) + m.group(3) + m.group(4) + m.group(5);
-            return temp;
+
+    private List<Integer> intersectList(List<Integer> a,List<Integer> b)
+    {
+        List<Integer> tmp = new LinkedList<Integer>();
+        for(int index: a)
+            tmp.add(index);
+        tmp.retainAll(b);
+        return tmp;
+    }
+
+
+    private Set<Contact> phoneDecision(AnalyzedDS ads)
+    {
+        Set<Contact> contactList = new HashSet<Contact>();
+        List<Integer> phoneList = ads.GetEnvsIndex(Classify.PHONE);
+        List<Integer> nameList = ads.GetEnvsIndex(Classify.NAME);
+        List<Integer> phoneWithoutName = minusList(ads.GetEnvsIndex(Classify.PHONE),nameList);
+        List<Integer> nameAndPhone = intersectList(nameList,phoneList);
+
+        if (!nameAndPhone.isEmpty()) // Envs with names and telephones
+        {
+            for (int i : nameAndPhone)
+            {
+                List<String> phones = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.PHONE, i));
+                List<String> names = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.NAME, i));
+                if (names.size() <= phones.size())
+                {
+                    for (int j = 0; j < names.size(); j++)
+                        contactList.add(new Contact(names.get(j), phones.get(j)));
+                    for (int j = names.size(); j < phones.size(); j++)
+                        contactList.add(new Contact(names.get(j), phones.get(j)));
+                }
+                else
+                    for (int j = 0; j < phones.size(); j++)
+                        contactList.add(new Contact(names.get(j), phones.get(j)));
+            }
         }
-        else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(5)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(1)))) {
-            String temp = "" + m.group(1) + m.group(2) + m.group(5);
-            return temp;
+        else { // TO DO FOR THE OTHER SIDE
+            //List<Integer> namesIndex = ads.GetEnvsIndex(Classify.NAME);
+            List<Integer> phoneRightToName = new LinkedList<Integer>();
+            List<Integer> phoneLeftToName = new LinkedList<Integer>();
+
+            for (int i : nameList) {
+                if (phoneList.contains(i - 1))
+                    phoneRightToName.add(i - 1);
+                if(phoneList.contains(i + 1))
+                    phoneLeftToName.add(i + 1);
+            }
+            //phoneList.retainAll(phoneRightToName);
+            if (phoneRightToName.size() > 0) {
+                // phoneWithoutName = minusList(phoneWithoutName,phoneRightToName);
+                for (int i : phoneRightToName) {
+                    List<String> prevNames = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.NAME, i + 1));
+                    List<String> phones = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.PHONE, i));
+                    String[] st = ads.getEnvLst().get(i + 1).getEnvString().split(" ");
+                    if (prevNames.contains(st[st.length - 1])) {
+                        contactList.add(new Contact(st[st.length - 1], phones.get(0)));
+                        phoneWithoutName.remove(phoneWithoutName.indexOf(i));
+                    }
+                }
+            }
+            if (phoneLeftToName.size() > 0) {
+                // phoneWithoutName = minusList(phoneWithoutName,phoneLeftToName);
+                for (int i : phoneLeftToName) {
+                    List<String> prevNames = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.NAME, i - 1));
+                    List<String> phones = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.PHONE, i));
+                    String[] st = ads.getEnvLst().get(i - 1).getEnvString().split(" ");
+                    if (prevNames.contains(st[st.length - 1])) {
+                        contactList.add(new Contact(st[st.length - 1], phones.get(0)));
+                        phoneWithoutName.remove(phoneWithoutName.indexOf(i));;
+                    }
+                }
+            }
         }
-        else if (b && (streets.contains("" + m.group(5) + m.group(2) + m.group(3)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(5)))) {
-            String temp = "" + m.group(3) + m.group(2) + m.group(5);
-            return temp;
+        //Envs with only phones
+        for (int i : phoneWithoutName)
+        {
+            List<String> phones = ads.GetResultsByClassifyAndIndex(Classify.PHONE, i);
+            for (String p : phones)
+                contactList.add(new Contact("", p));
         }
-        else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(3)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            String temp = "" + m.group(1) + m.group(2) + m.group(3);
-            return temp;
+        return contactList;
+    }
+
+    // assume that price and wordPrice must exist. rommate help to devide if it exist in more than one env
+    private int priceDecision(AnalyzedDS ads) {
+        int price = -1;
+        List<Integer> priceList = ads.GetEnvsIndex(Classify.PRICE);
+        List<Integer> priceWordList = ads.GetEnvsIndex(Classify.WORD_PRICE);
+        List<Integer> rommateList = ads.GetEnvsIndex(Classify.ROMMATE);
+        List<Integer> suspicious = new LinkedList<Integer>();
+        suspicious = intersectList(priceList,priceWordList);
+
+        if (suspicious.size() == 0) // assume that price and wordPrice must exist.
+        {
+            return -1;
         }
-        p = Pattern.compile("(\\S+)(\\s)(\\S+)([^\\d\\s]*)");
-        m = p.matcher(str);
-        b = m.lookingAt();
-        if (b && (streets.contains(m.group()) || streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            return m.group(1) + m.group(2) + m.group(3);
+        else if (suspicious.size() == 1) {
+            List<String> res = ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0));
+            if (res.size() == 1)
+                price = Integer.parseInt(res.iterator().next());
+            else //exist 2 prices or more in the same env
+            {
+                Iterator<String> iterator = res.iterator();
+                List<String> rommateWords = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE, suspicious.get(0));
+                List<String> priceWords = ads.GetResultsByClassifyAndIndex(Classify.WORD_PRICE, suspicious.get(0));
+                rommateWords.retainAll(priceWords);
+
+                if (rommateList.contains(suspicious.get(0)) && !rommateWords.isEmpty())//nearest price to rommate word
+                {
+                    String rommateWord = rommateWords.iterator().next();
+                    String str1 = iterator.next();
+                    price = Integer.parseInt(str1);
+                    int gap = Math.abs(distance(ads.getEnvLst().get(suspicious.get(0)).getEnvString(), rommateWord, str1));
+                    while (iterator.hasNext()) {
+                        String str2 = iterator.next();
+                        int tmp = Integer.parseInt(str2);
+                        int distance = Math.abs(distance(ads.getEnvLst().get(suspicious.get(0)).getEnvString(), rommateWord, str2));
+                        if (Math.abs(distance) < gap) {
+                            gap = Math.abs(distance);
+                            price = Integer.parseInt(str2);
+                        }
+                    }
+                    return price;
+                } else//first that end with zero
+                {
+                    int tmp;
+                    while (iterator.hasNext()) {
+                        tmp = Integer.parseInt(iterator.next());
+                        if (tmp % 10 == 0)
+                            return tmp;
+                    }
+                }
+            }
+        } else  // more than one env with prices
+        {
+            suspicious.retainAll(rommateList);
+            if (suspicious.size() == 1)
+                return Integer.parseInt(ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0)).iterator().next());
+            else // more than one env with rommanteWord priceWord and price or sus is empty
+            {
+                List<String> l = new LinkedList<>();
+                List<Integer> l1 = new LinkedList<>();
+
+                for(int i=0;i<priceList.size();i++)
+                    l.addAll(ads.GetResultsByClassifyAndIndex(Classify.PRICE, priceList.get(i)));
+                int min = Integer.parseInt(l.get(0));
+                for(String str:l)
+                    if(min > Integer.parseInt(str))
+                        min = Integer.parseInt(str);
+                return min;
+            }
         }
-        p = Pattern.compile("(\\S+)([^\\d\\s]*)");
-        m = p.matcher(str);
-        b = m.lookingAt();
-        if (b && streets.contains(m.group(1))) {
-            return m.group(1);
+        return price;
+    }
+
+    private Dictionary<Integer,Integer> gardenDecision(AnalyzedDS ads)
+    {
+        int exist=0;
+        Dictionary<Integer,Integer> gardenRes = new Hashtable<Integer, Integer>();
+        List<Integer> gardenList = ads.GetEnvsIndex(Classify.GARDEN);
+        List<Integer> negativeList = ads.GetEnvsIndex(Classify.NEGATIVE);
+        List<Integer> gardenNotNegativeList = minusList(gardenList,negativeList);
+        if(gardenNotNegativeList.size()==0)
+            return gardenRes;
+        exist = 1;
+        List<Integer> wordSizeList = ads.GetEnvsIndex(Classify.WORD_SIZE);
+        List<Integer> sizeList = ads.GetEnvsIndex(Classify.SIZE_GARDEN);
+        List<Integer> intersectSizeWordSizeList = intersectList(wordSizeList,sizeList);
+        intersectSizeWordSizeList.retainAll(gardenNotNegativeList);
+        if(intersectSizeWordSizeList.size()==0) {
+            gardenRes.put(exist, -1);
+            return gardenRes;
         }
+        if(ads.getNumberOfGapAccourences(10,270)>1) {
+            if (intersectSizeWordSizeList.size() == 1) {
+                List<String> tmp = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.SIZE_GARDEN, intersectSizeWordSizeList.get(0)));
+                List<Integer> sizeLst = new LinkedList<Integer>();
+                for (String s : tmp)
+                    sizeLst.add(Integer.valueOf(s));
+                int min = sizeLst.get(0);
+                for (int i = 1; i < sizeLst.size(); i++)
+                    if (min > sizeLst.get(i))
+                        min = sizeLst.get(i);
+                gardenRes.put(exist, min);
+            } else {
+                System.out.println("Very Rare Path Situation");
+            }
+        }
+        if(gardenRes.isEmpty())
+            gardenRes.put(1,-1);
+        return gardenRes;
+    }
+
+    private int sizeDecision(AnalyzedDS ads) {
+        int size = 0;
+        List<Integer> sizeList = ads.GetEnvsIndex(Classify.SIZE_APARTMENT);
+        List<Integer> sizeWordList = ads.GetEnvsIndex(Classify.WORD_SIZE);
+        List<Integer> streetWordList = ads.GetEnvsIndex(Classify.STREET);
+        List<Integer> toRemoveFromSizeLst = intersectList(streetWordList,sizeList);
+        for(int i:toRemoveFromSizeLst)
+        {
+            String str = ads.getEnvLst().get(i).getEnvString();
+            Pattern p = Pattern.compile("([3456789])(\\d+)(\\s)(\\S+)(\\s)(מ)");
+            Pattern p2 = Pattern.compile("([12])(\\d)(\\d+)(\\s)(\\S+)(\\s)(מ)");
+            Matcher m = p.matcher(str);
+            Matcher m2 = p2.matcher(str);
+            if (m.find() || m2.find()) {
+                toRemoveFromSizeLst.remove(toRemoveFromSizeLst.indexOf(i));
+                break;
+            }
+        }
+        toRemoveFromSizeLst = minusList(intersectList(streetWordList,sizeList),toRemoveFromSizeLst);
+        sizeList = minusList(sizeList, toRemoveFromSizeLst);
+        List<Integer> sizeAndWordSize = intersectList(sizeList,sizeWordList);
+        int occourence = ads.getNumberOfGapAccourences(30,270);
+        if(sizeAndWordSize.size()==0)
+            return -1;
+        if(sizeAndWordSize.size()==1)
+        {
+            List<String> sizeL = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.SIZE_APARTMENT, sizeAndWordSize.get(0)));
+            if (occourence == 1)
+            {
+                List<String> gardenL = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.GARDEN, sizeAndWordSize.get(0)));
+                if (gardenL.isEmpty())
+                    return Integer.parseInt(sizeL.get(0));
+                int dis = distance(ads.getEnvLst().get(sizeAndWordSize.get(0)).getEnvString(), gardenL.get(0), sizeL.get(0));
+                if (dis < -1)
+                    return Integer.parseInt(sizeL.get(0));
+                return -1;
+            }
+
+            else
+            {
+                int max=Integer.parseInt(sizeL.get(0));
+                for(int i=1;i<sizeL.size();i++)
+                {
+                    int num = Integer.parseInt(sizeL.get(i));
+                    if(num > max)
+                        max = num;
+                }
+                return max;
+            }
+        }
+        else {
+            List<Integer> gardenList = ads.GetEnvsIndex(Classify.GARDEN);
+            List<Integer> sizeNotGarden = minusList(sizeAndWordSize, gardenList);
+            if (sizeNotGarden.size() == 0)
+                return -1;
+            if (sizeNotGarden.size() == 1) {
+                List<String> sizeL = new ArrayList<String>(ads.GetResultsByClassifyAndIndex(Classify.SIZE_APARTMENT, sizeNotGarden.get(0)));
+                if (occourence == 1)
+                    return Integer.parseInt(sizeL.get(0));
+                else {
+                    int max = Integer.parseInt(sizeL.get(0));
+                    for (int i = 1; i < sizeL.size(); i++) {
+                        int num = Integer.parseInt(sizeL.get(i));
+                        if (num > max)
+                            max = num;
+                    }
+                    return max;
+                }
+            } else {
+                System.out.println("Size Rare Path");
+                return -1;
+            }
+        }
+    }
+
+    private String neighborhoodDecision(AnalyzedDS ads)
+    {
+        List<Integer> neighborhoodList = ads.GetEnvsIndex(Classify.NEIGHBORHOOD);
+        List<Integer> phoneList = ads.GetEnvsIndex(Classify.PHONE);
+
+        neighborhoodList = minusList(neighborhoodList,phoneList);
+        if(!neighborhoodList.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.NEIGHBORHOOD,neighborhoodList.get(0)).iterator().next();
         return "";
     }
 
 
-    public static String extractStreetNameNumber(String str, List<String> streets) {
-        Pattern p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s)(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)"); //([^\d\s]*)
-        Matcher m = p.matcher(str);
-        boolean b = m.lookingAt();
-        String temp;
-        if (b && (streets.contains(m.group()) || streets.contains("" + m.group(1) + m.group(2) + m.group(5) + m.group(4) + m.group(3)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(5) + m.group(4) + m.group(1)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(1) + m.group(4) + m.group(5)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(1) + m.group(4) + m.group(3)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(3) + m.group(4) + m.group(1)))) {
-            temp = "" + m.group(1) + m.group(2)+ m.group(3) + m.group(4) + m.group(5)+ m.group(6);
-            return temp;
-        } else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(5)) ||
-                streets.contains("" + m.group(5) + m.group(2) + m.group(1)))) {
-            temp = "" + m.group(1) + m.group(2) + m.group(5)+ m.group(6);
-            return temp;
-        } else if (b && (streets.contains("" + m.group(5) + m.group(2) + m.group(3)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(5)))) {
-            temp = "" + m.group(3) + m.group(2) + m.group(5)+ m.group(6);
-            return temp;
-        } else if (b && (streets.contains("" + m.group(1) + m.group(2) + m.group(3)) ||
-                streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            temp = "" + m.group(1) + m.group(2) + m.group(3)+ m.group(6);
-            return temp;
+    private String streetDecision(AnalyzedDS ads)
+    {
+        List<Integer> badList = ads.GetEnvsIndex(Classify.PHONE);
+        badList.addAll(ads.GetEnvsIndex(Classify.LOCATION));
+        List<Integer> blackList = ads.GetEnvsIndex(Classify.BLACKLIST);
+        List<Integer> streetList = ads.GetEnvsIndex(Classify.STREET);
+        List<Integer> streetWord = ads.GetEnvsIndex(Classify.WORD_STREET);
+        List<Integer> streetAndStreetWord = intersectList(streetList,streetWord);
+        List<Integer> apartmentNumber = ads.GetEnvsIndex(Classify.APARTMENT_NUMBER);
+        List<Integer> streetAndApNumber = intersectList(apartmentNumber,streetList);
+        streetAndStreetWord = minusList(minusList(streetAndStreetWord,badList),blackList);
+        streetList = intersectList(streetList,streetWord);
+        if(!streetAndApNumber.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET,streetAndApNumber.get(0)).iterator().next();
+        if(!streetAndStreetWord.isEmpty()) {
+            List<Integer> locationWord = ads.GetEnvsIndex(Classify.WORD_LOCATION);
+            List<Integer> locationWordAndStreet = intersectList(locationWord,streetAndStreetWord);
+            if(!locationWordAndStreet.isEmpty()) {
+                List<String> streets = ads.GetResultsByClassifyAndIndex(Classify.STREET, locationWordAndStreet.get(0));
+                List<String> location = ads.GetResultsByClassifyAndIndex(Classify.WORD_LOCATION, locationWordAndStreet.get(0));
+                if(streets.size()==1)
+                    return location.get(0) + " " + streets.get(0);
+                else if(streets.size() == 2)
+                    return streets.get(0) + " " + location.get(0) + " " + streets.get(1);
+                else
+                    return streets.get(1) + " " + location.get(0) + " " + streets.get(2);
+            }
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndStreetWord.get(0)).iterator().next();
         }
-        p = Pattern.compile("(\\S+)(\\s)(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)");
-        m = p.matcher(str);
-        b = m.lookingAt();
-        if (b && (streets.contains(m.group()) || streets.contains("" + m.group(3) + m.group(2) + m.group(1)))) {
-            temp = "" + m.group(1) + m.group(2) + m.group(3)+ m.group(4);
-            return temp;
+        if(!streetList.isEmpty()) {
+            List<String> streetSet = ads.GetResultsByClassifyAndIndex(Classify.STREET, streetList.get(0));
+            List<String> locationSet = ads.GetResultsByClassifyAndIndex(Classify.LOCATION, streetList.get(0));
+            if(!locationSet.isEmpty())
+                if (locationSet.contains("מרכז אורן") || locationSet.contains("אוניברסיטת בן גוריון"))
+                    if(streetSet.contains("אורן"))
+                        streetSet.remove("אורן");
+                    else
+                        streetSet.remove("שדרות בן גרויון");
+            if(!streetSet.isEmpty())
+                return streetSet.iterator().next();
         }
-        p = Pattern.compile("(\\S+)(\\s?\\d{1,3})([^\\d\\s]*)");
-        m = p.matcher(str);
-        b = m.lookingAt();
-        if (b && streets.contains(m.group(1))) {
-            return m.group(1)+m.group(2);
+        List<Integer> locationWord = ads.GetEnvsIndex(Classify.WORD_LOCATION);
+        List<Integer> streetAndWordLocation = intersectList(locationWord,ads.GetEnvsIndex(Classify.STREET));
+        if(!streetAndWordLocation.isEmpty())
+        {
+            List<String> streets = ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndWordLocation.get(0));
+            if(streets.size()>1)
+                return ads.GetResultsByClassifyAndIndex(Classify.WORD_LOCATION, streetAndWordLocation.get(0)).iterator().next() + " " + streets.get(0) + " - " + streets.get(1);
         }
+        List<Integer> envsWithStreetWithoutWordLocationAndPhone = minusList(minusList(minusList(ads.GetEnvsIndex(Classify.STREET),ads.GetEnvsIndex(Classify.WORD_LOCATION)),ads.GetEnvsIndex(Classify.PHONE)),blackList);
+        if(!envsWithStreetWithoutWordLocationAndPhone.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET, envsWithStreetWithoutWordLocationAndPhone.get(0)).iterator().next();
+
+        List<Integer> location = ads.GetEnvsIndex(Classify.LOCATION);
+        List<Integer> locationAndWordLocation = intersectList(location,locationWord);
+        if(!locationAndWordLocation.isEmpty())
+        {
+            return ads.GetResultsByClassifyAndIndex(Classify.WORD_LOCATION, locationAndWordLocation.get(0)).iterator().next() + ads.GetResultsByClassifyAndIndex(Classify.LOCATION, locationAndWordLocation.get(0)).iterator().next();
+        }
+        List<Integer> streetAndNotPhone = minusList(minusList(ads.GetEnvsIndex(Classify.STREET),ads.GetEnvsIndex(Classify.PHONE)),blackList);
+        if(!streetAndNotPhone.isEmpty())
+            return ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndNotPhone.get(0)).iterator().next();
         return "";
     }
 
-
-    public static int extractStreetCombine2(String str, List<String> streets) {
-        //Pattern p4 = Pattern.compile("(ב?רחוב||כתובת):?\\s?.*");
-        //Pattern p5 = Pattern.compile("( ב(\\S*\\s\\S*)||(ב?רחוב||ב?כתובת)(\\S*\\s))");
-        Pattern p1 = Pattern.compile("(ב?רחוב ||ב?כתובת )");
-
-        //Pattern p3 = Pattern.compile("(ב?רחוב ||ב?כתובת )||ב"+p2.pattern());
-        //Pattern p6 = Pattern.compile("(ב?רחוב||ב?כתובת)");
-
-
-        Pattern p = Pattern.compile(p1.pattern() + "\\S*\\s\\S*\\s\\S*||\\S*\\s\\S*||\\S*");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            if (streets.contains(m.group())) {
-                System.out.println(m.group());
-                return m.end();
-            }
-        }
-        return 0;
+    private int apartmentNumberDecision(AnalyzedDS ads) {
+        List<Integer> apartmentNumberList = ads.GetEnvsIndex(Classify.APARTMENT_NUMBER);
+        List<Integer> phoneList = ads.GetEnvsIndex(Classify.PHONE);
+        apartmentNumberList = minusList(apartmentNumberList,phoneList);
+        if(!apartmentNumberList.isEmpty())
+            return Integer.parseInt(ads.GetResultsByClassifyAndIndex(Classify.APARTMENT_NUMBER,apartmentNumberList.get(0)).iterator().next());
+        return -1;
     }
-
-    public static int extractNRooms(String str) {
-        Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d) חדרים");
-        //Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d) חדרים");
-        //Pattern p = Pattern.compile("([הב]?דיר[תה])? (\\d||שלושה?||שני?||\\d.\\d)[( חדר)(חדרי?ם?)]");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            System.out.println("Rooms in the apartment: "+m.group());
-            return m.end();
-        }
-        return 0;
-    }
-
-    public static int extractPrices(String str) {
-        //System.out.println("the whole sentence: "+ str);
-        Pattern p = Pattern.compile("(\\S*)(\\s)(\\D*)(\\d?)(,?)(\\d{3})(\\D*)(\\s)(\\S*)(\\s)");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            int temp = 0;
-            if (m.group(4).isEmpty()) {
-                temp = Integer.parseInt(m.group(6));
-            } else {
-                temp = 1000 * (Integer.parseInt(m.group(4)));
-                temp = temp + Integer.parseInt(m.group(6));
-            }
-            if (m.group().contains("שותף") || m.group().contains("לחדר") || m.group().contains("קטן") || m.group().contains("גדול")) {
-                System.out.println("We Found: Roomate Will Pay: " + temp);
-            } else if (m.group().contains("מחיר") || m.group().contains("שכירות") || m.group().contains("שכ\"ד") || m.group().contains("שכד")
-                    || m.group().contains("₪") || m.group().contains("שח") || m.group().contains("ש\"ח") || m.group().contains("שקל")
-                    || m.group().contains("בלבד") || m.group().contains("חודש") || m.group().contains("ש''ח") || m.group().contains("אחד")
-                    || m.group().contains("שכר") || m.group().contains("כולל") || m.group().contains("דירה") || m.group().contains("ש'ח")
-                    || m.group().contains("עד")) {
-                if (m.group().contains("כל") || temp > 1700) {
-                    System.out.println("We Suggest: For all the apartment: " + temp);
-                } else if ((temp > 550) && (temp < 1700)) {
-                    System.out.println("We Suggest: Roomate Will Pay: " + temp);
-                }
-            } else {
-                //System.out.println("---WE DONT:---        "+m.group());
-                return 0;
-            }
-            //if ((temp>550)&&(1800>temp))
-            //System.out.println(m.group());
-            String until = "" + m.group(1) + m.group(2) + m.group(3) + m.group(4) + m.group(5) + m.group(6);
-            return until.length();
-        }
-        return 0;
-    }
-
-    public static int extractSH(String str) {
-        //System.out.println("the whole sentence: "+ str);
-        //Pattern p = Pattern.compile("\\S+\\s\\S*0\\d\\s*-?\\s*\\d{7}\\S*\\s\\S+||\\S+\\s\\S*0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4}\\S*\\s\\S+");
-        Pattern p = Pattern.compile("[^\\d\\s]*0[2346789]\\s*-?\\s*\\d{7}[^\\d\\s]*||[^\\d\\s]*0\\d{2}\\s*-?\\s*\\d{3}\\s*-?\\s*\\d{4}[^\\d\\s]*");
-        //Pattern p = Pattern.compile("\\S*\\s\\S*\\s\\S*רו?הי?ט\\S*\\s\\S*\\s");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            //System.out.println(m.group());
-            System.out.println("Phone Number: "+m.group().replaceAll("[\\D]", ""));
-            return m.group().replaceAll("[\\D]", "").length();
-        }
-        return 0;
-    }
-
-    public static int extractSHOnlyTheWord(String str) {
-        //System.out.println("the whole sentence: "+ str);
-        Pattern p = Pattern.compile("\\S*חד\\S*");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            System.out.println(m.group());
-            return m.end();
-        }
-        return 0;
-    }
-
-    public static int extractNeighborhood(String str) {
-        Pattern p = Pattern.compile("ש?[בה]?שכונ[הת] (יא||הרכס||רבין||נוו?ה[ -]נוי||נחל[ -]בקע||רמות||[אבגדהוט]'?)][,.]?");
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b) {
-            System.out.println("The Neighborhood is: "+m.group());
-            return m.end();
-        }
-        return 0;
-    }
-
-
-
-    public static void tokentoken(String str) {
-        Pattern p1 = Pattern.compile("(נפטצי)");
-        Pattern p = Pattern.compile("(נופר)\\s?"+p1.pattern());//
-        Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        if (b){
-            System.out.println(m.group());
-            System.out.println(m.group(1));
-            System.out.println(m.group(2));
-        }
-    }
-
-    public static List<String> noDupsList(List<String> list){
-        Set<String> hs = new HashSet<>();
-        hs.addAll(list);
-        list.clear();
-        list.addAll(hs);
-        return list;
-    }
-    public static List<String> loadStreets(){
-        String fileName = "po.txt";
-        List<String> streets = new ArrayList<String>();
-        //List<String> streetslist= loadStreets();
-        String line = null;
-        try {
-            FileReader fileReader = new FileReader(fileName);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            int s;
-            int counter=0;
-
-            while((line = bufferedReader.readLine()) != null) {
-                //System.out.println(line);
-                streets.add(line);
-            }
-
-            // Always close files.
-            bufferedReader.close();
-        }
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");
-        }
-        catch(IOException ex) {
-            System.out.println("Error reading file '" + fileName + "'");
-        }
-        return streets;
-    }
-    public static void readText(){
-        // The name of the file to open.
-        String fileName = "posts.txt";
-        List<String> streets= loadStreets();
-        // This will reference one line at a time
-        String line = null;
-        try {
-            // FileReader reads text files in the default encoding.
-            FileReader fileReader = new FileReader(fileName);
-
-            // Always wrap FileReader in BufferedReader.
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            int s;
-            int counter=0;
-            List<String> shcone = new ArrayList<String>();
-            while((line = bufferedReader.readLine()) != null) {
-                //in the future, we won't write "line = bufferedReader.readLine()"
-                //we will use bufferedReader.toString() or something like that
-                while (line.length()>0) {
-                    /* MAKING LIST OF THE WORD APPEAREANCE ACCORDING TO THE PATTERN
-                    s=extractSHOnlyTheWord(line);
-                    if (s == 0) {
-                        line = line.substring(1);
-                    }
-                    else {
-                        counter++;
-                        shcone.add(line.substring(0,s));
-                        line = line.substring(s);
-                    */
-
-
-                    //System.out.println(line);
-                    //s=extractPhoneNumber(line);  //63824
-                    //if (s==0) {
-                    s = extractNRooms(line);  //528
-                    //s=extractAddress(line,streets); //==>extractStreetNameNumber
-                    //s=extractSHOnlyTheWord(line);    //help func for analyzing
-                    //s=extractNeighborhood(line);   //912
-                    //s= extractStreetName(line,streets);
-                    //s= extractStreetNameNumber(line,streets); //8141
-                    //s=extractPrices(line);
-                    //s = extractSH(line);     //help func for analyzing
-                    //s=extractPhoneNumber(line);
-                    if (s == 0) {
-                        line = line.substring(1);
-                    }
-                    else {
-                        counter++;
-                        shcone.add(line.substring(0,s));
-                        line = line.substring(s);
-                    }
-                    //}
-                    //else
-                    //    line = line.substring(s);
-                }
-            }
-            System.out.println("counter= "+ counter);
-            shcone= noDupsList(shcone);
-            for (int i=0;i<shcone.size();i++)
-                System.out.println(shcone.get(i));
-            // Always close files.
-            bufferedReader.close();
-        }
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");
-        }
-        catch(IOException ex) {
-            System.out.println("Error reading file '" + fileName + "'");
-            // Or we could just do this:
-            // ex.printStackTrace();
-        }
-    }
-
-
-    public static void workOnAPost(String postText, List<String> streets) { //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
-        if (postText != null) {
-            postText=postText.replaceAll("\\n"," ");
-            postText=postText.replaceAll("[,;'\"]","");
-            String s;
-            int num;
-
-            String line= postText;
-            /*if (extractStreetNameNumberNM(line,streets))
-                extractStreetNameNM(line,streets);
-            extractPrices(line);
-            extractNeighborhood(line);
-            extractNRooms(line);
-            */
-            ///*
-            extractPhoneNumber(line);
-            while (line.length() > 0) {
-                if ((s=extractStreetNameNumber(line, streets)) == "") {
-                    if ((s=extractStreetName(line, streets))=="") {
-                        line = line.substring(1);
-                    }else {
-                        //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
-                        //System.out.println("extractStreetName: "+s);
-                        line = line.substring(s.length());
-                    }
-                }else {
-                    //עדיף לא לעשות הדפסות, הכל יודפס בטסטים כאשר יחזור אובייקט של apartmentDetails
-                   // System.out.println("extractStreetName+Number: "+s);
-                    line = line.substring(s.length());
-                }
-            }
-        }
-    }
-
 
     @Override
     public Apartment extractApartment(String str) {
-        workOnAPost(str ,loadStreets());
 
-        return new Apartment();
+        EnvList l = new EnvList(str);
+        AnalyzedDS ads= new AnalyzedDS(l);
+
+        Apartment ap = new Apartment();
+       /*
+       Dictionary<Integer,Integer> gardenDic = gardenDecision(ads);
+        System.out.println("************************");
+        if(gardenDic.isEmpty())
+            System.out.println("GARDEN NOT EXIST");
+        else
+            System.out.println("SIZE  " + gardenDic.get(1));
+            //int size = gardenDic.get(1);
+        System.out.println("************************");
+*/
+        ap.setSize(sizeDecision(ads));
+        ap.setContacts(phoneDecision(ads));
+        ap.setCost(priceDecision(ads));
+        ApartmentLocation apl = new ApartmentLocation();
+        apl.setNeighborhood(neighborhoodDecision(ads));
+        Address ad= new Address();
+        ad.setStreet(streetDecision(ads));
+        ad.setNumber(apartmentNumberDecision(ads));
+        apl.setAddress(ad);
+        ap.setApartmentLocation(apl);
+
+        return ap;
     }
 
     @Override
     public void run() {
         while(true){
             try {
-                System.out.println("hihihihihh");
-                il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post post = NLPController.postsQueue.take();
+                System.out.println("i am NLPimp");
+                System.out.println(NLPController.postsQueue.size());
+                il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post post = NLPController.postsQueue.poll();
                 System.out.println("thread get the string : \n\n"+post.getText());
-               extractApartment(post.getText());
+                extractApartment(post.getText());
 
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static class FacebookHandler {
-        public FacebookHandler() {
-        }
 
-        public static String get2WeeksAgoDate() {
-            Date date = new Date();
-            int noOfDays = -14;
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            calendar.add(6, noOfDays);
-            date = calendar.getTime();
-            System.out.println(date.getTime() / 1000L);
-            String year = String.valueOf(calendar.get(1));
-            String month = String.valueOf(calendar.get(2) + 1);
-            String day = String.valueOf(calendar.get(5));
-            return year + "-" + month + "-" + day;
-        }
-    }
+    public static void main(String[] args) throws IOException {
+        //String s = "מחפשים שותף/ שותפה !\n\nרגר 139, קומה 3, 84 מ\"ר, מתפנה חדר ענקי !!!!\nבדירה משופצת , דקה הליכה איטית לשער רגר!\nבדירה שירותים ומקלחת + שירותים נפרדים, דוד שמש + חשמל, מטבח מאובזר ומכונת כביסה. בכל חדר מזגן נפרד.  בחדר שמתפנה נשאר ארון ובסיס למיטה. אופציה לשולחן !\nללא עישון וללא בע\"ח\n\nכניסה מיידית, חוזה עד 31.8, 1050 ש\"ח !!!\nלפרטים ותיאומים מוזמנים לפנות אלי בהודעות !\n";
+        //String s = "***החדר הכי גדול ושווה מתפנה***\nמתפנה בעקבות הפסקת לימודים (לא שלי)\n350 מטר משער רגר. 6 דקות משער 90. רגר 130 כניסה ' דירה 5.\nדירה גדולה ומרווחת,צנרת חדשה, דוד חדש, מזגנים בכל החדרים כולל בסלון וטלוויזיה ענקית, מטבח גדול ומרווח, סלון גדול לארח חברים עם בריזה מטורפת, שירותים נפרדים ומקלחת נפרדת עם מרפסת סגורה ובה מכונת כביסה.\nבחדר נשאר מיטה, ארון, כיסא ושולחן רק להביא מזוודה (:\nוכל התענוג הזה רק ב1100 שקלים!! ללא שקרים רק בואו ותראו!!\nבדירה נשארים שני שותפים מקסימים.\nכניסה מיידית!! אבל גמישים.\nלפנות רק אם זה רלוונטי אליכם כדי שנחסוך זמן יקר גם לשותפים וגם לכם (:\nשאלות נוספות יכולים לפנות אליי בפרטי או בטלפון 0524744888 וכמובן לתאם ולבוא לראותת (:\n";
 
-    public static void printPosts(){
-        String accessToken = "EAAESqCOZCzy4BANaOKhN4VeZAtYr0Ja9rAZCPEKVgsl8VFuyW0PY1yNZC5YMhiqPMRYN0VlV4WaZCIxsJz7GvrBHbbpZCIzeVDbXZBdCr2IhlMspJdAjGCZAqUnTRklPcIsDy2hD4ZBjfgL6DM5CBYTeYJS1bwC6FdOEZD";
-        FacebookClient fbClient = new DefaultFacebookClient(accessToken);
-        String groupId = "279135451973";
-        Connection<Post> postFeed = fbClient.fetchConnection(groupId + "/feed", Post.class, new Parameter[0]);
-        ConnectionIterator var5 = postFeed.iterator();
-
-        //Handler handler = new FileHandler("test.log", LOG_SIZE, LOG_ROTATION_COUNT);
-        //Logger.getLogger("").addHandler(handler);
-        //Files.write(Paths.get("fileName"), StandardOpenOption.CREATE);
-        while(var5.hasNext()) {
-            List<Post> postPage = (List)var5.next();
-            Iterator var7 = postPage.iterator();
-            while(var7.hasNext()) {
-                System.out.println("********************** HERE COMES A POST **********************");
-                Post aPost = (Post)var7.next();
-                System.out.println(aPost.getMessage());
-                workOnAPost(aPost.getMessage(),loadStreets());
-            }
-        }
-    }
-
-
-    public static void main(String[] args) {
-        //printPosts();
-        readText();
-        /*
-        List<String> streets= loadStreets();
-        Scanner input;
-        String st;
-        for(int i=0; i<10; i++) {
-            System.out.println("input:");
-            input= new Scanner(System.in);
-            String curr= input.nextLine();
-            if (streets.contains(curr)==true)
-                System.out.println(curr);
-        }
-*/
- /*
-        Scanner input;
-        String st;
-        for(int i=0; i<10; i++) {
-            input= new Scanner(System.in);
-            st=input.nextLine();
-            //extractAddress(st);
-            //extractPhoneNumber(st);
-            //extractNRooms(st);
-            tokentoken(st);
-        }
-*/
-
-        //workOnAPost Function
-        /*
-        Scanner input;
-        String st;
-        for(int i=0; i<10; i++) {
-            input= new Scanner(System.in);
-            st=input.nextLine();
-            System.out.println(st);
-            workOnAPost(st,loadStreets());
-            //extractAddress(st);
-            //extractPhoneNumber(st);
-            //extractNRooms(st);
-            //tokentoken(st);
-        }
-        */
-        System.out.println("Hello World!");
-        //System.out.println("משהו בעברית");
+        /*String b="(BOMBA)";
+        System.out.println(b.replaceAll("[()]",""));
+        String s = "להשכרה קוטג' 3 חדרים בשכונת נחל עשן\n\nממוזגת\nמשופצת\nכניסה מיידית\n65 מ\"ר\nגינה 230 מ\"ר\n\nריהוט: מקרר.\n\nמחיר: רק ב3,500.\n\nטלפון: 052-477-8940\n";
+        NLPImp n = new NLPImp();
+        n.extractApartment(s);*/
     }
 }

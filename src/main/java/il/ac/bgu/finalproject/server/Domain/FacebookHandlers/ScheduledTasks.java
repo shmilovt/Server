@@ -16,6 +16,7 @@ public class ScheduledTasks {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void updatePosts()
     {
+        System.out.println("Hello");
         //FacebookHandler fb= new FacebookHandler();
         //function that asks for list of groups to search
         //   foreach group do: FacebookHandler.GetFeed(2,groupId);
