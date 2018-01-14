@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduledTasks {
 
-    FacebookHandler fb= new FacebookHandler();
+    private static FacebookHandler fb= new FacebookHandler();
     private static DataBaseConnection conn=new DataBaseConnection();
 
     @Scheduled(cron = "0 0/1 * * * ?")

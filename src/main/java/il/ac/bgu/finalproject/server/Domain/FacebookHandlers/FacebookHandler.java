@@ -54,6 +54,7 @@ public class FacebookHandler {
         Connection<Post> postFeed = fbClient.fetchConnection(groupId + "/feed", Post.class, Parameter.with("since", sinceDate), Parameter.with("limit", 100));
         DataBaseConnection dbConn = new DataBaseConnection();
         List<String> post;
+        int x=1000;
         for (List<Post> postPage : postFeed)
             for (Post apost : postPage) {
                 if (apost.getMessage() != null) {
@@ -77,7 +78,9 @@ public class FacebookHandler {
                         System.out.println("db: post added");
                         dbConn.addPost(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
                         try {
+
                             NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
+                            System.out.println(NLPController.postsQueue.size());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
