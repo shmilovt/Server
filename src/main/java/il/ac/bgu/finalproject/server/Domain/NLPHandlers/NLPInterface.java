@@ -1,9 +1,9 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 
-public interface NLPInterface {
+public interface NLPInterface extends Runnable {
 
-     ApartmentDetails extractApartment(String str);
+     Apartment extractApartment(String str);
 
 }

@@ -1,18 +1,18 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
 public class UserPreferencesDTO {
- private FilledCategoryDTO [] preferences;
+ private SearchCategoryDTO[] preferences;
 
     public UserPreferencesDTO(){}
-    public UserPreferencesDTO(FilledCategoryDTO[] preferences) {
+    public UserPreferencesDTO(SearchCategoryDTO[] preferences) {
         this.preferences = preferences;
     }
 
-    public FilledCategoryDTO[] getPreferences() {
+    public SearchCategoryDTO[] getPreferences() {
         return preferences;
     }
 
-    public void setPreferences(FilledCategoryDTO[] preferences) {
+    public void setPreferences(SearchCategoryDTO[] preferences) {
         this.preferences = preferences;
     }
 }

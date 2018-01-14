@@ -1,23 +1,21 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-import il.ac.bgu.finalproject.server.CategoryType;
-
-public class FilledCategoryDTO {
-    private CategoryType categoryType;
+public class SearchCategoryDTO {
+    private int categoryType;
     private String value;
 
-    public FilledCategoryDTO(){}
-    public FilledCategoryDTO(CategoryType categoryType, String value) {
+    public SearchCategoryDTO(){}
+    public SearchCategoryDTO(int categoryType, String value) {
 
         this.categoryType = categoryType;
         this.value = value;
     }
 
-    public CategoryType getCategoryType() {
+    public int getCategoryType() {
         return categoryType;
     }
 
-    public void setCategoryType(CategoryType categoryType) {
+    public void setCategoryType(int categoryType) {
         this.categoryType = categoryType;
     }
 

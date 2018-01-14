@@ -1,7 +1,7 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserPreferences;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestion;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.UserPreferences;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestionUtils.UserSuggestion;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.Reply;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public interface IService {
     boolean apartmentRecommendation (Integer apartmentID, String username, String password);
 
     // shavit
-    List<ApartmentDetails> searchApartments(UserPreferences userPreferences);
+    List<Apartment> searchApartments(UserPreferences userPreferences);
     boolean userSuggestion (Integer apartmentID, UserSuggestion UserSuggestion);
     // project interface to facebook in another class
 

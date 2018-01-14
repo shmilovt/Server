@@ -1,7 +1,7 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Contact;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class AnalyzedResult {
 
     public AnalyzedResult() {}
 
-    public AnalyzedResult(ApartmentDetails apartmentDetails) {
+    public AnalyzedResult(Apartment apartment) {
 
         street = "";
         neighborhood = "";
@@ -26,23 +26,23 @@ public class AnalyzedResult {
         cost = -1;
         size = -1;
 
-        if(apartmentDetails != null) {
-            if (apartmentDetails.getApartmentLocation() != null) {
-                if(apartmentDetails.getApartmentLocation().getAddress()!= null) {
-                    street = apartmentDetails.getApartmentLocation().getAddress().getStreet();
-                    buildingNumber = apartmentDetails.getApartmentLocation().getAddress().getNumber();
+        if(apartment != null) {
+            if (apartment.getApartmentLocation() != null) {
+                if(apartment.getApartmentLocation().getAddress()!= null) {
+                    street = apartment.getApartmentLocation().getAddress().getStreet();
+                    buildingNumber = apartment.getApartmentLocation().getAddress().getNumber();
                 }
-                if(apartmentDetails.getApartmentLocation().getNeighborhood()!= null)
-                    neighborhood = apartmentDetails.getApartmentLocation().getNeighborhood();
+                if(apartment.getApartmentLocation().getNeighborhood()!= null)
+                    neighborhood = apartment.getApartmentLocation().getNeighborhood();
             }
-            if(apartmentDetails.getContacts()!=null) {
+            if(apartment.getContacts()!=null) {
                 phones = new HashSet<>();
-                for (Contact contact : apartmentDetails.getContacts()) {
+                for (Contact contact : apartment.getContacts()) {
                     phones.add(contact.getPhone());
                 }
             }
-            cost = apartmentDetails.getCost();
-            size = apartmentDetails.getSize();
+            cost = apartment.getCost();
+            size = apartment.getSize();
         }
     }
 

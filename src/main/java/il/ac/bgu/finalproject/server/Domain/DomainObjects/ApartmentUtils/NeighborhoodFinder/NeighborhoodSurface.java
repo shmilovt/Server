@@ -1,4 +1,6 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.Neighborhoods;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.NeighborhoodFinder;
+
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.NeighborhoodFinder.Coordinate;
 
 import java.util.ArrayList;
 import java.util.List;

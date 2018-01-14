@@ -1,4 +1,4 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.Neighborhoods;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.NeighborhoodFinder;
 
 public class Coordinate {
     private double longitude;

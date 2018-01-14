@@ -1,6 +1,4 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations;
-
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations.Address;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils;
 
 public class ApartmentLocation {
     public static final int UNKNOWN_APARTMENT_NUMBER = -1;

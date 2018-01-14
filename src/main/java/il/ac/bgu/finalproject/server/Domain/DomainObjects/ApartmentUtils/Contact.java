@@ -1,4 +1,4 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils;
 
 public class Contact {
     private String name;

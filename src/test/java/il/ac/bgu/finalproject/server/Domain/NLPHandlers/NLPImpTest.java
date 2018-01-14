@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import org.junit.BeforeClass;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -54,8 +54,8 @@ public class NLPImpTest {
         int passStreet = 0, passNeighborhood = 0, passBuildingNumber = 0;
 
         for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            ApartmentDetails apartmentDetails = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartmentDetails);
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
             AnalyzedResult expectedResult = testCase.getOutput();
             try{
             assertEquals(analyzedResult.getStreet() , expectedResult.getStreet());
@@ -86,8 +86,8 @@ public class NLPImpTest {
         List<AssertionError> errors = new ArrayList<>();
         int passCost = 0;
         for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            ApartmentDetails apartmentDetails = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartmentDetails);
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
             AnalyzedResult expectedResult = testCase.getOutput();
             try{
             assertEquals((int)(analyzedResult.getCost() - expectedResult.getCost()) , 0);
@@ -118,8 +118,8 @@ public class NLPImpTest {
         List<AssertionError> errors = new ArrayList<>();
         int passSize = 0;
         for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            ApartmentDetails apartmentDetails = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartmentDetails);
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
             AnalyzedResult expectedResult = testCase.getOutput();
             try{
             assertEquals((int)(analyzedResult.getSize()- expectedResult.getSize()) , 0);
@@ -146,8 +146,8 @@ public class NLPImpTest {
         List<AssertionError> errors = new ArrayList<>();
         int passPhones = 0;
         for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            ApartmentDetails apartmentDetails = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartmentDetails);
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
             AnalyzedResult expectedResult = testCase.getOutput();
             try{
             assertEquals(analyzedResult.getPhones() , expectedResult.getPhones());

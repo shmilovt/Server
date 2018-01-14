@@ -1,12 +1,14 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.Categories;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.CategoryType;
-
-public abstract class FilledCategory <T> {
+public abstract class SearchCategory<T> {
     private CategoryType category;
     private T value;
 
-    public FilledCategory(CategoryType category, T value) {
+
+    public SearchCategory(CategoryType category) {
+        this.category = category;
+    }
+    public SearchCategory(CategoryType category, T value) {
         this.category = category;
         this.value = value;
     }
@@ -26,5 +28,7 @@ public abstract class FilledCategory <T> {
     public void setValue(T value) {
         this.value = value;
     }
+
+    public abstract  void parseValue(String valueString);
 
 }

@@ -1,5 +1,5 @@
 package il.ac.bgu.finalproject.server;
-import il.ac.bgu.finalproject.server.CommunicationLayer.Converter;
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.Converter;
 import il.ac.bgu.finalproject.server.Domain.Controllers.AdminClientController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;

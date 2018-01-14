@@ -1,11 +1,11 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.Controllers.AdminClientController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.ProjectException;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserPreferences;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestion;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.UserPreferences;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestionUtils.UserSuggestion;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -76,7 +76,7 @@ public class Service implements IService {
     }
 
     @Override
-    public List<ApartmentDetails> searchApartments(UserPreferences userPreferences) {
+    public List<Apartment> searchApartments(UserPreferences userPreferences) {
 
         return regularClientController.searchApartments(userPreferences);
     }

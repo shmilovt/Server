@@ -7,33 +7,24 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
 import com.restfb.types.Post;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.ApartmentDetails;
+import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 
-import java.nio.file.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.*;
-import java.util.stream.*;
 
 //import java.util.Logger;
 import java.io.IOException;
 //package com.vogella.eclipse.ide.first;
 import java.io.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Optional;
-import java.util.stream.Stream;
 //import java.util.logging;
 
-import java.lang.Object;
-import java.util.Scanner;
 import java.util.regex.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class NLPImp  implements NLPInterface{
 
@@ -424,10 +415,25 @@ public class NLPImp  implements NLPInterface{
 
 
     @Override
-    public ApartmentDetails extractApartment(String str) {
+    public Apartment extractApartment(String str) {
         workOnAPost(str ,loadStreets());
 
-        return new ApartmentDetails();
+        return new Apartment();
+    }
+
+    @Override
+    public void run() {
+        while(true){
+            try {
+                System.out.println("hihihihihh");
+                il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post post = NLPController.postsQueue.take();
+                System.out.println("thread get the string : \n\n"+post.getText());
+               extractApartment(post.getText());
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static class FacebookHandler {

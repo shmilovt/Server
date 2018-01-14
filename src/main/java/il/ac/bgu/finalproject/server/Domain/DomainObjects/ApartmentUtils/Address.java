@@ -1,4 +1,4 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentDetails.Locations;
+package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils;
 
 public class Address {
     private String street;

@@ -5,6 +5,7 @@ import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.Json;
 import com.restfb.json.JsonObject;
 import com.restfb.types.Post;
+import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPImp;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPInterface;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
@@ -18,10 +19,13 @@ public class FacebookHandler {
     private static final FacebookClient fbClient = new DefaultFacebookClient(accessToken,Version.VERSION_2_11);
     private static DataBaseConnection conn;
     private static NLPImp nlp;
+    private static NLPController nlpController;
 
     public FacebookHandler()
     {
         nlp=new NLPImp();
+        nlpController = new NLPController();
+        nlpController.setupNLPThreads();
         conn = new DataBaseConnection();
         conn.connect();
     }
@@ -62,12 +66,22 @@ public class FacebookHandler {
                         if (post.get(2).compareTo(apost.getMessage()) != 0) {
                             System.out.println("db: post updated");
                             dbConn.update(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                            nlp.extractApartment(apost.getMessage());
+                            try {
+                                NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            //nlp.extractApartment(apost.getMessage());
                         }
                     } else {
                         System.out.println("db: post added");
                         dbConn.addPost(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                        nlp.extractApartment(apost.getMessage());
+                        try {
+                            NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        //nlp.extractApartment(apost.getMessage());
                     }
                 }
             }
