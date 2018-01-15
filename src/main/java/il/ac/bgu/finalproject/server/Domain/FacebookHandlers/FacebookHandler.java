@@ -19,13 +19,13 @@ public class FacebookHandler {
     private static final FacebookClient fbClient = new DefaultFacebookClient(accessToken,Version.VERSION_2_11);
     private static DataBaseConnection conn;
     private static NLPImp nlp;
-    private static NLPController nlpController;
+   // private static NLPController nlpController;
 
     public FacebookHandler()
     {
         nlp=new NLPImp();
-        nlpController = new NLPController();
-        nlpController.setupNLPThreads();
+       // nlpController = new NLPController();
+       // nlpController.setupNLPThreads();
         conn = new DataBaseConnection();
         conn.connect();
     }
@@ -67,24 +67,24 @@ public class FacebookHandler {
                         if (post.get(2).compareTo(apost.getMessage()) != 0) {
                             System.out.println("db: post updated");
                             dbConn.update(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                            try {
+                            /*try {
                                 NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }
-                            //nlp.extractApartment(apost.getMessage());
+                            }*/
+                            nlp.extractApartment(apost.getMessage());
                         }
                     } else {
                         System.out.println("db: post added");
                         dbConn.addPost(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                        try {
+                       /* try {
 
                             NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
                             System.out.println(NLPController.postsQueue.size());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
-                        }
-                        //nlp.extractApartment(apost.getMessage());
+                        }*/
+                        nlp.extractApartment(apost.getMessage());
                     }
                 }
             }
