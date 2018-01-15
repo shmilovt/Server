@@ -276,14 +276,27 @@ public class NLPImp implements NLPInterface {
 
             else
             {
-                int max=Integer.parseInt(sizeL.get(0));
-                for(int i=1;i<sizeL.size();i++)
-                {
-                    int num = Integer.parseInt(sizeL.get(i));
-                    if(num > max)
-                        max = num;
+                if(occourence==2) {
+                    List<String> wordSize=ads.GetResultsByClassifyAndIndex(Classify.WORD_SIZE,sizeAndWordSize.get(0));
+                    if(sizeL.size()==2) {
+                        int dis1 = Math.abs(distance(ads.getEnvLst().get(sizeAndWordSize.get(0)).getEnvString(), sizeL.get(0), wordSize.get(0)));
+                        int dis2 = Math.abs(distance(ads.getEnvLst().get(sizeAndWordSize.get(0)).getEnvString(), sizeL.get(1), wordSize.get(0)));
+                        if (dis1 < dis2)
+                            return Integer.parseInt(sizeL.get(0));
+                        else
+                            return Integer.parseInt(sizeL.get(1));
+                    }
+                    return Integer.parseInt(sizeL.get(0));
                 }
-                return max;
+                else {
+                    int max = Integer.parseInt(sizeL.get(0));
+                    for (int i = 1; i < sizeL.size(); i++) {
+                        int num = Integer.parseInt(sizeL.get(i));
+                        if (num > max)
+                            max = num;
+                    }
+                    return max;
+                }
             }
         }
         else {
@@ -385,6 +398,13 @@ public class NLPImp implements NLPInterface {
         List<Integer> streetAndNotPhone = minusList(minusList(ads.GetEnvsIndex(Classify.STREET),ads.GetEnvsIndex(Classify.PHONE)),blackList);
         if(!streetAndNotPhone.isEmpty())
             return ads.GetResultsByClassifyAndIndex(Classify.STREET, streetAndNotPhone.get(0)).iterator().next();
+        List<Integer> streetsEnvs = ads.GetEnvsIndex(Classify.STREET);
+        List<String> streets = ads.GetResultsByClassify(Classify.STREET);
+        if(streets.size()==1) {
+            String street = streets.get(0);
+            if(ads.getEnvLst().get(streetsEnvs.get(0)).getEnvString().contains("ב" + street))
+                return street;
+        }
         return "";
     }
 

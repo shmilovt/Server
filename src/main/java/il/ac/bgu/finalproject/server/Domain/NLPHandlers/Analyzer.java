@@ -13,13 +13,56 @@ import java.util.regex.Pattern;
 
 public class  Analyzer {
 
-
-
-
     private static AnalyzedDS aDS;
+    private static List<String> gardenList ;
+    private static List<String> rommateList ;
+    private static List<String> blackList ;
+    private static List<String> wordLocationList ;
+    private static List<String> firstNamesList ;
+    private static List<String> wordPriceList ;
+    private static List<String> wordSizeList ;
+    private static List<String> wordNegativeList ;
+    private static List<String> streetList ;
+    private static List<String> floorList ;
+    private static List<String> neighborhoodList ;
+    private static List<String> wordStreetList ;
+    private static List<String> locationsList;
+    public List<String> loadFile(String fileName){
+        String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
+        String  path= pathPref + fileName;
+        List<String> streets = new ArrayList<String>();
+        String line = null;
+        try {
+            FileReader fileReader = new FileReader(path);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            while((line = bufferedReader.readLine()) != null)
+                streets.add(line);
+            bufferedReader.close();
+        }
+        catch(FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + fileName + "'");
+        }
+        catch(IOException ex) {
+            System.out.println("Error reading file '" + fileName + "'");
+        }
+        return streets;
+    }
 
     public Analyzer(AnalyzedDS aDS) {
         this.aDS = aDS;
+        gardenList = loadFile("garden.txt");
+        rommateList = loadFile("rommate.txt");
+        blackList = loadFile("blackList.txt");
+        wordLocationList = loadFile("wordLocation.txt");
+        firstNamesList = loadFile("firstNames.txt");
+        wordPriceList = loadFile("price.txt");
+        wordSizeList = loadFile("size.txt");
+        wordNegativeList = loadFile("negative.txt");
+        streetList = loadFile("streets1.txt");
+        floorList = loadFile("floor.txt");
+        neighborhoodList = loadFile("neighborhood.txt");
+        wordStreetList = loadFile("streetWord.txt");
+        locationsList = loadFile("locations.txt");
         // we will load the Dictionaries
     }
 
@@ -68,26 +111,6 @@ public class  Analyzer {
         return dp[len1][len2];
     }
 
-    public List<String> loadFile(String fileName){
-        String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
-        String  path= pathPref + fileName;
-        List<String> streets = new ArrayList<String>();
-        String line = null;
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while((line = bufferedReader.readLine()) != null)
-                streets.add(line);
-            bufferedReader.close();
-        }
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");
-        }
-        catch(IOException ex) {
-            System.out.println("Error reading file '" + fileName + "'");
-        }
-        return streets;
-    }
 
     public void extractFirstName(Classify classify, String fileName, String notToInclude)
     {
@@ -195,31 +218,29 @@ public class  Analyzer {
     }
 
 
-    public void extractAddress(Classify classify, String fileName, String notToInclude)
+    public void extractAddress(Classify classify, List<String> dictionary, String notToInclude)
     {
         int size = aDS.getEnvLst().size();
-        List<String> names = loadFile(fileName);
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             str = str.replaceAll("[(]"," ").replaceAll(notToInclude,"");
-            List<String> streetList = newExtractStreetName(str.replaceAll("[(-]"," "),names,i,classify);
+            List<String> streetList = newExtractStreetName(str.replaceAll("[(-]"," "),dictionary,i,classify);
                 if(!streetList.isEmpty())
                     for(String street:streetList)//System.out.println(streetList);
                         aDS.Insert(classify,i,street);
         }
     }
 
-    public void extractWord(Classify classify, String fileName, String notToInclude)
+    public void extractWord(Classify classify, List<String> dictionary, String notToInclude)
     {
         int size = aDS.getEnvLst().size();
-        List<String> names = loadFile(fileName);
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             String[] splited = str.split(" ");
             for (String s : splited) {
                 s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
                 if(!s.isEmpty()) {
-                    if (names.contains(s) || (names.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
+                    if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
                         aDS.Insert(classify, i, s);
                 }
             }
@@ -270,7 +291,8 @@ public class  Analyzer {
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             for (String s : str.split(" ")) {
-                s = s.replaceAll("\\D","");
+                if(!s.contains("/") && !s.contains("."))
+                    s = s.replaceAll("\\D","");
                 if (NumberUtils.isCreatable(s)) {
                     int x = Integer.parseInt(s);
                     if (x >= min && x <= max)
@@ -284,25 +306,25 @@ public class  Analyzer {
     public void analyze()
     {
         String notToIncludeRegex = "([!,~@#$%-:״^&*\\)]|\\d)";
-        String notToIncludeStreetRegex = "[*!@#$%^&):]";
+        String notToIncludeStreetRegex = "[*!@#'$%^&)]";
 
-        extractWord(Classify.GARDEN,"garden.txt",notToIncludeRegex);
+        extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
         extractPhoneNumber();
-        extractWord(Classify.ROMMATE,"rommate.txt",notToIncludeRegex);
-        extractWord(Classify.BLACKLIST,"blackList.txt",notToIncludeRegex);
-        extractAddress(Classify.WORD_LOCATION,"wordLocation.txt",notToIncludeRegex);
+        extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
+        extractWord(Classify.BLACKLIST,blackList,notToIncludeRegex);
+        extractAddress(Classify.WORD_LOCATION,wordLocationList,notToIncludeRegex);
         extractFirstName(Classify.NAME,"firstNames.txt",notToIncludeRegex);
-        extractWord(Classify.WORD_PRICE,"price.txt",notToIncludeRegex);
+        extractWord(Classify.WORD_PRICE,wordPriceList,notToIncludeRegex);
         extractGapNumber(Classify.PRICE,500,5000);
-        extractWord(Classify.WORD_SIZE,"size.txt",notToIncludeRegex);
+        extractWord(Classify.WORD_SIZE,wordSizeList,notToIncludeRegex);
         extractGapNumber(Classify.SIZE_APARTMENT,30,270);
         extractGapNumber(Classify.SIZE_GARDEN,10,270);
-        extractWord(Classify.NEGATIVE,"negative.txt",notToIncludeRegex);
-        extractAddress(Classify.STREET,"streets1.txt",notToIncludeStreetRegex);
-        extractWord(Classify.FLOOR,"floor.txt",notToIncludeStreetRegex);
-        extractAddress(Classify.NEIGHBORHOOD,"neighborhood.txt",notToIncludeStreetRegex);
-        extractAddress(Classify.WORD_STREET,"streetWord.txt",notToIncludeRegex);
-        extractAddress(Classify.LOCATION,"locations.txt",notToIncludeStreetRegex);
+        extractWord(Classify.NEGATIVE,wordNegativeList,notToIncludeRegex);
+        extractAddress(Classify.STREET,streetList,notToIncludeStreetRegex);
+        extractWord(Classify.FLOOR,floorList,notToIncludeStreetRegex);
+        extractAddress(Classify.NEIGHBORHOOD,neighborhoodList,notToIncludeStreetRegex);
+        extractAddress(Classify.WORD_STREET,wordStreetList,notToIncludeRegex);
+        extractAddress(Classify.LOCATION,locationsList,notToIncludeStreetRegex);
         //extractGapNumber(Classify.APARTMENT_NUMBER,1,500);
     }
 }
