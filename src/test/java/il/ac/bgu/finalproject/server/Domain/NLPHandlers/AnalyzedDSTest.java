@@ -19,6 +19,7 @@ public class AnalyzedDSTest {
         assertEquals(ds.GetResultsByClassify(Classify.PHONE),ex);
     }
 
+
     @Test
     public void remove() {
         EnvList env = new EnvList("להשכרה דירה מהממת ברחוב ברנפלד 13, בעל דירה מקסים! הדירה מרוהטת קומפלט, 4 חדרים, כולל מטבח מאובזר, רק 900 שח בחודש! כדאי מאוד! לפרטים, נופר- 053-3391800");
