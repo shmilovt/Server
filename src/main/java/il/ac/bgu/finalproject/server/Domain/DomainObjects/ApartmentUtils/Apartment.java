@@ -89,4 +89,18 @@ public class Apartment {
     public void setPostIDs(List<String> postID) {
         this.postIDs = postID;
     }
+
+    public String toString()
+    {
+        String title = "Apartment details: " + "\n";
+        String contactDetails="";
+        for(Contact c:contacts)
+        {
+            contactDetails = contactDetails + "name: " + c.getName() + "\n" + "phone: " + c.getPhone() + "\n";
+        }
+        String cost = "cost: " + this.cost + "\n";
+        String size = "size: " + this.size + "\n";
+        String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n" + "street: " + apartmentLocation.getAddress().getStreet() +  "\n" +"building number: " + apartmentLocation.getAddress().getNumber();
+        return title+contactDetails+cost+size+location;
+    }
 }

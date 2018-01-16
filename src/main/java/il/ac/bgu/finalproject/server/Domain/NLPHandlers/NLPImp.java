@@ -444,7 +444,7 @@ public class NLPImp implements NLPInterface {
         ad.setNumber(apartmentNumberDecision(ads));
         apl.setAddress(ad);
         ap.setApartmentLocation(apl);
-
+        System.out.println(ap.toString());
         return ap;
     }
 
