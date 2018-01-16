@@ -112,18 +112,17 @@ public class  Analyzer {
     }
 
 
-    public void extractFirstName(Classify classify, String fileName, String notToInclude)
+    public void extractFirstName(Classify classify, List<String> firstNameDictionary, String notToInclude)
     {
         int size = aDS.getEnvLst().size();
-        List<String> names = loadFile(fileName);
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             String[] splited = str.split(" ");
             for (String s : splited) {
                 s = s.replaceAll(notToInclude,"");
-                if(!s.equals("") && names.contains(s.substring(1)) && s.substring(0,1).equals("ל"))
+                if(!s.equals("") && firstNameDictionary.contains(s.substring(1)) && s.substring(0,1).equals("ל"))
                     aDS.Insert(classify, i, s.substring(1));
-                else if (!s.equals("") && (names.contains(s) || names.contains(s + "ל")))
+                else if (!s.equals("") && (firstNameDictionary.contains(s) || firstNameDictionary.contains(s + "ל")))
                     aDS.Insert(classify, i, s);
                 else{}
             }
@@ -144,7 +143,7 @@ public class  Analyzer {
         return s;
     }
 
-    public static String newFullName(String street, List<String> streets) {
+    public static String fullName(String street, List<String> streets) {
         if(!street.contains("*"))
             return  street;
         else {
@@ -170,7 +169,7 @@ public class  Analyzer {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
 
-    public static List<String> newExtractStreetName(String str, List<String> streets, int index, Classify classify) {
+    public static List<String> extractAddressField(String str, List<String> streets, int index, Classify classify) {
         List<String> streetLst = new LinkedList<String>();
         boolean found = false;
         String[] strSplited = str.split(" ");
@@ -183,11 +182,11 @@ public class  Analyzer {
                     if (isWordExist(strSplited[i], splitedStreet[0])) {
                         if(classify.equals(Classify.NEIGHBORHOOD))
                             if(i-1>=0 && !strSplited[i-1].equals("קומה") && !strSplited[i-1].equals("בקומה"))
-                                streetLst.add(newFullName(street, streets));
+                                streetLst.add(fullName(street, streets));
                             else
                                 break;
                         else
-                            streetLst.add(newFullName(street, streets));
+                            streetLst.add(fullName(street, streets));
                         if(strSplited.length>i+1 && isNumeric(strSplited[i+1]) && Integer.parseInt(strSplited[i+1])<500)
                             aDS.Insert(Classify.APARTMENT_NUMBER,index,strSplited[i+1]);
                     break;
@@ -196,7 +195,7 @@ public class  Analyzer {
                     if ((isWordExist(strSplited[i], splitedStreet[0]) && isWordExist(strSplited[i + 1], splitedStreet[1]))
                             || (isWordExist(strSplited[i], splitedStreet[1]) && isWordExist(strSplited[i + 1], splitedStreet[0]))
                             ) {
-                        streetLst.add(newFullName(street, streets));
+                        streetLst.add(fullName(street, streets));
                         if(strSplited.length>i+2 && isNumeric(strSplited[i+2]) && Integer.parseInt(strSplited[i+2])<500)
                             aDS.Insert(Classify.APARTMENT_NUMBER,index,strSplited[i+2]);
                         i=i+2;
@@ -205,7 +204,7 @@ public class  Analyzer {
                 } else if (length == 3 && strSplited.length - i > 2) {
                     if (isWordExist(strSplited[i], splitedStreet[0]) && isWordExist(strSplited[i + 1], splitedStreet[1]) && isWordExist(strSplited[i + 2], splitedStreet[2]))
                     {
-                        streetLst.add(newFullName(street, streets));
+                        streetLst.add(fullName(street, streets));
                         if(strSplited.length>i+3 && isNumeric(strSplited[i+3]) && Integer.parseInt(strSplited[i+3])<500 )
                             aDS.Insert(Classify.APARTMENT_NUMBER,index,strSplited[i+3]);
                         i=i+3;
@@ -224,7 +223,7 @@ public class  Analyzer {
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             str = str.replaceAll("[(]"," ").replaceAll(notToInclude,"");
-            List<String> streetList = newExtractStreetName(str.replaceAll("[(-]"," "),dictionary,i,classify);
+            List<String> streetList = extractAddressField(str.replaceAll("[(-]"," "),dictionary,i,classify);
                 if(!streetList.isEmpty())
                     for(String street:streetList)//System.out.println(streetList);
                         aDS.Insert(classify,i,street);
@@ -313,7 +312,7 @@ public class  Analyzer {
         extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
         extractWord(Classify.BLACKLIST,blackList,notToIncludeRegex);
         extractAddress(Classify.WORD_LOCATION,wordLocationList,notToIncludeRegex);
-        extractFirstName(Classify.NAME,"firstNames.txt",notToIncludeRegex);
+        extractFirstName(Classify.NAME,firstNamesList,notToIncludeRegex);
         extractWord(Classify.WORD_PRICE,wordPriceList,notToIncludeRegex);
         extractGapNumber(Classify.PRICE,500,5000);
         extractWord(Classify.WORD_SIZE,wordSizeList,notToIncludeRegex);

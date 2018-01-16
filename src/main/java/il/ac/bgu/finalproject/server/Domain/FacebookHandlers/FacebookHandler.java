@@ -58,33 +58,30 @@ public class FacebookHandler {
         for (List<Post> postPage : postFeed)
             for (Post apost : postPage) {
                 if (apost.getMessage() != null) {
-                    //System.out.println("postid: "+ apost.getId());
                     post = dbConn.getPost(apost.getId().toString());
-                    //System.out.println("Post?: " + post);
                     if (post != null) {
-                        //System.out.println("DB: "+post.get(2));
-                        //System.out.println("APOST: " + apost.getMessage());
                         if (post.get(2).compareTo(apost.getMessage()) != 0) {
-                            System.out.println("db: post updated");
+                            System.out.println("\n" + "***** db: post updated *****" + "\n");
                             dbConn.update(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
+                            nlp.extractApartment(apost.getMessage());
                             /*try {
                                 NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }*/
-                            nlp.extractApartment(apost.getMessage());
                         }
                     } else {
-                        System.out.println("db: post added");
+                        System.out.println("\n" + "***** db: post added *****" + "\n");
                         dbConn.addPost(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                       /* try {
+                        nlp.extractApartment(apost.getMessage());
+
+                        /* try {
 
                             NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
                             System.out.println(NLPController.postsQueue.size());
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }*/
-                        nlp.extractApartment(apost.getMessage());
                     }
                 }
             }
@@ -99,25 +96,14 @@ public class FacebookHandler {
 
     public  void IsDeleted(List<String> ids)
     {
-        //System.out.println("Here IsDeleted");
         DataBaseConnection dbConn = new DataBaseConnection();
         try {
             JsonObject fetchObjectsResults = fbClient.fetchObjects(ids, JsonObject.class, Parameter.with("fields", "id"));
-            //System.out.println("ids: " + ids.toString());
-            //System.out.println("fetch: " + fetchObjectsResults.names().toString());
             if(ids.removeAll(fetchObjectsResults.names()) || fetchObjectsResults.names().size()==0)
                 for(String id: ids) {
-                    System.out.println("db: post was deleted" + id);
+                    System.out.println("\n" + "***** db: post was deleted " + id + " *****" + "\n");
                     dbConn.deletePost(id);
                 }
-            //System.out.println("ids after: " + ids.toString());
-
-
-           /* System.out.println("tryn :" +  ids.removeAll(fetchObjectsResults.names()));
-            System.out.println("tryP :" +  ids.toString());
-            System.out.println("tryT :" +  fetchObjectsResults.names().get(0));
-            System.out.println("ids: " + ids.toString());
-            System.out.println("fetch: " + fetchObjectsResults.names().toString());*/
         }catch(FacebookOAuthException e)
         {
             System.out.println("error");
@@ -130,5 +116,3 @@ public class FacebookHandler {
         }
     }
 }
-// DO WE NEED CACHE?
-// will we have all ids in collection? or i have to req from DB?
