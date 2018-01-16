@@ -112,7 +112,7 @@ public class  Analyzer {
     }
 
 
-    public void extractFirstName(Classify classify, List<String> firstNameDictionary, String notToInclude)
+    public void extractFirstName(List<String> firstNameDictionary, String notToInclude)
     {
         int size = aDS.getEnvLst().size();
         for (int i = 0; i < size; i++) {
@@ -121,9 +121,9 @@ public class  Analyzer {
             for (String s : splited) {
                 s = s.replaceAll(notToInclude,"");
                 if(!s.equals("") && firstNameDictionary.contains(s.substring(1)) && s.substring(0,1).equals("ל"))
-                    aDS.Insert(classify, i, s.substring(1));
+                    aDS.Insert(Classify.NAME, i, s.substring(1));
                 else if (!s.equals("") && (firstNameDictionary.contains(s) || firstNameDictionary.contains(s + "ל")))
-                    aDS.Insert(classify, i, s);
+                    aDS.Insert(Classify.NAME, i, s);
                 else{}
             }
         }
@@ -312,7 +312,7 @@ public class  Analyzer {
         extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
         extractWord(Classify.BLACKLIST,blackList,notToIncludeRegex);
         extractAddress(Classify.WORD_LOCATION,wordLocationList,notToIncludeRegex);
-        extractFirstName(Classify.NAME,firstNamesList,notToIncludeRegex);
+        extractFirstName(firstNamesList,notToIncludeRegex);
         extractWord(Classify.WORD_PRICE,wordPriceList,notToIncludeRegex);
         extractGapNumber(Classify.PRICE,500,5000);
         extractWord(Classify.WORD_SIZE,wordSizeList,notToIncludeRegex);
