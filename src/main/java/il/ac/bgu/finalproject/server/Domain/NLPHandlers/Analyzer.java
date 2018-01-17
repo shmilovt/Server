@@ -27,6 +27,7 @@ public class  Analyzer {
     private static List<String> neighborhoodList ;
     private static List<String> wordStreetList ;
     private static List<String> locationsList;
+
     public List<String> loadFile(String fileName){
         String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
         String  path= pathPref + fileName;
