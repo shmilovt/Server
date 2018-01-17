@@ -38,6 +38,14 @@ public class AnalyzerTest {
         ana.extractFirstName(firstNamesList,notToIncludeRegex);
         assertTrue(ds.GetResultsByClassifyAndIndex(Classify.NAME,5).contains("נופר"));
         assertTrue(ds.GetResultsByClassify(Classify.NAME).contains("נועה"));
+        assertFalse(ds.GetResultsByClassify(Classify.NAME).contains("נועם"));
+        assertFalse(ds.GetResultsByClassify(Classify.NAME).contains(""));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.NAME,5).contains("נועה"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.NAME,4).contains("נועה"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.NAME,3).contains("נועה"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.NAME,2).contains("נועה"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.NAME,1).contains("נועה"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.NAME,0).contains("נועה"));
     }
 
     @Test
@@ -101,6 +109,18 @@ public class AnalyzerTest {
         assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("רק"));
         assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("שח"));
         assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,3).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,3).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,3).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,2).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,2).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,2).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,1).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,1).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,1).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,0).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,0).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,0).contains("בחודש"));
 
     }
 
