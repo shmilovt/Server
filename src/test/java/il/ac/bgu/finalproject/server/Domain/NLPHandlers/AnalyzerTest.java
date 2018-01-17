@@ -18,6 +18,7 @@ public class AnalyzerTest {
     private static String notToIncludeRegex = "([!,~@#$%-:״^&*\\)]|\\d)";
     private static List<String> firstNamesList;
     private static List<String> streetsList;
+    private static List<String> wordPriceList;
 
 
     //@Test
@@ -29,6 +30,7 @@ public class AnalyzerTest {
         ana= new Analyzer(ds);
         firstNamesList=ana.loadFile("firstNames.txt");
         streetsList= ana.loadFile("streets.txt");
+        wordPriceList=ana.loadFile("price.txt");
     }
 
     @Test
@@ -40,6 +42,7 @@ public class AnalyzerTest {
 
     @Test
     public void fullName() {
+        assertEquals( "אוסטרובסקי גרשון",Analyzer.fullName("אוסטרובסקי", streetsList));
         assertEquals( "מיכאל אבן ארי",Analyzer.fullName("אבן ארי", streetsList));
         assertEquals( "חביבה רייק",Analyzer.fullName("חביבה", streetsList));
 
@@ -76,6 +79,29 @@ public class AnalyzerTest {
 
     @Test
     public void extractWord() {
+        //Classify.NAME&firstNamesList
+        ds.Remove(Classify.NAME,5,"נופר");
+        ds.Remove(Classify.NAME,6,"נועה");
+        List<String> pl= new ArrayList<String>();
+        assertEquals(pl,ds.GetResultsByClassify(Classify.NAME));
+        ana.extractWord(Classify.NAME,firstNamesList,notToIncludeRegex);
+        pl.add("נופר");
+        pl.add("נועה");
+        assertEquals(pl,ds.GetResultsByClassify(Classify.NAME));
+
+        //Classify.NAME&firstNamesList
+        ds.Remove(Classify.WORD_PRICE,4,"רק");
+        ds.Remove(Classify.WORD_PRICE,4,"שח");
+        ds.Remove(Classify.WORD_PRICE,4,"בחודש");
+        pl.remove("נופר");
+        pl.remove("נועה");
+        assertEquals(pl,ds.GetResultsByClassify(Classify.WORD_PRICE));
+        ana.extractWord(Classify.WORD_PRICE,wordPriceList,notToIncludeRegex);
+
+        assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("רק"));
+        assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("שח"));
+        assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("בחודש"));
+
     }
 
     @Test
