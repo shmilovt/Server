@@ -12,23 +12,30 @@ import static org.junit.Assert.*;
 
 public class AnalyzerTest {
 
-    private static EnvList env;
-    private static AnalyzedDS ds;
+    private static EnvList env,env2;
+    private static AnalyzedDS ds,ds2;
     private static Analyzer ana;
     private static String notToIncludeRegex = "([!,~@#$%-:״^&*\\)]|\\d)";
     private static List<String> firstNamesList;
     private static List<String> streetsList;
+    private static List<String> neighborhoodList;
+    private static List<String> wordPriceList;
+    String notToIncludeStreetRegex = "[*!@#'$%^&)]";
 
 
     //@Test
-    //public void loadFile() { }
     @BeforeClass
     public static void setup(){
         env = new EnvList("להשכרה דירה מהממת ברחוב ברנפלד 13, בעל דירה מדהים! הדירה מרוהטת קומפלט, 4 חדרים, כולל מטבח מאובזר, רק 900 שח בחודש! כדאי מאוד! לפרטים, נופר- 053-3391800, לתיאום לראות את הדירה: נועה- 053-3311010, אגב דירה ממש שווה- 10 דקות מהאוניברסיטה ו100 מ\"ר");
-        ds= new AnalyzedDS(env);
-        ana= new Analyzer(ds);
+        ds = new AnalyzedDS(env);
+        env2 = new EnvList("להשכרה דירה מהממת ברחוב ברנפלד 13, בעל דירה מדהים! הדירה מרוהטת קומפלט, 4 חדרים, כולל מטבח מאובזר, רק 900 שח בחודש! כדאי מאוד! לפרטים, נופר- 053-3391800, לתיאום לראות את הדירה: נועה- 053-3311010, אגב דירה ממש שווה- 10 דקות מהאוניברסיטה ו100 מ\"ר שכונה ג");
+        ds2 = new AnalyzedDS(env2);
+
+        ana = new Analyzer(ds);
         firstNamesList=ana.loadFile("firstNames.txt");
-        streetsList= ana.loadFile("streets.txt");
+        streetsList= ana.loadFile("streets1.txt");
+        neighborhoodList = ana.loadFile("neighborhood.txt");
+        wordPriceList= ana.loadFile("price.txt");
     }
 
     @Test
@@ -40,9 +47,9 @@ public class AnalyzerTest {
 
     @Test
     public void fullName() {
-        assertEquals( "מיכאל אבן ארי",Analyzer.fullName("אבן ארי", streetsList));
-        assertEquals( "חביבה רייק",Analyzer.fullName("חביבה", streetsList));
-
+        assertEquals( "אוסטרובסקי גרשון",Analyzer.fullName("*אוסטרובסקי", streetsList));
+        assertEquals( "אבן ארי מיכאל",Analyzer.fullName("*אבן ארי", streetsList));
+        assertEquals( "רייק חביבה",Analyzer.fullName("*רייק", streetsList));
     }
 
     @Test
@@ -65,17 +72,48 @@ public class AnalyzerTest {
     }
 
     @Test
-    public void extractAddressField() {
-        //assertTrue(Analyzer.extractAddressField());
-    }
-
-    @Test
     public void extractAddress() {
-        //ana.extractAddress(Classify.STREET,streetsList,notToIncludeRegex);
+        assertEquals(ds.GetResultsByClassifyAndIndex(Classify.STREET,0).get(0),"ברנפלד שמעון");
+        assertEquals(ds.GetResultsByClassify(Classify.NEIGHBORHOOD).isEmpty(),true);
+        assertEquals(ds2.GetResultsByClassify(Classify.NEIGHBORHOOD).get(ds2.GetResultsByClassify(Classify.NEIGHBORHOOD).size()-1),"שכונה ג'");
     }
 
     @Test
     public void extractWord() {
+        //Classify.NAME&firstNamesList
+        ds.Remove(Classify.NAME,5,"נופר");
+        ds.Remove(Classify.NAME,6,"נועה");
+        List<String> pl= new ArrayList<String>();
+        assertEquals(pl,ds.GetResultsByClassify(Classify.NAME));
+        ana.extractWord(Classify.NAME,firstNamesList,notToIncludeRegex);
+        pl.add("נופר");
+        pl.add("נועה");
+        assertEquals(pl,ds.GetResultsByClassify(Classify.NAME));
+
+        //Classify.NAME&firstNamesList
+        ds.Remove(Classify.WORD_PRICE,4,"רק");
+        ds.Remove(Classify.WORD_PRICE,4,"שח");
+        ds.Remove(Classify.WORD_PRICE,4,"בחודש");
+        pl.remove("נופר");
+        pl.remove("נועה");
+        assertEquals(pl,ds.GetResultsByClassify(Classify.WORD_PRICE));
+        ana.extractWord(Classify.WORD_PRICE,wordPriceList,notToIncludeRegex);
+
+        assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("רק"));
+        assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("שח"));
+        assertTrue(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,4).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,3).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,3).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,3).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,2).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,2).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,2).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,1).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,1).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,1).contains("בחודש"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,0).contains("רק"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,0).contains("שח"));
+        assertFalse(ds.GetResultsByClassifyAndIndex(Classify.WORD_PRICE,0).contains("בחודש"));
     }
 
     @Test
