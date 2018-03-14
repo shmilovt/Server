@@ -184,6 +184,7 @@ public class AnalyzedResult
         size = -1;
 
         if(apartment != null) {
+            garden=apartment.getGarden();
             if (apartment.getApartmentLocation() != null) {
                 if(apartment.getApartmentLocation().getAddress()!= null) {
                     street = apartment.getApartmentLocation().getAddress().getStreet();

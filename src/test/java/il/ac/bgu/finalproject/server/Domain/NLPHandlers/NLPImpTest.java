@@ -110,7 +110,30 @@ public class NLPImpTest {
 
 
 
+    @Test
+    public void extractApartmentTest_Garden() {
+        List<AssertionError> errors = new ArrayList<>();
+        int passGarden = 0;
+        for (TestCase<String, AnalyzedResult> testCase : testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try {
+                assertEquals((int) (analyzedResult.getGarden() - expectedResult.getGarden()), 0);
+                passGarden++;
+                System.out.println(getPassMessage_Garden(testCase.getInput(), analyzedResult));
+            } catch (AssertionError e) {
+                errors.add(new AssertionError(getAssertionErrorMessage_Garden(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
 
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_Size(passGarden ,  testCases.size()));
+    }
 
 
     @Test
@@ -236,6 +259,30 @@ public class NLPImpTest {
         return message;
     }
 
+    private String getAssertionErrorMessage_Garden(String input, AnalyzedResult output, AnalyzedResult expected) {
+        String isPassColor ;
+
+        String message = "";
+        message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
+        message = message + input + "\n";
+
+
+        if(output.getGarden() == expected.getGarden()) {
+            isPassColor = ANSI_GREEN;
+        }
+        else{
+            isPassColor = ANSI_RED;
+        }
+
+        message = message + isPassColor+ "\ngarden => ";
+        message = message + "expected: ";
+        message = message + expected.getGarden();
+        message = message + " , but was: ";
+        message = message + output.getGarden()+  ANSI_RED;
+        return message;
+    }
+
+
     private String getAssertionErrorMessage_Cost(String input, AnalyzedResult output, AnalyzedResult expected) {
         String isPassColor ;
 
@@ -262,6 +309,11 @@ public class NLPImpTest {
     private String getPassMessage_Cost(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
                 "pass test-case: \n\n"+input+"\n\n" + "cost: "+output.getCost() + ANSI_RESET ;
+    }
+
+    private String getPassMessage_Garden(String input, AnalyzedResult output) {
+        return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
+                "pass test-case: \n\n"+input+"\n\n" + "garden: "+output.getGarden() + ANSI_RESET ;
     }
 
     private static String printSummary_Cost(int passCost, int totalPostsNum) {

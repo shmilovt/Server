@@ -241,22 +241,27 @@ public class NLPImp implements NLPInterface {
         return price;
     }
 
-    private Dictionary<Integer,Integer> gardenDecision(AnalyzedDS ads)
+    private List<Integer> gardenDecision(AnalyzedDS ads)
     {
-        int exist=0;
-        Dictionary<Integer,Integer> gardenRes = new Hashtable<Integer, Integer>();
+        int exist=-1;
+        List<Integer> gardenRes = new LinkedList<Integer>();
         List<Integer> gardenList = ads.GetEnvsIndex(Classify.GARDEN);
         List<Integer> negativeList = ads.GetEnvsIndex(Classify.NEGATIVE);
         List<Integer> gardenNotNegativeList = minusList(gardenList,negativeList);
         if(gardenNotNegativeList.size()==0)
+        {
+            gardenRes.add(-1);
+            gardenRes.add(-1);
             return gardenRes;
+        }
         exist = 1;
         List<Integer> wordSizeList = ads.GetEnvsIndex(Classify.WORD_SIZE);
         List<Integer> sizeList = ads.GetEnvsIndex(Classify.SIZE_GARDEN);
         List<Integer> intersectSizeWordSizeList = intersectList(wordSizeList,sizeList);
         intersectSizeWordSizeList.retainAll(gardenNotNegativeList);
         if(intersectSizeWordSizeList.size()==0) {
-            gardenRes.put(exist, -1);
+            gardenRes.add(1);
+            gardenRes.add(-1);
             return gardenRes;
         }
         if(ads.getNumberOfGapAccourences(10,270)>1) {
@@ -269,13 +274,15 @@ public class NLPImp implements NLPInterface {
                 for (int i = 1; i < sizeLst.size(); i++)
                     if (min > sizeLst.get(i))
                         min = sizeLst.get(i);
-                gardenRes.put(exist, min);
+                gardenRes.add(1);
+                gardenRes.add(min);
             } else {
                 System.out.println("Very Rare Path Situation");
             }
         }
         if(gardenRes.isEmpty())
-            gardenRes.put(1,-1);
+            gardenRes.add(1);
+            gardenRes.add(-1);
         return gardenRes;
     }
 
@@ -467,16 +474,19 @@ public class NLPImp implements NLPInterface {
         AnalyzedDS ads= new AnalyzedDS(l);
 
         Apartment ap = new Apartment();
-       /*
-       Dictionary<Integer,Integer> gardenDic = gardenDecision(ads);
-        System.out.println("************************");
-        if(gardenDic.isEmpty())
-            System.out.println("GARDEN NOT EXIST");
-        else
-            System.out.println("SIZE  " + gardenDic.get(1));
+
+
+//        System.out.println("************************");
+  //      if(gardenDic.isEmpty())
+    //        System.out.println("GARDEN NOT EXIST");
+      //  else
+        List<Integer> gardenDic = gardenDecision(ads);
+        ap.setGarden(gardenDic.get(0));
+        ap.setGardenSize(gardenDic.get(1));
+       //     System.out.println("SIZE  " + gardenDic.get(1));
             //int size = gardenDic.get(1);
-        System.out.println("************************");
-*/
+     //   System.out.println("************************");
+
         ap.setSize(sizeDecision(ads));
         ap.setContacts(phoneDecision(ads));
         ap.setCost(priceDecision(ads));

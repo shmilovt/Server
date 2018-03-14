@@ -11,6 +11,9 @@ public class Apartment {
     private double cost;
     private double size;
     private Set<Contact> contacts;
+    private int garden;
+    private int gardenSize;
+
 
 
     public Apartment() {
@@ -18,6 +21,8 @@ public class Apartment {
         apartmentLocation = new ApartmentLocation();
         cost = -1;
         size = -1;
+        garden = -1;
+        gardenSize = -1;
         contacts = new HashSet<>();
     }
 
@@ -25,6 +30,8 @@ public class Apartment {
         this.apartmentLocation = apartmentLocation;
         this.cost = -1;
         this.size = -1;
+        garden = -1;
+        gardenSize = -1;
         contacts = new HashSet<>();
     }
 
@@ -33,7 +40,8 @@ public class Apartment {
         this.contacts = contacts;
         this.cost = -1;
         this.size = -1;
-
+        garden = -1;
+        gardenSize = -1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
@@ -41,6 +49,8 @@ public class Apartment {
         this.cost = cost;
         this.contacts = contacts;
         this.size = -1;
+        garden = -1;
+        gardenSize = -1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
@@ -48,6 +58,8 @@ public class Apartment {
         this.cost = cost;
         this.contacts = contacts;
         this.size = size;
+        garden = -1;
+        gardenSize = -1;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -65,6 +77,24 @@ public class Apartment {
     public void setCost(double cost) {
         this.cost = cost;
     }
+
+    public int getGarden() {
+        return garden;
+    }
+
+    public void setGarden(int garden) {
+        this.garden = garden;
+    }
+
+
+    public int getGardenSize() {
+        return gardenSize;
+    }
+
+    public void setGardenSize(int gardenSize) {
+        this.gardenSize = gardenSize;
+    }
+
 
     public Set<Contact> getContacts() {
         return contacts;
@@ -100,7 +130,9 @@ public class Apartment {
         }
         String cost = "cost: " + this.cost + "\n";
         String size = "size: " + this.size + "\n";
+        String garden = "garden: " + this.getGarden() + "\n";
+        String gardenSize = "garden size: " + this.gardenSize + "\n";
         String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n" + "street: " + apartmentLocation.getAddress().getStreet() +  "\n" +"building number: " + apartmentLocation.getAddress().getNumber();
-        return title+contactDetails+cost+size+location;
+        return title+contactDetails+cost+garden+gardenSize+size+location;
     }
 }
