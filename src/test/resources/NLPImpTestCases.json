@@ -864,7 +864,7 @@
       "phones": [],
       "cost": 1150,
       "timeFromUni": -1,
-      "garden": -1,
+      "garden": 1,
       "balcony": 0,
       "protectedSpace": 0,
       "wareHouse": 0,

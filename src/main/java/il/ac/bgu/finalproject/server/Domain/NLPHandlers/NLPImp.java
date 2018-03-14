@@ -248,11 +248,28 @@ public class NLPImp implements NLPInterface {
         List<Integer> gardenList = ads.GetEnvsIndex(Classify.GARDEN);
         List<Integer> negativeList = ads.GetEnvsIndex(Classify.NEGATIVE);
         List<Integer> gardenNotNegativeList = minusList(gardenList,negativeList);
-        if(gardenNotNegativeList.size()==0)
+        if(gardenNotNegativeList.size()==0 && gardenList.size()==0)
         {
             gardenRes.add(-1);
             gardenRes.add(-1);
             return gardenRes;
+        }
+        else if(gardenNotNegativeList.size()==0 && gardenList.size()>0)
+        {
+             List<Integer> ans =  intersectList(gardenList,negativeList);
+             for(int i=0;i<ans.size();i++) {
+                 List<String> gardenWords = ads.GetResultsByClassifyAndIndex(Classify.GARDEN, ans.get(i));
+                 List<String> negativeWords = ads.GetResultsByClassifyAndIndex(Classify.NEGATIVE, ans.get(i));
+                 String str = ads.getEnvLst().get(ans.get(i)).getEnvString();
+                 for(int j=0;j<gardenWords.size();j++) {
+                     for(int k=0;k<negativeWords.size();k++)
+                     if (distance(str, gardenWords.get(j), negativeWords.get(k)) < 2) {
+                         gardenRes.add(-1);
+                         gardenRes.add(-1);
+                         return gardenRes;
+                     }
+                 }
+             }
         }
         exist = 1;
         List<Integer> wordSizeList = ads.GetEnvsIndex(Classify.WORD_SIZE);
