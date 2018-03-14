@@ -50,9 +50,13 @@ public class FacebookHandler {
      * @param groupId
      */
     public void GetFeed(int sinceWeeks,String groupId) {
+        System.out.println("GetFeed");
         long sinceDate = DateToUnixTime(GetDateOfNumOfWeeksBefore(sinceWeeks));
+        System.out.println("Create Connection");
         Connection<Post> postFeed = fbClient.fetchConnection(groupId + "/feed", Post.class, Parameter.with("since", sinceDate), Parameter.with("limit", 100));
         DataBaseConnection dbConn = new DataBaseConnection();
+        System.out.println("Connection established");
+
         List<String> post;
         int x=1000;
         for (List<Post> postPage : postFeed)

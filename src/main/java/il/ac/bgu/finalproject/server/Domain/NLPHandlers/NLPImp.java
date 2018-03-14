@@ -5,9 +5,28 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class NLPImp implements NLPInterface {
 
+
+    private static boolean rootAndWord (String root, String word){
+        String reg="ו?(הו?|מו?|א|י|תו?|נ)?"+root.charAt(0);
+        String temp=root;
+        for (int i=1; i<root.length();i++){
+            reg=reg+"[וי]?";
+            reg=reg+root.charAt(i);
+        }
+        reg=reg+"(ה|ות?|ים?|ת[יםן]?|נ[וה])?";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(word);
+        String temp2;
+        while(m.find()) {
+            temp2=word.substring(m.start(),m.end());
+            return true;
+        }
+        return false;
+    }
 
     private static int distance(String str, String a, String b) {
         int aIndex = -1;
@@ -33,6 +52,12 @@ public class NLPImp implements NLPInterface {
             return minDistance;
     }
 
+    private List<Integer> stringCollectionToIntegerCollection(List<String> toConvert)
+    {
+        return toConvert.stream()
+                .map(s -> Integer.parseInt(s))
+                .collect(Collectors.toList());
+    }
     private List<Integer> minusList(List<Integer> a,List<Integer> b)
     {
         List<Integer> tmp = new LinkedList<Integer>();
@@ -181,7 +206,7 @@ public class NLPImp implements NLPInterface {
             suspicious.retainAll(rommateList);
             if (suspicious.size() == 1)
                 return Integer.parseInt(ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0)).iterator().next());
-            else // more than one env with rommanteWord priceWord and price or sus is empty
+            else  if (suspicious.size() > 1)// more than one env with rommanteWord priceWord and price or sus is empty
             {
                 List<String> l = new LinkedList<>();
                 List<Integer> l1 = new LinkedList<>();
@@ -193,6 +218,24 @@ public class NLPImp implements NLPInterface {
                     if(min > Integer.parseInt(str))
                         min = Integer.parseInt(str);
                 return min;
+            }
+            else
+            {
+                suspicious = intersectList(priceList,priceWordList);
+                String toCheck;
+
+                for(int i=0;i<suspicious.size();i++)
+                {
+                    //String toCheck;
+                    toCheck = ads.getEnvLst().get(suspicious.get(i)).getEnvString();
+                    String[] toCheckArray = toCheck.replaceAll("-","").split(" ");
+                    for(int j=0;j<toCheckArray.length;j++)
+                        if(rootAndWord("שכר",toCheckArray[j]) || rootAndWord("חדר",toCheckArray[j]) || rootAndWord("שתף",toCheckArray[j]))
+                            return Integer.parseInt(ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(i)).get(0));
+                }
+                List<String> priceSus = ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0));
+                priceSus.addAll(ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(1)));
+                price = Collections.min(stringCollectionToIntegerCollection(priceSus));
             }
         }
         return price;
