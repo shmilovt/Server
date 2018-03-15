@@ -484,6 +484,14 @@ public class NLPImp implements NLPInterface {
         return -1;
     }
 
+    private int protectedSpaceDecision(AnalyzedDS ads)
+    {
+        List<Integer> protectedSpace = ads.GetEnvsIndex(Classify.PROTECTED_SPACE);
+        if(protectedSpace.isEmpty())
+            return 0;
+        return 1;
+    }
+
     @Override
     public Apartment extractApartment(String str) {
 
@@ -492,17 +500,10 @@ public class NLPImp implements NLPInterface {
 
         Apartment ap = new Apartment();
 
-
-//        System.out.println("************************");
-  //      if(gardenDic.isEmpty())
-    //        System.out.println("GARDEN NOT EXIST");
-      //  else
+        ap.setProtectedSpace(protectedSpaceDecision(ads));
         List<Integer> gardenDic = gardenDecision(ads);
         ap.setGarden(gardenDic.get(0));
         ap.setGardenSize(gardenDic.get(1));
-       //     System.out.println("SIZE  " + gardenDic.get(1));
-            //int size = gardenDic.get(1);
-     //   System.out.println("************************");
 
         ap.setSize(sizeDecision(ads));
         ap.setContacts(phoneDecision(ads));

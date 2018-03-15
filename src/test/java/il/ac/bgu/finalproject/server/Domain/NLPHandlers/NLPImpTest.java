@@ -107,6 +107,31 @@ public class NLPImpTest {
         System.out.println(printSummary_Cost(passCost ,  testCases.size()));
     }
 
+    @Test
+    public void extractApartmentTest_ProtectedSpace(){
+        List<AssertionError> errors = new ArrayList<>();
+        int passProtectedSpace = 0;
+        for (TestCase<String, AnalyzedResult> testCase: testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try{
+                assertEquals((int)(analyzedResult.getProtectedSpace() - expectedResult.getProtectedSpace()) , 0);
+                passProtectedSpace ++;
+                System.out.println(getPassMessage_ProtectedSpace(testCase.getInput(), analyzedResult));}
+            catch (AssertionError e){
+                errors.add(new AssertionError(getAssertionErrorMessage_ProtectedSpace(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
+
+
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_ProtectedSpace(passProtectedSpace ,  testCases.size()));
+    }
 
 
 
@@ -306,6 +331,34 @@ public class NLPImpTest {
         return message;
     }
 
+    private String getAssertionErrorMessage_ProtectedSpace(String input, AnalyzedResult output, AnalyzedResult expected) {
+        String isPassColor ;
+
+        String message = "";
+        message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
+        message = message + input + "\n";
+
+
+        if(output.getProtectedSpace() == expected.getProtectedSpace()) {
+            isPassColor = ANSI_GREEN;
+        }
+        else{
+            isPassColor = ANSI_RED;
+        }
+
+        message = message + isPassColor+ "\nProtected space => ";
+        message = message + "expected: ";
+        message = message + expected.getProtectedSpace();
+        message = message + " , but was: ";
+        message = message + output.getProtectedSpace()+  ANSI_RED;
+        return message;
+    }
+
+    private String getPassMessage_ProtectedSpace(String input, AnalyzedResult output) {
+        return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
+                "pass test-case: \n\n"+input+"\n\n" + "Protected space: "+output.getProtectedSpace() + ANSI_RESET ;
+    }
+
     private String getPassMessage_Cost(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
                 "pass test-case: \n\n"+input+"\n\n" + "cost: "+output.getCost() + ANSI_RESET ;
@@ -319,6 +372,13 @@ public class NLPImpTest {
     private static String printSummary_Cost(int passCost, int totalPostsNum) {
         String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
         message = message + passCost+"/"+totalPostsNum+" streets correctly analyzed\n";
+        message = message +  ANSI_RESET;
+        return message;
+    }
+
+    private static String printSummary_ProtectedSpace(int passProtectedSpace, int totalPostsNum) {
+        String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
+        message = message + passProtectedSpace + "/" + totalPostsNum +" Protected space correctly analyzed\n";
         message = message +  ANSI_RESET;
         return message;
     }

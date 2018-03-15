@@ -27,6 +27,7 @@ public class  Analyzer {
     private static List<String> neighborhoodList ;
     private static List<String> wordStreetList ;
     private static List<String> locationsList;
+    private static List<String> protectedSpace;
 
     public List<String> loadFile(String fileName){
         String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
@@ -64,6 +65,7 @@ public class  Analyzer {
         neighborhoodList = loadFile("neighborhood.txt");
         wordStreetList = loadFile("streetWord.txt");
         locationsList = loadFile("locations.txt");
+        protectedSpace = loadFile("protectedSpace.txt");
         // we will load the Dictionaries
     }
 
@@ -262,6 +264,15 @@ public class  Analyzer {
         }
     }
 
+    /*
+    public void extractProtectedSpace() {
+        int size = aDS.getEnvLst().size();
+        for (int i = 0; i < size; i++) {
+            String str = aDS.getEnvLst().get(i).getEnvString();
+
+
+        }
+    }*/
 
     public void extractGapNumber(Classify classify,int min, int max) {
         int size = aDS.getEnvLst().size();
@@ -309,6 +320,7 @@ public class  Analyzer {
         String notToIncludeStreetRegex = "[*!@#'$%^&)]";
 
         extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
+        extractWord(Classify.PROTECTED_SPACE,protectedSpace,notToIncludeRegex);
         extractPhoneNumber();
         extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
         extractWord(Classify.BLACKLIST,blackList,notToIncludeRegex);

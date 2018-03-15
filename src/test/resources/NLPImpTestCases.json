@@ -705,7 +705,7 @@
       "timeFromUni": -1,
       "garden": -1,
       "balcony": 1,
-      "protectedSpace": 0,
+      "protectedSpace": 1,
       "wareHouse": 0,
       "pets": 0,
       "seperatedShowerToilet": 0,

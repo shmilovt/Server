@@ -19,4 +19,5 @@ public enum Classify {
     BLACKLIST,
     WORD_LOCATION,
     FLOOR,
+    PROTECTED_SPACE
 }
