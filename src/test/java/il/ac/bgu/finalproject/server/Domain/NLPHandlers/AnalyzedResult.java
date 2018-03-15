@@ -182,9 +182,11 @@ public class AnalyzedResult
         phones  = new HashSet<>();
         cost = -1;
         size = -1;
-        protectedSpace = 0;
+        protectedSpace = -1;
+        wareHouse = -1;
 
         if(apartment != null) {
+            wareHouse = apartment.getWarehouse();
             protectedSpace = apartment.getProtectedSpace();
             garden=apartment.getGarden();
             if (apartment.getApartmentLocation() != null) {

@@ -134,6 +134,32 @@ public class NLPImpTest {
     }
 
 
+    @Test
+    public void extractApartmentTest_WareHouse(){
+        List<AssertionError> errors = new ArrayList<>();
+        int passWarehouse = 0;
+        for (TestCase<String, AnalyzedResult> testCase: testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try{
+                assertEquals((int)(analyzedResult.getWareHouse() - expectedResult.getWareHouse()) , 0);
+                passWarehouse ++;
+                System.out.println(getPassMessage_Warehouse(testCase.getInput(), analyzedResult));}
+            catch (AssertionError e){
+                errors.add(new AssertionError(getAssertionErrorMessage_wareHouse(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
+
+
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_Warehouse(passWarehouse ,  testCases.size()));
+    }
+
 
     @Test
     public void extractApartmentTest_Garden() {
@@ -354,6 +380,35 @@ public class NLPImpTest {
         return message;
     }
 
+    private String getAssertionErrorMessage_wareHouse(String input, AnalyzedResult output, AnalyzedResult expected) {
+        String isPassColor ;
+
+        String message = "";
+        message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
+        message = message + input + "\n";
+
+
+        if(output.getWareHouse() == expected.getWareHouse()) {
+            isPassColor = ANSI_GREEN;
+        }
+        else{
+            isPassColor = ANSI_RED;
+        }
+
+        message = message + isPassColor+ "\nWarehouse => ";
+        message = message + "expected: ";
+        message = message + expected.getWareHouse();
+        message = message + " , but was: ";
+        message = message + output.getWareHouse()+  ANSI_RED;
+        return message;
+    }
+
+
+    private String getPassMessage_Warehouse(String input, AnalyzedResult output) {
+        return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
+                "pass test-case: \n\n"+input+"\n\n" + "Warehouse: "+output.getWareHouse() + ANSI_RESET ;
+    }
+
     private String getPassMessage_ProtectedSpace(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
                 "pass test-case: \n\n"+input+"\n\n" + "Protected space: "+output.getProtectedSpace() + ANSI_RESET ;
@@ -383,6 +438,13 @@ public class NLPImpTest {
         return message;
     }
 
+
+    private static String printSummary_Warehouse(int passProtectedSpace, int totalPostsNum) {
+        String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
+        message = message + passProtectedSpace + "/" + totalPostsNum +" Warehouse correctly analyzed\n";
+        message = message +  ANSI_RESET;
+        return message;
+    }
 
     private String getAssertionErrorMessage_Size(String input, AnalyzedResult output, AnalyzedResult expected) {
         String isPassColor ;

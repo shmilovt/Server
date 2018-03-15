@@ -162,7 +162,13 @@ public class NLPImp implements NLPInterface {
 
         if (suspicious.size() == 0) // assume that price and wordPrice must exist.
         {
-            return -1;
+            if(priceList.isEmpty())
+                return -1;
+            List<String> res = ads.GetResultsByClassifyAndIndex(Classify.PRICE, priceList.get(0));
+            for(int i=1;i<priceList.size();i++)
+                res.addAll(ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(i)));
+            return Collections.max(stringCollectionToIntegerCollection(res));
+
         }
         else if (suspicious.size() == 1) {
             List<String> res = ads.GetResultsByClassifyAndIndex(Classify.PRICE, suspicious.get(0));
@@ -492,6 +498,14 @@ public class NLPImp implements NLPInterface {
         return 1;
     }
 
+    private int warehouseDecision(AnalyzedDS ads)
+    {
+        List<Integer> suspicious = ads.GetEnvsIndex(Classify.WAREHOUSE);
+        if(suspicious.isEmpty())
+            return 0;
+        return 1;
+    }
+
     @Override
     public Apartment extractApartment(String str) {
 
@@ -504,6 +518,8 @@ public class NLPImp implements NLPInterface {
         List<Integer> gardenDic = gardenDecision(ads);
         ap.setGarden(gardenDic.get(0));
         ap.setGardenSize(gardenDic.get(1));
+
+        ap.setWarehouse(warehouseDecision(ads));
 
         ap.setSize(sizeDecision(ads));
         ap.setContacts(phoneDecision(ads));

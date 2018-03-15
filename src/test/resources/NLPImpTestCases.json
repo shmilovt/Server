@@ -292,7 +292,7 @@
       "garden": 1,
       "balcony": 0,
       "protectedSpace": 0,
-      "wareHouse": 0,
+      "wareHouse": 1,
       "pets": 0,
       "seperatedShowerToilet": 0,
       "roomType": 0
@@ -1143,7 +1143,7 @@
       "garden": 1,
       "balcony": 0,
       "protectedSpace": 0,
-      "wareHouse": 0,
+      "wareHouse": 1,
       "pets": 1,
       "seperatedShowerToilet": 0,
       "roomType": 0
@@ -1741,7 +1741,7 @@
       "garden": -1,
       "balcony": 0,
       "protectedSpace": 0,
-      "wareHouse": 0,
+      "wareHouse": 1,
       "pets": 0,
       "seperatedShowerToilet": 0,
       "roomType": 0
@@ -1884,7 +1884,7 @@
       "garden": -1,
       "balcony": 0,
       "protectedSpace": 0,
-      "wareHouse": 0,
+      "wareHouse": 1,
       "pets": 0,
       "seperatedShowerToilet": 1,
       "roomType": 0
@@ -2275,7 +2275,7 @@
       "garden": -1,
       "balcony": 0,
       "protectedSpace": 0,
-      "wareHouse": 1,
+      "wareHouse": 0,
       "pets": 0,
       "seperatedShowerToilet": 1,
       "roomType": 0
@@ -2321,7 +2321,7 @@
       "garden": -1,
       "balcony": 0,
       "protectedSpace": 0,
-      "wareHouse": 0,
+      "wareHouse": 1,
       "pets": 0,
       "seperatedShowerToilet": 0,
       "roomType": 0

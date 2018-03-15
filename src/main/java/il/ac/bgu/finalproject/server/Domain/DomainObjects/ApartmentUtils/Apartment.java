@@ -14,7 +14,7 @@ public class Apartment {
     private int garden;
     private int gardenSize;
     private int protectedSpace;
-
+    private int warehouse;
 
     public Apartment() {
         postIDs = new ArrayList<>();
@@ -24,6 +24,7 @@ public class Apartment {
         garden = -1;
         gardenSize = -1;
         protectedSpace = -1;
+        warehouse=-1;
         contacts = new HashSet<>();
     }
 
@@ -34,6 +35,7 @@ public class Apartment {
         garden = -1;
         gardenSize = -1;
         protectedSpace = -1;
+        warehouse=-1;
         contacts = new HashSet<>();
     }
 
@@ -45,6 +47,7 @@ public class Apartment {
         garden = -1;
         gardenSize = -1;
         protectedSpace = -1;
+        warehouse=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
@@ -55,6 +58,7 @@ public class Apartment {
         garden = -1;
         gardenSize = -1;
         protectedSpace = -1;
+        warehouse=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
@@ -65,6 +69,7 @@ public class Apartment {
         garden = -1;
         gardenSize = -1;
         protectedSpace = -1;
+        warehouse=-1;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -89,6 +94,14 @@ public class Apartment {
 
     public void setGarden(int garden) {
         this.garden = garden;
+    }
+
+    public int getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(int warehouse) {
+        this.warehouse = warehouse;
     }
 
     public int getGardenSize() {
@@ -140,11 +153,12 @@ public class Apartment {
             contactDetails = contactDetails + "name: " + c.getName() + "\n" + "phone: " + c.getPhone() + "\n";
         }
         String cost = "cost: " + this.cost + "\n";
+        String warehouse = "warehouse: " + this.warehouse + "\n";
         String size = "size: " + this.size + "\n";
         String protectedSpace = "protectedSpace: " + this.protectedSpace + "\n";
         String garden = "garden: " + this.getGarden() + "\n";
         String gardenSize = "garden size: " + this.gardenSize + "\n";
         String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n" + "street: " + apartmentLocation.getAddress().getStreet() +  "\n" +"building number: " + apartmentLocation.getAddress().getNumber();
-        return title + contactDetails + cost + garden + gardenSize + protectedSpace + size + location;
+        return title + contactDetails + cost + garden + gardenSize + warehouse + protectedSpace + size + location;
     }
 }

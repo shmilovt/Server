@@ -28,6 +28,8 @@ public class  Analyzer {
     private static List<String> wordStreetList ;
     private static List<String> locationsList;
     private static List<String> protectedSpace;
+    private static List<String> warehouseList;
+
 
     public List<String> loadFile(String fileName){
         String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
@@ -66,6 +68,7 @@ public class  Analyzer {
         wordStreetList = loadFile("streetWord.txt");
         locationsList = loadFile("locations.txt");
         protectedSpace = loadFile("protectedSpace.txt");
+        warehouseList = loadFile("warehouse.txt");
         // we will load the Dictionaries
     }
 
@@ -233,14 +236,20 @@ public class  Analyzer {
         }
     }
 
+    private String cleanEmojis(String str)
+    {
+        return str.replaceAll("\uD83D\uDC8E","");
+    }
+
     public void extractWord(Classify classify, List<String> dictionary, String notToInclude)
     {
         int size = aDS.getEnvLst().size();
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
+            str=cleanEmojis(str.replaceAll(notToInclude,"").replaceAll("[+-]"," "));
             String[] splited = str.split(" ");
             for (String s : splited) {
-                s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
+               // s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
                 if(!s.isEmpty()) {
                     if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
                         aDS.Insert(classify, i, s);
@@ -316,9 +325,10 @@ public class  Analyzer {
 
     public void analyze()
     {
-        String notToIncludeRegex = "([!,~@#$%-:״^&*\\)]|\\d)";
+        String notToIncludeRegex = "([!,~@#$%:״^&*\\)]|\\d)";
         String notToIncludeStreetRegex = "[*!@#'$%^&)]";
 
+        extractWord(Classify.WAREHOUSE,warehouseList,notToIncludeRegex);
         extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
         extractWord(Classify.PROTECTED_SPACE,protectedSpace,notToIncludeRegex);
         extractPhoneNumber();
