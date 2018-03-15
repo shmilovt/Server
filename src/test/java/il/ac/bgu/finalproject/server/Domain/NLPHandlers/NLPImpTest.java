@@ -107,6 +107,35 @@ public class NLPImpTest {
         System.out.println(printSummary_Cost(passCost ,  testCases.size()));
     }
 
+
+    @Test
+    public void extractApartmentTest_Animal(){
+        List<AssertionError> errors = new ArrayList<>();
+        int passAnimal = 0;
+        for (TestCase<String, AnalyzedResult> testCase: testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try{
+                assertEquals((int)(analyzedResult.getPets() - expectedResult.getPets()) , 0);
+                passAnimal ++;
+                System.out.println(getPassMessage_Animal(testCase.getInput(), analyzedResult));}
+            catch (AssertionError e){
+                errors.add(new AssertionError(getAssertionErrorMessage_Animal(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
+
+
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_Animal(passAnimal ,  testCases.size()));
+    }
+
+
+
     @Test
     public void extractApartmentTest_ProtectedSpace(){
         List<AssertionError> errors = new ArrayList<>();
@@ -357,6 +386,31 @@ public class NLPImpTest {
         return message;
     }
 
+
+    private String getAssertionErrorMessage_Animal(String input, AnalyzedResult output, AnalyzedResult expected) {
+        String isPassColor ;
+
+        String message = "";
+        message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
+        message = message + input + "\n";
+
+
+        if(output.getPets() == expected.getPets()) {
+            isPassColor = ANSI_GREEN;
+        }
+        else{
+            isPassColor = ANSI_RED;
+        }
+
+        message = message + isPassColor+ "\nAnimal => ";
+        message = message + "expected: ";
+        message = message + expected.getPets();
+        message = message + " , but was: ";
+        message = message + output.getPets()+  ANSI_RED;
+        return message;
+    }
+
+
     private String getAssertionErrorMessage_ProtectedSpace(String input, AnalyzedResult output, AnalyzedResult expected) {
         String isPassColor ;
 
@@ -419,9 +473,22 @@ public class NLPImpTest {
                 "pass test-case: \n\n"+input+"\n\n" + "cost: "+output.getCost() + ANSI_RESET ;
     }
 
+    private String getPassMessage_Animal(String input, AnalyzedResult output) {
+        return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
+                "pass test-case: \n\n"+input+"\n\n" + "Animal: "+output.getPets() + ANSI_RESET ;
+    }
+
     private String getPassMessage_Garden(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
                 "pass test-case: \n\n"+input+"\n\n" + "garden: "+output.getGarden() + ANSI_RESET ;
+    }
+
+
+    private static String printSummary_Animal(int passAnimal, int totalPostsNum) {
+        String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
+        message = message + passAnimal +"/"+totalPostsNum+" Animal correctly analyzed\n";
+        message = message +  ANSI_RESET;
+        return message;
     }
 
     private static String printSummary_Cost(int passCost, int totalPostsNum) {

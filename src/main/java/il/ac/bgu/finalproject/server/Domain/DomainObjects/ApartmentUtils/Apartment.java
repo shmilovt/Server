@@ -15,6 +15,7 @@ public class Apartment {
     private int gardenSize;
     private int protectedSpace;
     private int warehouse;
+    private int animal;
 
     public Apartment() {
         postIDs = new ArrayList<>();
@@ -25,6 +26,7 @@ public class Apartment {
         gardenSize = -1;
         protectedSpace = -1;
         warehouse=-1;
+        animal=-1;
         contacts = new HashSet<>();
     }
 
@@ -36,6 +38,7 @@ public class Apartment {
         gardenSize = -1;
         protectedSpace = -1;
         warehouse=-1;
+        animal=-1;
         contacts = new HashSet<>();
     }
 
@@ -48,6 +51,7 @@ public class Apartment {
         gardenSize = -1;
         protectedSpace = -1;
         warehouse=-1;
+        animal=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
@@ -59,6 +63,7 @@ public class Apartment {
         gardenSize = -1;
         protectedSpace = -1;
         warehouse=-1;
+        animal=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
@@ -70,6 +75,7 @@ public class Apartment {
         gardenSize = -1;
         protectedSpace = -1;
         warehouse=-1;
+        animal=-1;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -94,6 +100,14 @@ public class Apartment {
 
     public void setGarden(int garden) {
         this.garden = garden;
+    }
+
+    public int getAnimal() {
+        return animal;
+    }
+
+    public void setAnimal(int animal) {
+        this.animal = animal;
     }
 
     public int getWarehouse() {
@@ -155,6 +169,7 @@ public class Apartment {
         String cost = "cost: " + this.cost + "\n";
         String warehouse = "warehouse: " + this.warehouse + "\n";
         String size = "size: " + this.size + "\n";
+        String animal = "animal: " + this.animal + "\n";
         String protectedSpace = "protectedSpace: " + this.protectedSpace + "\n";
         String garden = "garden: " + this.getGarden() + "\n";
         String gardenSize = "garden size: " + this.gardenSize + "\n";

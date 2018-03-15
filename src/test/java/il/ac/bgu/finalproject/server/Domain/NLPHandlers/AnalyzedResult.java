@@ -184,8 +184,10 @@ public class AnalyzedResult
         size = -1;
         protectedSpace = -1;
         wareHouse = -1;
+        pets=-1;
 
         if(apartment != null) {
+            pets=apartment.getAnimal();
             wareHouse = apartment.getWarehouse();
             protectedSpace = apartment.getProtectedSpace();
             garden=apartment.getGarden();

@@ -20,5 +20,7 @@ public enum Classify {
     WORD_LOCATION,
     FLOOR,
     PROTECTED_SPACE,
-    WAREHOUSE
+    WAREHOUSE,
+    ANIMELNAME,
+    ANIMEL_EXIST
 }

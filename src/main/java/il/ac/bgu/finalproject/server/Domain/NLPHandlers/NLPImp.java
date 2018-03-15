@@ -506,6 +506,19 @@ public class NLPImp implements NLPInterface {
         return 1;
     }
 
+    private int animalDecision(AnalyzedDS ads)
+    {
+        List<Integer> animalName = ads.GetEnvsIndex(Classify.ANIMELNAME);
+        List<Integer> animalExist = ads.GetEnvsIndex(Classify.ANIMEL_EXIST);
+        List<Integer> negative = ads.GetEnvsIndex(Classify.NEGATIVE);
+
+        List<Integer> suspicious = intersectList(animalExist,animalName);
+        suspicious = minusList(suspicious,negative);
+        if(suspicious.isEmpty())
+            return 0;
+        return 1;
+    }
+
     @Override
     public Apartment extractApartment(String str) {
 
@@ -514,6 +527,7 @@ public class NLPImp implements NLPInterface {
 
         Apartment ap = new Apartment();
 
+        ap.setAnimal(animalDecision(ads));
         ap.setProtectedSpace(protectedSpaceDecision(ads));
         List<Integer> gardenDic = gardenDecision(ads);
         ap.setGarden(gardenDic.get(0));

@@ -29,6 +29,8 @@ public class  Analyzer {
     private static List<String> locationsList;
     private static List<String> protectedSpace;
     private static List<String> warehouseList;
+    private static List<String> animalNameList;
+    private static List<String> animalExistList;
 
 
     public List<String> loadFile(String fileName){
@@ -69,6 +71,8 @@ public class  Analyzer {
         locationsList = loadFile("locations.txt");
         protectedSpace = loadFile("protectedSpace.txt");
         warehouseList = loadFile("warehouse.txt");
+        animalExistList = loadFile("animalExist.txt");
+        animalNameList = loadFile("animalName.txt");
         // we will load the Dictionaries
     }
 
@@ -328,6 +332,8 @@ public class  Analyzer {
         String notToIncludeRegex = "([!,~@#$%:״^&*\\)]|\\d)";
         String notToIncludeStreetRegex = "[*!@#'$%^&)]";
 
+        extractWord(Classify.ANIMELNAME,animalNameList,notToIncludeRegex);
+        extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
         extractWord(Classify.WAREHOUSE,warehouseList,notToIncludeRegex);
         extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
         extractWord(Classify.PROTECTED_SPACE,protectedSpace,notToIncludeRegex);
