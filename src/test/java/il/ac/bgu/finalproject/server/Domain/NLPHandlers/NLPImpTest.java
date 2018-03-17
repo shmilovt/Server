@@ -164,6 +164,36 @@ public class NLPImpTest {
 
 
     @Test
+    public void extractApartmentTest_Balcony(){
+        List<AssertionError> errors = new ArrayList<>();
+        int passBalcony = 0;
+        for (TestCase<String, AnalyzedResult> testCase: testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try{
+                assertEquals((int)(analyzedResult.getBalcony() - expectedResult.getBalcony()) , 0);
+                passBalcony ++;
+                System.out.println(getPassMessage_Balcony(testCase.getInput(), analyzedResult));
+            }
+            catch (AssertionError e){
+                errors.add(new AssertionError(getAssertionErrorMessage_Balcony(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
+
+
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_Balcony(passBalcony ,  testCases.size()));
+    }
+
+
+
+
+    @Test
     public void extractApartmentTest_WareHouse(){
         List<AssertionError> errors = new ArrayList<>();
         int passWarehouse = 0;
@@ -434,6 +464,30 @@ public class NLPImpTest {
         return message;
     }
 
+    private String getAssertionErrorMessage_Balcony(String input, AnalyzedResult output, AnalyzedResult expected) {
+        String isPassColor ;
+
+        String message = "";
+        message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
+        message = message + input + "\n";
+
+
+        if(output.getBalcony() == expected.getBalcony()) {
+            isPassColor = ANSI_GREEN;
+        }
+        else{
+            isPassColor = ANSI_RED;
+        }
+
+        message = message + isPassColor+ "\nBalcony => ";
+        message = message + "expected: ";
+        message = message + expected.getBalcony();
+        message = message + " , but was: ";
+        message = message + output.getBalcony()+  ANSI_RED;
+        return message;
+    }
+
+
     private String getAssertionErrorMessage_wareHouse(String input, AnalyzedResult output, AnalyzedResult expected) {
         String isPassColor ;
 
@@ -461,6 +515,11 @@ public class NLPImpTest {
     private String getPassMessage_Warehouse(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
                 "pass test-case: \n\n"+input+"\n\n" + "Warehouse: "+output.getWareHouse() + ANSI_RESET ;
+    }
+
+    private String getPassMessage_Balcony(String input, AnalyzedResult output) {
+        return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
+                "pass test-case: \n\n"+input+"\n\n" + "Balcony: "+output.getBalcony() + ANSI_RESET ;
     }
 
     private String getPassMessage_ProtectedSpace(String input, AnalyzedResult output) {
@@ -505,6 +564,13 @@ public class NLPImpTest {
         return message;
     }
 
+
+    private static String printSummary_Balcony(int passBalcony, int totalPostsNum) {
+        String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
+        message = message + passBalcony + "/" + totalPostsNum +" Balcony correctly analyzed\n";
+        message = message +  ANSI_RESET;
+        return message;
+    }
 
     private static String printSummary_Warehouse(int passProtectedSpace, int totalPostsNum) {
         String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";

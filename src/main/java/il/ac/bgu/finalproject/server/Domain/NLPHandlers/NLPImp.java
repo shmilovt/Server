@@ -519,6 +519,32 @@ public class NLPImp implements NLPInterface {
         return 1;
     }
 
+    //    //////////////////////////////////////////
+    //    //////////////////////////////////////////////////
+    //    //////////////////////////////////////////////////
+    //    //////////////////////////////////////////////////
+    //    //////////////////////////////////////////////////
+    private int balconyDecision(AnalyzedDS ads)
+    {
+        List<Integer> balconyName = ads.GetEnvsIndex(Classify.BALCONY);
+        if(balconyName.size()==0)
+            return 0;
+        for(int i=0;i<balconyName.size();i++)
+        {
+            String[] toCheck = ads.getEnvLst().get(balconyName.get(i)).getEnvString().split(" ");
+            int isNot=0;
+            for(String str: toCheck) {
+                if (str.equals("שירות"))
+                    isNot++;
+                if (str.equals("ומרפסת") && isNot>0)
+                    isNot--;
+            }
+            if(isNot==0)
+                return 1;
+        }
+        return 0;
+    }
+
     @Override
     public Apartment extractApartment(String str) {
 
@@ -526,6 +552,8 @@ public class NLPImp implements NLPInterface {
         AnalyzedDS ads= new AnalyzedDS(l);
 
         Apartment ap = new Apartment();
+
+        ap.setBalcony(balconyDecision(ads));
 
         ap.setAnimal(animalDecision(ads));
         ap.setProtectedSpace(protectedSpaceDecision(ads));

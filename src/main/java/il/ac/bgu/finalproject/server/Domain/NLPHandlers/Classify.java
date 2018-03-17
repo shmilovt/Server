@@ -22,5 +22,6 @@ public enum Classify {
     PROTECTED_SPACE,
     WAREHOUSE,
     ANIMELNAME,
-    ANIMEL_EXIST
+    ANIMEL_EXIST,
+    BALCONY
 }

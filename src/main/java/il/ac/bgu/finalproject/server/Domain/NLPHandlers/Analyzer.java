@@ -31,6 +31,7 @@ public class  Analyzer {
     private static List<String> warehouseList;
     private static List<String> animalNameList;
     private static List<String> animalExistList;
+    private static List<String> balconyList;
 
 
     public List<String> loadFile(String fileName){
@@ -73,6 +74,7 @@ public class  Analyzer {
         warehouseList = loadFile("warehouse.txt");
         animalExistList = loadFile("animalExist.txt");
         animalNameList = loadFile("animalName.txt");
+        balconyList = loadFile("balcony.txt");
         // we will load the Dictionaries
     }
 
@@ -255,7 +257,7 @@ public class  Analyzer {
             for (String s : splited) {
                // s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
                 if(!s.isEmpty()) {
-                    if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
+                    if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && classify.equals(Classify.BALCONY)) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
                         aDS.Insert(classify, i, s);
                 }
             }
@@ -334,6 +336,8 @@ public class  Analyzer {
 
         extractWord(Classify.ANIMELNAME,animalNameList,notToIncludeRegex);
         extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
+        extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
+        extractWord(Classify.BALCONY,balconyList,notToIncludeRegex);
         extractWord(Classify.WAREHOUSE,warehouseList,notToIncludeRegex);
         extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
         extractWord(Classify.PROTECTED_SPACE,protectedSpace,notToIncludeRegex);

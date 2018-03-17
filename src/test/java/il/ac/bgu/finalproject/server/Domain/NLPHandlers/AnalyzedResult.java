@@ -185,8 +185,9 @@ public class AnalyzedResult
         protectedSpace = -1;
         wareHouse = -1;
         pets=-1;
-
+        balcony = -1;
         if(apartment != null) {
+            balcony=apartment.getBalcony();
             pets=apartment.getAnimal();
             wareHouse = apartment.getWarehouse();
             protectedSpace = apartment.getProtectedSpace();

@@ -16,6 +16,7 @@ public class Apartment {
     private int protectedSpace;
     private int warehouse;
     private int animal;
+    private int balcony;
 
     public Apartment() {
         postIDs = new ArrayList<>();
@@ -27,6 +28,7 @@ public class Apartment {
         protectedSpace = -1;
         warehouse=-1;
         animal=-1;
+        balcony=-1;
         contacts = new HashSet<>();
     }
 
@@ -39,6 +41,7 @@ public class Apartment {
         protectedSpace = -1;
         warehouse=-1;
         animal=-1;
+        balcony=-1;
         contacts = new HashSet<>();
     }
 
@@ -52,6 +55,7 @@ public class Apartment {
         protectedSpace = -1;
         warehouse=-1;
         animal=-1;
+        balcony=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
@@ -64,6 +68,7 @@ public class Apartment {
         protectedSpace = -1;
         warehouse=-1;
         animal=-1;
+        balcony=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
@@ -76,6 +81,7 @@ public class Apartment {
         protectedSpace = -1;
         warehouse=-1;
         animal=-1;
+        balcony=-1;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -100,6 +106,14 @@ public class Apartment {
 
     public void setGarden(int garden) {
         this.garden = garden;
+    }
+
+    public int getBalcony() {
+        return balcony;
+    }
+
+    public void setBalcony(int balcony) {
+        this.balcony = balcony;
     }
 
     public int getAnimal() {
@@ -170,6 +184,7 @@ public class Apartment {
         String warehouse = "warehouse: " + this.warehouse + "\n";
         String size = "size: " + this.size + "\n";
         String animal = "animal: " + this.animal + "\n";
+        String balcony = "balcony: " + this.balcony + "\n";
         String protectedSpace = "protectedSpace: " + this.protectedSpace + "\n";
         String garden = "garden: " + this.getGarden() + "\n";
         String gardenSize = "garden size: " + this.gardenSize + "\n";
