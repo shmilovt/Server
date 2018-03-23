@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Apartment {
-    private List<String> postIDs;
+    private List<Integer> postIDs;
     private ApartmentLocation apartmentLocation;
-    private double cost;
+    private int cost;
     private double size;
+    private int numOfRooms;
     private Set<Contact> contacts;
 
 
@@ -36,18 +37,25 @@ public class Apartment {
 
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
+    public Apartment(ApartmentLocation apartmentLocation, int cost, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
         this.size = -1;
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
+    public Apartment(ApartmentLocation apartmentLocation, int cost, double size, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
         this.size = size;
+    }
+    public Apartment(ApartmentLocation apartmentLocation, int cost, double size, Set<Contact> contacts, int numOfRooms) {
+        this.apartmentLocation = apartmentLocation;
+        this.cost = cost;
+        this.contacts = contacts;
+        this.size = size;
+        this.numOfRooms=numOfRooms;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -58,12 +66,18 @@ public class Apartment {
         this.apartmentLocation = apartmentLocation;
     }
 
-    public double getCost() {
+    public int getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public int getNumOfRooms() { return numOfRooms; }
+
+    public void setNumOfRooms(int cost) {
+        this.numOfRooms= numOfRooms;
     }
 
     public Set<Contact> getContacts() {
@@ -82,11 +96,11 @@ public class Apartment {
         this.size = size;
     }
 
-    public List<String> getPostIDs() {
+    public List<Integer> getPostIDs() {
         return postIDs;
     }
 
-    public void setPostIDs(List<String> postID) {
+    public void setPostIDs(List<Integer> postID) {
         this.postIDs = postID;
     }
 

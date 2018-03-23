@@ -10,7 +10,7 @@ import java.util.Set;
 
 
 public class ApartmentDetailsDTO {
-    private String postID;
+    private Integer postID;
     private String street;
     private int number;
     private String neighborhood;
@@ -23,7 +23,7 @@ public class ApartmentDetailsDTO {
 
     public ApartmentDetailsDTO(){}
     public ApartmentDetailsDTO(Apartment apartment){
-        List<String> postIDs = apartment.getPostIDs();
+        List<Integer> postIDs = apartment.getPostIDs();
         postID = postIDs.get(postIDs.size()-1);
         street = apartment.getApartmentLocation().getAddress().getStreet();
         number = apartment.getApartmentLocation().getAddress().getNumber();

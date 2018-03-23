@@ -2,12 +2,10 @@ package il.ac.bgu.finalproject.server.Domain.FacebookHandlers;
 
 import com.restfb.*;
 import com.restfb.exception.FacebookOAuthException;
-import com.restfb.json.Json;
 import com.restfb.json.JsonObject;
 import com.restfb.types.Post;
-import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPImp;
-import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPInterface;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 
 import java.util.Calendar;
@@ -46,24 +44,44 @@ public class FacebookHandler {
 
     /***
      * The function return the feed of _ weeks ago
-     * @param sinceWeeks - number of weeks
-     * @param groupId
+     * @param /sinceWeeks - number of weeks
+     * @param /groupId
      */
+
+
     public void GetFeed(int sinceWeeks,String groupId) {
         long sinceDate = DateToUnixTime(GetDateOfNumOfWeeksBefore(sinceWeeks));
         Connection<Post> postFeed = fbClient.fetchConnection(groupId + "/feed", Post.class, Parameter.with("since", sinceDate), Parameter.with("limit", 100));
         DataBaseConnection dbConn = new DataBaseConnection();
-        List<String> post;
+        //List<String> post;
+        Apartment apartment;
+        int tempForApartment;
+        int tempForApartmentD;
+        il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post tempPost;
         int x=1000;
         for (List<Post> postPage : postFeed)
             for (Post apost : postPage) {
+                System.out.println("here1");
                 if (apost.getMessage() != null) {
-                    post = dbConn.getPost(apost.getId().toString());
-                    if (post != null) {
-                        if (post.get(2).compareTo(apost.getMessage()) != 0) {
+                    System.out.println("here2");
+                    tempPost= dbConn.getPost(apost.getId().toString());
+                    if (tempPost!= null) {
+                        System.out.println("here3");
+                        if (tempPost.getText().compareTo(apost.getMessage()) != 0) {
                             System.out.println("\n" + "***** db: post updated *****" + "\n");
-                            dbConn.update(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                            nlp.extractApartment(apost.getMessage());
+                            //dbConn.updateO(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
+                            apartment= nlp.extractApartment(apost.getMessage());
+                            //tempForApartmentD= dbConn.addAddressDetailsRecord(
+                             //       apartment.getApartmentLocation().getAddress().getStreet(),
+                             //       apartment.getApartmentLocation().getAddress().getNumber()+"",
+                              //      apartment.getApartmentLocation().getDistanceFromUniversity(),
+                               //     1, 47.0, 47.0
+                                //    );
+                         //   //TODO: calc longitude, latitude, neighborhood
+                          //  tempForApartment= dbConn.addApartmentRecord(apartment., apartment.geNumOfRooms(),
+                           //         apartment.getApartmentLocation().getFloor(), apartment.getSize(),
+                            //        apartment.getCost(), tempForApartmentD);
+                            dbConn.update(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+11111111);
                             /*try {
                                 NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
                             } catch (InterruptedException e) {
@@ -71,9 +89,24 @@ public class FacebookHandler {
                             }*/
                         }
                     } else {
+                        System.out.println("here4");
                         System.out.println("\n" + "***** db: post added *****" + "\n");
-                        dbConn.addPost(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                        nlp.extractApartment(apost.getMessage());
+                        //dbConn.addPostO(apost.getId(),apost.getUpdatedTime().toString(),apost.getMessage());
+                        apartment= nlp.extractApartment(apost.getMessage());
+                        tempForApartmentD= dbConn.addAddressDetailsRecord(
+                                apartment.getApartmentLocation().getAddress().getStreet(),
+                                apartment.getApartmentLocation().getAddress().getNumber()+"",
+                                apartment.getApartmentLocation().getDistanceFromUniversity(),
+                                1, 47.0, 47.0);
+                        //TODO: calc longitude, latitude, neighborhood
+                        tempForApartment= dbConn.addApartmentRecord(
+                                apartment.getPostIDs().get(0),
+                                apartment.getNumOfRooms(),
+                                apartment.getApartmentLocation().getFloor(),
+                                apartment.getSize(),
+                                apartment.getCost(),
+                                tempForApartmentD);
+                        dbConn.addPost(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+tempForApartment);
 
                         /* try {
 

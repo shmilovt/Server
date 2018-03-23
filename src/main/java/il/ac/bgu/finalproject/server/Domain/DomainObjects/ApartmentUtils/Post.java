@@ -13,6 +13,14 @@ public class Post {
         this.text = text;
     }
 
+    public Post(String ID, Date dateOfPublish, String publisherName, String text, String apartmentID) {
+        this.ID=ID;
+        this.dateOfPublish= dateOfPublish;
+        this.publisherName= publisherName;
+        this.text = text;
+        this.apartmentID=apartmentID;
+    }
+
     public String getID() {
         return ID;
     }

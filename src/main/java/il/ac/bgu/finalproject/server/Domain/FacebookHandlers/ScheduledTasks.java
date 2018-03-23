@@ -1,11 +1,10 @@
 package il.ac.bgu.finalproject.server.Domain.FacebookHandlers;
 
-import java.util.List;
-
-import com.restfb.Facebook;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class ScheduledTasks {
@@ -36,5 +35,6 @@ public class ScheduledTasks {
                 fb.IsDeleted(a.subList(i, i + maxListSize));
             else
                 fb.IsDeleted(a.subList(i, a.size()));
+        //is fb.IsDeleted needs to get a subList
     }
 }

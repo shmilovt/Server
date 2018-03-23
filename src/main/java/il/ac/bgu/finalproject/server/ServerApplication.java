@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class ServerApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(ServerApplication.class, args);
 	}
 
@@ -43,6 +44,5 @@ public class ServerApplication {
 	public Converter converter() {
 		return new Converter();
 	}
-
 
 }

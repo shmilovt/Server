@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,14 @@ public class RegularClientCommunicationController {
 
     @Autowired
     private Converter converter;
+
+    @RequestMapping(value = "/allApartments" , method = {RequestMethod.GET})
+    public ApartmentDescriptionsDTO allApartments() {
+        LinkedList<ApartmentDetailsDTO> apartments = new LinkedList<>();
+        apartments.push(new ApartmentDetailsDTO(new Apartment()));
+
+        return new ApartmentDescriptionsDTO(true, "we win", apartments);
+    }
 
     @RequestMapping(value = "/searchApartments" , method = {RequestMethod.POST, RequestMethod.GET})
     public ApartmentDescriptionsDTO searchApartments(@RequestParam UserPreferencesDTO userPreferencesDTO){
