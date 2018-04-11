@@ -16,7 +16,7 @@ public class AnalyzedResult
     private int size= -1;
     private int numberOfRooms= -1;
     private int numberOfMates= -1;
-    private Set<String> furniture = new HashSet<>() ;
+    private int furniture = -1;
     private Set<String> phones = new HashSet<>() ;
     private double cost = -1;
     private int timeFromUni = -1;
@@ -140,11 +140,11 @@ public class AnalyzedResult
         this.numberOfMates = numberOfMates;
     }
 
-    public Set<String> getFurniture() {
+    public int getFurniture() {
         return furniture;
     }
 
-    public void setFurniture(Set<String> furniture) {
+    public void setFurniture(int furniture) {
         this.furniture = furniture;
     }
 
@@ -186,7 +186,9 @@ public class AnalyzedResult
         wareHouse = -1;
         pets=-1;
         balcony = -1;
+        furniture = -1;
         if(apartment != null) {
+            furniture=apartment.getFurniture();
             balcony=apartment.getBalcony();
             pets=apartment.getAnimal();
             wareHouse = apartment.getWarehouse();

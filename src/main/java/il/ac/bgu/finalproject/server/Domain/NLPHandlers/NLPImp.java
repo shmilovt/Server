@@ -519,11 +519,6 @@ public class NLPImp implements NLPInterface {
         return 1;
     }
 
-    //    //////////////////////////////////////////
-    //    //////////////////////////////////////////////////
-    //    //////////////////////////////////////////////////
-    //    //////////////////////////////////////////////////
-    //    //////////////////////////////////////////////////
     private int balconyDecision(AnalyzedDS ads)
     {
         List<Integer> balconyName = ads.GetEnvsIndex(Classify.BALCONY);
@@ -545,13 +540,48 @@ public class NLPImp implements NLPInterface {
         return 0;
     }
 
-    @Override
+    private int furnitureDecision(AnalyzedDS ads) {
+        int size = 0;
+        List<Integer> negativeList = ads.GetEnvsIndex(Classify.NEGATIVE);
+        List<Integer> decisiveList = ads.GetEnvsIndex(Classify.DECISIVENESS);
+        List<Integer> requirementList = ads.GetEnvsIndex(Classify.REQUIREMENT);
+        List<Integer> furnitureList = ads.GetEnvsIndex(Classify.FURNITURE);
+        List<Integer> furnitureExistList = ads.GetEnvsIndex(Classify.FURNITURE_EXIST);
+        List<Integer> almostDescList = ads.GetEnvsIndex(Classify.ALMOST_DESC);
+
+        if(furnitureExistList.size()>0)
+        {
+           if(intersectList(furnitureExistList,negativeList).size()>0)
+               return 0;
+           if(intersectList(furnitureExistList,almostDescList).size()>0)
+                return 1;
+           if(intersectList(furnitureExistList,decisiveList).size()>0)
+               return 2;
+           if(intersectList(furnitureExistList,requirementList).size()>0)
+               return -1;
+           for(int i=0;i<furnitureExistList.size();i++)
+               for(String str:ads.GetResultsByClassifyAndIndex(Classify.FURNITURE_EXIST,furnitureExistList.get(i)))
+                   if((str.equals("מרוהטת") || str.equals("מרוהטים") || str.equals("מאובזרת") || ((str.charAt(0)== 'ו' || str.charAt(0)== 'ה') && (str.substring(1).equals("מרוהטת") || str.equals("מרוהטים") || str.substring(1).equals("מאובזרת")))))
+                       return 2;
+            return 1;
+        }
+        if(furnitureList.size()==0)
+            return -1;
+        return 1;
+    }
+
+
+
+
+        @Override
     public Apartment extractApartment(String str) {
 
         EnvList l = new EnvList(str);
         AnalyzedDS ads= new AnalyzedDS(l);
 
         Apartment ap = new Apartment();
+
+        ap.setFurniture(furnitureDecision(ads));
 
         ap.setBalcony(balconyDecision(ads));
 
@@ -605,5 +635,6 @@ public class NLPImp implements NLPInterface {
         String s = "להשכרה קוטג' 3 חדרים בשכונת נחל עשן\n\nממוזגת\nמשופצת\nכניסה מיידית\n65 מ\"ר\nגינה 230 מ\"ר\n\nריהוט: מקרר.\n\nמחיר: רק ב3,500.\n\nטלפון: 052-477-8940\n";
         NLPImp n = new NLPImp();
         n.extractApartment(s);*/
+        System.out.println(rootAndWord("רהט","מרוהטת"));
     }
 }

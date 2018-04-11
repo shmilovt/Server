@@ -23,5 +23,10 @@ public enum Classify {
     WAREHOUSE,
     ANIMELNAME,
     ANIMEL_EXIST,
-    BALCONY
+    BALCONY,
+    FURNITURE_EXIST,
+    FURNITURE,
+    DECISIVENESS,
+    REQUIREMENT,
+    ALMOST_DESC,
 }

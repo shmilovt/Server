@@ -2,23 +2,23 @@
   {
     "input": "השותפה המקסימה שלנו Yarden Peretz עוזבת את הדירה. אני וGal Ben Maman מחפשים מישהי שתחליף את מקומה בחדר. דירת 4 חדרים חדשה משופצת לחלוטין עם חצר ענקית. הדירה באלעזר בן יאיר 16 כרבע שעה מאוניברסיטה. הדירה מרוהטת ויש בה הכל, רק להביא בגדים ולהכנס. עלות 1150 ש\"ח. כניסה מיידית :)\nלפרטים:\n0526516656\n",
     "output": {
-      "neighborhood": "",
-      "street": "אלעזר בן יאיר",
-      "buildingNumber": 16,
+      "neighborhood": "",                 // V
+      "street": "אלעזר בן יאיר",          // V
+      "buildingNumber": 16,               // V
       "floor": -2,
-      "size": -1,
+      "size": -1,                         // V
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מרוהטת"],
-      "phones": ["0526516656"],
-      "cost": 1150,
-      "timeFromUni": 15,
-      "garden": 1,
-      "balcony": 0,
-      "protectedSpace": 0,
-      "wareHouse": 0,
-      "pets": 0,
-      "seperatedShowerToilet": 0,
+      "furniture": 2,
+      "phones": ["0526516656"],           // V
+      "cost": 1150,                       // V
+      "timeFromUni": 15,                  // ?
+      "garden": 1,                        // V + SIZE
+      "balcony": 0,                       // V
+      "protectedSpace": 0,                // V
+      "wareHouse": 0,                     // V
+      "pets": 0,                          // V
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -32,7 +32,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["ריהוט מלא בכל החדרים - שולחן, מיטה וארון בכל חדר"],
+      "furniture": 2,
       "phones": ["0549435353"],
       "cost": 2800,
       "timeFromUni": -1,
@@ -55,7 +55,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": [],
       "cost": -1,
       "timeFromUni": -1,
@@ -64,7 +64,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -78,7 +78,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מיטה+מזרן","מקרר","ספה","ארון בגדים","מכונת כביסה"],
+      "furniture": 2,
       "phones": ["0532787802"],
       "cost": 1800,
       "timeFromUni": 10,
@@ -87,7 +87,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -101,7 +101,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת פרט למכונת כביסה"],
+      "furniture": 2,
       "phones": [],
       "cost": 2150,
       "timeFromUni": -1,
@@ -110,7 +110,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -124,7 +124,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מזגנים בכל הבית","סורגים ופלדלת","דוד שמש וחשמל","מקרר","מכונת כביסה","תנור משולב עם גז","מיטה ומזרון חדשים","סלון מזנון"],
+      "furniture": 1,
       "phones": ["0526090738"],
       "cost": 1700,
       "timeFromUni": 5,
@@ -133,7 +133,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -147,7 +147,7 @@
       "size": 90,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מקרר","מכונת כביסה","LCD","מזגנים","מיטות","ארונות","שולחנות","פינת אוכל","סלון"],
+      "furniture": 2,
       "phones": ["0546630191"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -170,7 +170,7 @@
       "size": 110,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מקרר","תנור","מכונת כביסה","פינת אוכל","2 מיטות","ארון בכל חדר","מזגן בכל חדר ובסלון"],
+      "furniture": 1,
       "phones": ["0542504055","0543980880","0544616535"],
       "cost": 2900,
       "timeFromUni": -1,
@@ -193,7 +193,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מיטה","שולחן","כסא","ארון","מזגן","ספה","שולחן","שידה","LCD","מזגן","פינת אוכל","מכונת כביסה","מקרר","מיקרו","תנור","כיריים","מרוהטת קומפלט"],
+      "furniture": 2,
       "phones": ["0546630191"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -202,7 +202,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -216,7 +216,7 @@
       "size": -1,
       "numberOfRooms": 5,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0545533351"],
       "cost": 4000,
       "timeFromUni": -1,
@@ -239,7 +239,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מאובזרת בריהוט ומוצרי חשמל"],
+      "furniture": 2,
       "phones": ["0522333252"],
       "cost": 2400,
       "timeFromUni": -1,
@@ -248,7 +248,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 1
     }
   },
@@ -262,7 +262,7 @@
       "size": 50,
       "numberOfRooms": 2,
       "numberOfMates": 1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0506796969"],
       "cost": 480000,
       "timeFromUni": 8,
@@ -271,7 +271,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -285,7 +285,7 @@
       "size": 60,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מקרר","כיריים","מזנון ושולחן בסלון","טוסטר אובן","ארון בגדים"],
+      "furniture": 1,
       "phones": ["0504875561"],
       "cost": 2900,
       "timeFromUni": -1,
@@ -294,7 +294,7 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -308,7 +308,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מזגן בכל חדר","מקרר","תנור בילט אין","פינת אוכל","פינת ישיבה בסלון","ארונות 3 דלתות","בסיס למיטה זוגית","שולחן עבודה בכל חדר"],
+      "furniture": 2,
       "phones": ["0537226131"],
       "cost": 3000,
       "timeFromUni": -1,
@@ -317,7 +317,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -331,7 +331,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": [],
       "cost": 2150,
       "timeFromUni": -1,
@@ -340,7 +340,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -354,7 +354,7 @@
       "size": 100,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["במכונת כביסה חדשה","תנור משולב עם כריים","מקרר","מרוהטת מלא למעט 2 מזרונים"],
+      "furniture": 1,
       "phones": ["0547334682"],
       "cost": 3300,
       "timeFromUni": -1,
@@ -363,7 +363,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -377,7 +377,7 @@
       "size": 80,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מיטה גדולה","מזרן","ארון","שולחן וכסא לימוד","מכונת כביסה","מקרר","ספות","טלוויזיה"],
+      "furniture": 2,
       "phones": ["0544421925"],
       "cost": 850,
       "timeFromUni": 10,
@@ -386,7 +386,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -400,7 +400,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["ללא ריהוט"],
+      "furniture": 0,
       "phones": ["0503403041"],
       "cost": 1900,
       "timeFromUni": -1,
@@ -409,7 +409,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -423,7 +423,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": [],
       "cost": 2150,
       "timeFromUni": -1,
@@ -432,7 +432,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -446,7 +446,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 2,
-      "furniture": ["מקרר","מיקרוגל","תנור","כיריים","מטבח חדש","מזגנים חדשים","סלון","שולחנות לימוד","שולחן פינת אוכל וכיסאות","מיטות"],
+      "furniture": 2,
       "phones": [],
       "cost": 2400,
       "timeFromUni": -1,
@@ -455,7 +455,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -469,7 +469,7 @@
       "size": 60,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0525447662"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -478,7 +478,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -492,7 +492,7 @@
       "size": 35,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0508693633"],
       "cost": 2000,
       "timeFromUni": 8,
@@ -501,7 +501,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -515,7 +515,7 @@
       "size": 110,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מקרר","תנור","מכונת כביסה","פינת אוכל","2 מיטות","ארון בכל חדר","מזגן בכל חדר ובסלון"],
+      "furniture": 1,
       "phones": ["0542504055","0543980880","0544616535"],
       "cost": 2900,
       "timeFromUni": -1,
@@ -524,7 +524,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -538,7 +538,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["תנור","מכונת כביסה"],
+      "furniture": 2,
       "phones": ["0542818529"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -561,7 +561,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["בכל חדר: מיטה+ שולחן + כסא+ ארון+ מזגן","ספה","שולחן","שידה","LCD, מזגן","פינת אוכל","מכונת כביסה","מקרר","מיקרו","תנור","כיריים"],
+      "furniture": 2,
       "phones": ["0546630191"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -570,7 +570,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -584,7 +584,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת"],
+      "furniture": 2,
       "phones": ["0544218258"],
       "cost": -1,
       "timeFromUni": -1,
@@ -593,7 +593,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -607,8 +607,8 @@
       "size": 30,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": [],
-      "phones": [0508693633],
+      "furniture": 2,
+      "phones": ["0508693633"],
       "cost": 1850,
       "timeFromUni": -1,
       "garden": -1,
@@ -616,7 +616,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -630,7 +630,7 @@
       "size": 50,
       "numberOfRooms": 2.5,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת קומפלט","מיטה זוגית","כל מכשירי החשמל","תנור משולב עם כיריים גז","מקרר","מכונת כביסה"],
+      "furniture": 2,
       "phones": ["0542033228"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -639,7 +639,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -653,7 +653,7 @@
       "size": 90,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0532787802"],
       "cost": 2700,
       "timeFromUni": -1,
@@ -662,7 +662,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -676,7 +676,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0523783637"],
       "cost": 3000,
       "timeFromUni": -1,
@@ -685,7 +685,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -699,7 +699,7 @@
       "size": -1,
       "numberOfRooms": 5,
       "numberOfMates": 4,
-      "furniture": ["תנור","כיריים","מזגן","מקרר"],
+      "furniture": 1,
       "phones": ["0543055096","0545446792"],
       "cost": 1050,
       "timeFromUni": -1,
@@ -708,7 +708,7 @@
       "protectedSpace": 1,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -722,7 +722,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["ריהוט מלא בכל החדרים - שולחן, מיטה וארון בכל חדר"],
+      "furniture": 2,
       "phones": ["0549435353"],
       "cost": 2700,
       "timeFromUni": -1,
@@ -745,7 +745,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0543206958"],
       "cost": 3800,
       "timeFromUni": -1,
@@ -754,7 +754,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -768,7 +768,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["ספות","שולחנות","מיטה זוגית","ארונות קיר","תנור","מקרר","מכונת כביסה","מזגן"],
+      "furniture": 2,
       "phones": ["0522353174"],
       "cost": 1900,
       "timeFromUni": -1,
@@ -777,7 +777,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -791,7 +791,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["שלושה מזגנים","מקרר חדש","תנור גז","סלון","מיטה ומזנון"],
+      "furniture": 2,
       "phones": ["0528021484","0545329930"],
       "cost": 2400,
       "timeFromUni": 3,
@@ -800,7 +800,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -814,7 +814,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["ריהוט חלקי"],
+      "furniture": 1,
       "phones": ["0502225392","0507289757"],
       "cost": 2900,
       "timeFromUni": -1,
@@ -823,7 +823,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -837,7 +837,7 @@
       "size": 35,
       "numberOfRooms": -1,
       "numberOfMates": 1,
-      "furniture": ["מיטה זוגית","ארון","שידה","ספה","מכונת כביסה","כיריים חשמליות","מקרר","שולחן אוכל"],
+      "furniture": 1,
       "phones": ["0505359900"],
       "cost": 1700,
       "timeFromUni": 10,
@@ -846,7 +846,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -860,7 +860,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": -1,
       "phones": [],
       "cost": 1150,
       "timeFromUni": -1,
@@ -869,7 +869,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -883,7 +883,7 @@
       "size": 160,
       "numberOfRooms": 5,
       "numberOfMates": 4,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0543055096"],
       "cost": -1,
       "timeFromUni": -1,
@@ -892,7 +892,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -906,7 +906,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0505300038"],
       "cost": 3000,
       "timeFromUni": -1,
@@ -915,7 +915,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -929,7 +929,7 @@
       "size": 80,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0543037805"],
       "cost": 3500,
       "timeFromUni": -1,
@@ -938,7 +938,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -952,7 +952,7 @@
       "size": 50,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["בסיס מיטה + מזרן"],
+      "furniture": 1,
       "phones": ["0544490025"],
       "cost": 1700,
       "timeFromUni": -1,
@@ -961,7 +961,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -975,7 +975,7 @@
       "size": 45,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0544490025"],
       "cost": 2100,
       "timeFromUni": -1,
@@ -984,7 +984,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -998,7 +998,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": -1,
       "phones": [],
       "cost": 1150,
       "timeFromUni": -1,
@@ -1007,7 +1007,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1021,7 +1021,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": -1,
       "phones": [],
       "cost": 1150,
       "timeFromUni": -1,
@@ -1030,7 +1030,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1044,7 +1044,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": 1,
       "phones": ["0525834867"],
       "cost": 2400,
       "timeFromUni": -1,
@@ -1053,7 +1053,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1067,7 +1067,7 @@
       "size": 60,
       "numberOfRooms": 2.5,
       "numberOfMates": -1,
-      "furniture": ["משופצת","מרוהטת","ממוזגת"],
+      "furniture": 2,
       "phones": ["0508812541"],
       "cost": 2000,
       "timeFromUni": -1,
@@ -1076,7 +1076,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1090,7 +1090,7 @@
       "size": 50,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0502516898"],
       "cost": 2000,
       "timeFromUni": -1,
@@ -1099,7 +1099,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1113,7 +1113,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מכונת כביסה","מקרר","כריים","תנור","2 מזגנים","טוסטר אובן","מקלחת ושירותים חדשים","מטבח חדש","ארונות","מיטות זוגיות בחדרי השינה"],
+      "furniture": 2,
       "phones": ["0525411144"],
       "cost": 2600,
       "timeFromUni": 2,
@@ -1122,7 +1122,7 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 1,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1136,7 +1136,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["פינת אוכל","מכונת כביסה","מקרר","מיקרו","תנור","כיריים","מיטה","שולחן","כסא","ארון","מזגן"],
+      "furniture": 2,
       "phones": ["0545514300"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -1145,7 +1145,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1159,7 +1159,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 0,
       "phones": ["0524848414","0523457591"],
       "cost": 2300,
       "timeFromUni": -1,
@@ -1168,7 +1168,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1182,7 +1182,7 @@
       "size": 96,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0524708798","0506233437"],
       "cost": 2200,
       "timeFromUni": -1,
@@ -1191,7 +1191,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -1205,7 +1205,7 @@
       "size": -1,
       "numberOfRooms": 5,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 1,
       "phones": ["0586823161"],
       "cost": 1000,
       "timeFromUni": -1,
@@ -1215,7 +1215,7 @@
       "wareHouse": 0,
       "pets": 0,
       "seperatedShowerToilet": 0,
-      "roomType": 0
+      "roomType": 1
     }
   },
   {
@@ -1228,7 +1228,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0543112881","0549747552"],
       "cost": 3150,
       "timeFromUni": -1,
@@ -1237,7 +1237,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1251,7 +1251,7 @@
       "size": 62,
       "numberOfRooms": -1,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": -1,
       "phones": [],
       "cost": 2500,
       "timeFromUni": -1,
@@ -1260,7 +1260,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1274,7 +1274,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת קומפלט"],
+      "furniture": 2,
       "phones": ["0505367219"],
       "cost": -1,
       "timeFromUni": -1,
@@ -1283,7 +1283,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1297,7 +1297,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת"],
+      "furniture": 2,
       "phones": ["0528683499"],
       "cost": 2700,
       "timeFromUni": -1,
@@ -1306,7 +1306,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1320,7 +1320,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 0,
       "phones": ["0503403041"],
       "cost": 2000,
       "timeFromUni": -1,
@@ -1329,7 +1329,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1343,7 +1343,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0545533351"],
       "cost": 2100,
       "timeFromUni": 10,
@@ -1352,7 +1352,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1366,7 +1366,7 @@
       "size": 70,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["מיטה","מזגן","ארון","שולחן כתיבה","כיסא","️מקרר","כיריים","מכונת כביסה"],
+      "furniture": 2,
       "phones": ["0545918161"],
       "cost": 850,
       "timeFromUni": 11,
@@ -1375,7 +1375,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1389,7 +1389,7 @@
       "size": 42,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מקרר","כיריים גז","סלון","ארון","מזגנים","מיטה","שולחן למידה"],
+      "furniture": 2,
       "phones": ["0505470703"],
       "cost": 1700,
       "timeFromUni": -1,
@@ -1398,7 +1398,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 1,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1412,7 +1412,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["ספה","שולחן","שידה","LCD","מזגן","פינת אוכל","מכונת כביסה","מקרר","מיקרו","תנור","כיריים","מיטה+ שולחן + כסא+ ארון+ מזגן"],
+      "furniture": 2,
       "phones": ["0525447662"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -1421,7 +1421,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1435,7 +1435,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["מזגן חדש","תנור","כיריים","מיקרוגל","שולחן פינת אוכל","כיסאות","ספות + שולחן בסלון"],
+      "furniture": 2,
       "phones": ["0547541707"],
       "cost": 1100,
       "timeFromUni": 9,
@@ -1444,7 +1444,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -1458,7 +1458,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["ריהוט כמעט מלא"],
+      "furniture": 1,
       "phones": [],
       "cost": 2000,
       "timeFromUni": 10,
@@ -1467,7 +1467,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1481,7 +1481,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0503403041"],
       "cost": 2700,
       "timeFromUni": -1,
@@ -1490,7 +1490,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1504,7 +1504,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0525447662"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -1513,31 +1513,8 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 1
-    }
-  },
-  {
-    "input": "דירה להשכרה!\nמחיר 2800 ש\"ח\nכתובת סמטת צקלג 5, קרוב מאד לחומוס אבו דאבי ולמעונות של שכונה ד.\nהדירה הינה 4 חדרים- שלושה חדרי שינה וסלון- בכל חדר שינה ,מיטה+ שולחן לימודים + ארון+מזגן. בסלון ישנה ספת שזלונג ומזגן גם כן.\nאחד החדרים מעט קטן יותר!\nלדירה גינה -גודל הגינה כ35 מטר.\nהדירה מתאימה בעקרון לשני שותפים, זוג או משפחה(אין כמובן התנגדות לשלושה שותפים אם הם יתסדרו עם הגודל)\nלפרטים .\nכניסה מידיית\n054-9435353 עדיפות להודעות בווסטאפ!\n054-5464750\nמראים היום!\n",
-    "output": {
-      "neighborhood": "שכונה ד'",
-      "street": "סמטת צקלג",
-      "buildingNumber": 5,
-      "floor": -2,
-      "size": -1,
-      "numberOfRooms": 4,
-      "numberOfMates": 2,
-      "furniture": ["מיטה","ארון","מזגן","שולחן לימודים"],
-      "phones": ["0549435353","0545464750"],
-      "cost": 2800,
-      "timeFromUni": -1,
-      "garden": 1,
-      "balcony": 0,
-      "protectedSpace": 0,
-      "wareHouse": 0,
-      "pets": 0,
-      "seperatedShowerToilet": 0,
-      "roomType": 0
     }
   },
   {
@@ -1550,7 +1527,7 @@
       "size": 35,
       "numberOfRooms": -1,
       "numberOfMates": 1,
-      "furniture": ["מרוהטת חלקית"],
+      "furniture": 1,
       "phones": ["0505359900","0507914455"],
       "cost": 1700,
       "timeFromUni": 10,
@@ -1559,7 +1536,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1573,7 +1550,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["משופצת","מרוהטת קומפלט","מאובזרת"],
+      "furniture": 2,
       "phones": ["0503133399"],
       "cost": 2300,
       "timeFromUni": -1,
@@ -1582,7 +1559,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1596,7 +1573,7 @@
       "size": 85,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מיטה","ארון","שולחן כתיבה"],
+      "furniture": 2,
       "phones": ["0503133399"],
       "cost": 800,
       "timeFromUni": 12,
@@ -1605,7 +1582,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1619,7 +1596,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מרוהטת מלא"],
+      "furniture": 2,
       "phones": ["0545634377"],
       "cost": 2950,
       "timeFromUni": 7,
@@ -1642,7 +1619,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מזגנים בכל החדרים","ריהוט","מקלחונים","סורגים","פלדלת","דוד שמש וחשמל","בסלון- פינת אוכל וכסאות","מקרר","כיריים גז","בסיס מיטה זוגית","ארון"],
+      "furniture": 1,
       "phones": [],
       "cost": 2200,
       "timeFromUni": -1,
@@ -1651,7 +1628,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 1,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 1
     }
   },
@@ -1665,7 +1642,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מרוהטת קומפלט"],
+      "furniture": 2,
       "phones": ["0525447662"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -1674,30 +1651,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
-      "roomType": 0
-    }
-  },
-  {
-    "input": "דירה להשכרה!\nויינגייט 12...\nדירה גדולה ומרווחת... 3 חדרי שינה שירוקלחת ושירותים נוספים\nמתאימה מאד ל3 שותפים.\nקרובה מאד לרכבת צפון ולכניסה הצפונית לאוניברסיטה.\nכולל ריהוט מלא בכל החדרים - שולחן, מיטה וארון בכל חדר!\nשכ\"ד 2800 ש\"ח\n054-9435353\n",
-    "output": {
-      "neighborhood": "",
-      "street": "וינגייט",
-      "buildingNumber": 12,
-      "floor": -2,
-      "size": -1,
-      "numberOfRooms": -1,
-      "numberOfMates": 3,
-      "furniture": ["שולחן","מיטה","ארון"],
-      "phones": ["0549435353"],
-      "cost": 2800,
-      "timeFromUni": -1,
-      "garden": -1,
-      "balcony": 0,
-      "protectedSpace": 0,
-      "wareHouse": 0,
-      "pets": 0,
-      "seperatedShowerToilet": 1,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1711,7 +1665,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מכונת כביסה","משופצת","גז","מקרר","ספה","ארונות","מזגן בכל חדר","טלוויזיה ״43","מיטות ומזרנים"],
+      "furniture": 2,
       "phones": ["0506533911"],
       "cost": 3000,
       "timeFromUni": -1,
@@ -1720,7 +1674,7 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1734,13 +1688,8 @@
       "size": 90,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": [
-        "משופצת",
-        "מרוהטת"
-      ],
-      "phones": [
-        "0532787802"
-      ],
+      "furniture": 2,
+      "phones": ["0532787802"],
       "cost": 2700,
       "timeFromUni": -1,
       "garden": -1,
@@ -1748,7 +1697,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1762,7 +1711,7 @@
       "size": -1,
       "numberOfRooms": 5,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0503336803"],
       "cost": -1,
       "timeFromUni": -1,
@@ -1771,7 +1720,7 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 1
     }
   },
@@ -1785,7 +1734,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": 1,
       "phones": ["0508292130"],
       "cost": -1,
       "timeFromUni": -1,
@@ -1794,7 +1743,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1808,7 +1757,7 @@
       "size": 74,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": ["מזגנים"],
+      "furniture": 2,
       "phones": ["0528982543"],
       "cost": 2800,
       "timeFromUni": -1,
@@ -1817,7 +1766,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1831,7 +1780,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 2,
-      "furniture": ["מקרר","שולחן מתקפל","פינת אוכל","כיריים חשמליות וגז","ארון","מיטה זוגית","שידת טלויזיה","כונניות","מזגן","2 ספות","שולחן"],
+      "furniture": 1,
       "phones": ["0543406666"],
       "cost": 1700,
       "timeFromUni": 7,
@@ -1840,7 +1789,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1854,7 +1803,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["פינת אוכל","2 מיטות יחיד","2 ארונות עץ מלא","ארון הזזה עם טריקה שקטה","2 שידות עץ מלא","כריים","תנור","שולחן","סלון","מזנון"],
+      "furniture": 1,
       "phones": ["0542054048"],
       "cost": 3400,
       "timeFromUni": -1,
@@ -1863,8 +1812,8 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 0,
-      "seperatedShowerToilet": 1,
-      "roomType": 0
+      "seperatedShowerToilet": -1,
+      "roomType": 1
     }
   },
   {
@@ -1877,7 +1826,7 @@
       "size": 70,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0525816440","0525816460"],
       "cost": 2700,
       "timeFromUni": -1,
@@ -1886,7 +1835,7 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -1900,7 +1849,7 @@
       "size": 75,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["תנור","כיריים","מקרר"],
+      "furniture": 0,
       "phones": ["0526035054"],
       "cost": 2700,
       "timeFromUni": -1,
@@ -1909,30 +1858,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
-      "roomType": 0
-    }
-  },
-  {
-    "input": "דירה להשכרה ברוטנברג קרוב לאוניברסיטה ולרכבת . 3 חדרים מרוהטים ל3 סטודנטים מטבח ופינת אוכל פינת ישיבה מטופחת ומסודרת. 900 שח לסטודנט פרטים איריס צדיק 0528752067\n",
-    "output": {
-      "neighborhood": "",
-      "street": "רוטנברג",
-      "buildingNumber": -1,
-      "floor": -2,
-      "size": -1,
-      "numberOfRooms": 3,
-      "numberOfMates": 3,
-      "furniture": [],
-      "phones": ["0528752067"],
-      "cost": 900,
-      "timeFromUni": -1,
-      "garden": -1,
-      "balcony": 0,
-      "protectedSpace": 0,
-      "wareHouse": 0,
-      "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -1946,7 +1872,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["ארון","מיטה","שולחן","מקרר"],
+      "furniture": 1,
       "phones": ["0584050960","0506966516"],
       "cost": 1000,
       "timeFromUni": -1,
@@ -1955,7 +1881,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -1969,7 +1895,7 @@
       "size": 90,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["סלון","שולחן סלוני","מקרר","טוסטר","מיקרוגל","טלוויזיה","מכונת כביסה","בכל חדר שולחן לימוד+כסא,ארון, מיטה זוגית+מזרן וטלוויזית"],
+      "furniture": 1,
       "phones": ["0524601230"],
       "cost": 1150,
       "timeFromUni": -1,
@@ -1978,8 +1904,8 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
-      "roomType": 0
+      "seperatedShowerToilet": 1,
+      "roomType": 1
     }
   },
   {
@@ -1992,7 +1918,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מזגן"],
+      "furniture": -1,
       "phones": ["0544490025"],
       "cost": 2100,
       "timeFromUni": -1,
@@ -2001,7 +1927,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2015,7 +1941,7 @@
       "size": -1,
       "numberOfRooms": 2.5,
       "numberOfMates": -1,
-      "furniture": ["ארון 3 דלתות","מקרר"],
+      "furniture": 1,
       "phones": ["0544490025"],
       "cost": 2000,
       "timeFromUni": -1,
@@ -2024,7 +1950,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2038,7 +1964,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0505298705"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -2047,7 +1973,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2061,7 +1987,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": [],
       "cost": 1000,
       "timeFromUni": -1,
@@ -2070,7 +1996,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2084,7 +2010,7 @@
       "size": 80,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0532731622"],
       "cost": 1050,
       "timeFromUni": -1,
@@ -2093,7 +2019,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2107,7 +2033,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["מיטה זוגית","מזרן","ארון בגדים","טלוויזיה","מקרר מיני בר","שולחן כתיבה"],
+      "furniture": 1,
       "phones": ["0524601230"],
       "cost": 1200,
       "timeFromUni": -1,
@@ -2117,7 +2043,7 @@
       "wareHouse": 0,
       "pets": 0,
       "seperatedShowerToilet": 1,
-      "roomType": 0
+      "roomType": 1
     }
   },
   {
@@ -2130,7 +2056,7 @@
       "size": -1,
       "numberOfRooms": 2,
       "numberOfMates": -1,
-      "furniture": ["מזגנים"],
+      "furniture": 2,
       "phones": ["0522623356"],
       "cost": 1700,
       "timeFromUni": 5,
@@ -2139,7 +2065,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2153,7 +2079,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["ארון","כסא","שולחן כתיבה","מזרון","מיטה","מזגן","ספות","מיקרוגל","כיריים גז","מכונת כביסה","טוסטר אובן","מקרר","טלוויזיה","שולחן סלון","אוכל קטן + 2 כסאות"],
+      "furniture": 2,
       "phones": [],
       "cost": 900,
       "timeFromUni": 5,
@@ -2162,7 +2088,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2176,7 +2102,7 @@
       "size": 65,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מקרר"],
+      "furniture": 1,
       "phones": ["0524778940"],
       "cost": 3500,
       "timeFromUni": -1,
@@ -2185,7 +2111,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2199,7 +2125,7 @@
       "size": 80,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": ["מיטה זוגית+שידות","מיקרוגל","2 ארונות 4 דלתות","מזגן","ספות 2+3","דוד חשמל ושמש","שולחן סלון","שידה"],
+      "furniture": 1,
       "phones": ["0544490025"],
       "cost": 2900,
       "timeFromUni": -1,
@@ -2208,7 +2134,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2222,7 +2148,7 @@
       "size": 96,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["קומפלט","פרט למכונת כביסה"],
+      "furniture": 2,
       "phones": ["0544490025"],
       "cost": 2300,
       "timeFromUni": 15,
@@ -2231,7 +2157,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2245,7 +2171,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת חלקית","אפשרות להוספת מזגן"],
+      "furniture": 1,
       "phones": ["0542080653"],
       "cost": 2400,
       "timeFromUni": -1,
@@ -2268,7 +2194,7 @@
       "size": -1,
       "numberOfRooms": 5,
       "numberOfMates": -1,
-      "furniture": ["מזגנים"],
+      "furniture": -1,
       "phones": ["0502750090"],
       "cost": -1,
       "timeFromUni": -1,
@@ -2277,7 +2203,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 1
     }
   },
@@ -2291,7 +2217,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["גז","תנור","מקרוגל","טלוויזיה וממיר","מכונת כביסה"],
+      "furniture": 1,
       "phones": ["0546310727"],
       "cost": -1,
       "timeFromUni": 1,
@@ -2300,7 +2226,7 @@
       "protectedSpace": 0,
       "wareHouse": 1,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2314,7 +2240,7 @@
       "size": 84,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["ללא ריהוט","ארונות בגדים"],
+      "furniture": 0,
       "phones": ["0545533351"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -2323,7 +2249,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2337,7 +2263,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מזגנים","אופציה למכונת כביסה","תנור","מקרר","ארונות בגדים","דוד שמש","מיטה זוגית"],
+      "furniture": 1,
       "phones": ["0545213259"],
       "cost": -1,
       "timeFromUni": -1,
@@ -2360,7 +2286,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["כיסא סטודנט","טלויזיה עם סלקום","מקרר","תנור+כיריים","מכונת כביסה","כוורת","שולחן כתיבה","ארון בגדים","בסיס מיטה","מזגן"],
+      "furniture": 1,
       "phones": ["0508929710"],
       "cost": 1100,
       "timeFromUni": 10,
@@ -2383,7 +2309,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 2,
-      "furniture": ["מרוהטת"],
+      "furniture": 2,
       "phones": ["0544022232"],
       "cost": 2400,
       "timeFromUni": -1,
@@ -2392,7 +2318,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2406,7 +2332,7 @@
       "size": -1,
       "numberOfRooms": 3.5,
       "numberOfMates": -1,
-      "furniture": ["ריהוט חלקי"],
+      "furniture": 1,
       "phones": ["0504567885"],
       "cost": 1950,
       "timeFromUni": -1,
@@ -2415,7 +2341,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2429,7 +2355,7 @@
       "size": 70,
       "numberOfRooms": 5,
       "numberOfMates": -1,
-      "furniture": ["מוצרי חשמל","ריהוט קומפחט","מזגן","טלוויזיות"],
+      "furniture": 2,
       "phones": ["0506966325"],
       "cost": 1000,
       "timeFromUni": -1,
@@ -2438,7 +2364,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 1
     }
   },
@@ -2452,7 +2378,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0502080122"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -2461,7 +2387,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2475,7 +2401,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["שולחן","כיריים","מקרר","מכונת כביסה","ספות","טלויזיה","תנור","ארון","מיטה"],
+      "furniture": 2,
       "phones": ["0547253336"],
       "cost": 800,
       "timeFromUni": 6,
@@ -2484,7 +2410,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2498,7 +2424,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["צנרת חדשה","דוד","מזגנים","טלויזיה","מכונת כביסה","מיטה","ארון","כיסא","שולחן"],
+      "furniture": 1,
       "phones": ["0524744888"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -2521,7 +2447,7 @@
       "size": 84,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["בסיס למיטה","שולחן","ארון","דוד שמש + חשמל","מכונת כביסה","מזגן","מטבח מאובזר"],
+      "furniture": 1,
       "phones": [],
       "cost": 1050,
       "timeFromUni": 1,
@@ -2544,7 +2470,7 @@
       "size": 80,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": ["מרוהטות לחלוטין","ממוזגת"],
+      "furniture": 2,
       "phones": ["0524848414"],
       "cost": 1100,
       "timeFromUni": 12,
@@ -2553,7 +2479,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 1
     }
   },
@@ -2567,7 +2493,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": -1,
-      "furniture": ["מרוהטת קומפלט","ארון"],
+      "furniture": 2,
       "phones": [],
       "cost": 1285,
       "timeFromUni": -1,
@@ -2576,7 +2502,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2590,7 +2516,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": [],
+      "furniture": 1,
       "phones": ["0508292130"],
       "cost": -1,
       "timeFromUni": -1,
@@ -2599,7 +2525,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2613,7 +2539,7 @@
       "size": 74,
       "numberOfRooms": 3,
       "numberOfMates": 2,
-      "furniture": ["מזגנים"],
+      "furniture": 2,
       "phones": ["0528982543"],
       "cost": 2800,
       "timeFromUni": -1,
@@ -2622,30 +2548,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
-      "roomType": 0
-    }
-  },
-  {
-    "input": "להשכרה בדרך מצדה\n₪2,700\n\nכתובת :דרך מצדה 95, קומה 2\n75 מטר נטו.\nמקום שקט ובטוח,יש שערים עם מפתח בכניסה לבניין\nדירת ארבעה חדרים-שלושה חדרי שינה, סלון מרווח ומואר,מטבח וחדר שירות.\nעברה שיפוץ כולל לפני שנה וחצי.\nכניסה מיידית\nמזגן בסלון+בשני חדרי שינה.\nהדירה מושכרת עם תנור משולב כיריים+מקרר חדשים.\nהדירה לא מרוהטת והמחיר לא כולל חשבונות.\nיש וועד בית.\n052-6035054 גיל.\n",
-    "output": {
-      "neighborhood": "",
-      "street": "דרך מצדה",
-      "buildingNumber": 95,
-      "floor": 2,
-      "size": 75,
-      "numberOfRooms": 4,
-      "numberOfMates": 3,
-      "furniture": ["תנור","כיריים","מקרר"],
-      "phones": ["0526035054"],
-      "cost": 2700,
-      "timeFromUni": -1,
-      "garden": -1,
-      "balcony": 0,
-      "protectedSpace": 0,
-      "wareHouse": 0,
-      "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2659,7 +2562,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0528752067"],
       "cost": 900,
       "timeFromUni": -1,
@@ -2668,7 +2571,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2682,7 +2585,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0507185345"],
       "cost": 2500,
       "timeFromUni": 5,
@@ -2691,7 +2594,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2705,7 +2608,7 @@
       "size": 70,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מזגנים","ארונות","שולחן","תנור","מקרר"],
+      "furniture": 1,
       "phones": ["0522206874"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -2714,7 +2617,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2728,7 +2631,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["טלוויזיות","מזגנים"],
+      "furniture": 2,
       "phones": ["0524446286","0775109199","0544293989"],
       "cost": 2200,
       "timeFromUni": -1,
@@ -2737,7 +2640,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2751,7 +2654,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0503320082","0509939959","0544022232"],
       "cost": 3000,
       "timeFromUni": -1,
@@ -2760,7 +2663,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -2774,7 +2677,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["ארון","מיטה","שולחן","מקרר"],
+      "furniture": 1,
       "phones": ["0584050960","0506966516"],
       "cost": 1000,
       "timeFromUni": -1,
@@ -2783,7 +2686,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": 1,
       "roomType": 0
     }
   },
@@ -2797,7 +2700,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0547677288"],
       "cost": 950,
       "timeFromUni": 10,
@@ -2806,7 +2709,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2820,7 +2723,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מכונת כביסה","כסא סטודנט","שולחן לימוד","ארוןבגדים","מזרון","בסיס מיטה","כיריים גז","מיקרו","טוסטר אובן"],
+      "furniture": 2,
       "phones": ["0526229084"],
       "cost": 1250,
       "timeFromUni": 5,
@@ -2829,8 +2732,8 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 1,
-      "roomType": 0
+      "seperatedShowerToilet": -1,
+      "roomType": 1
     }
   },
   {
@@ -2843,7 +2746,7 @@
       "size": 85,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": 0,
       "phones": ["0544490025"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -2852,7 +2755,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2866,7 +2769,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": ["מזגן"],
+      "furniture": -1,
       "phones": ["0544490025"],
       "cost": 2100,
       "timeFromUni": -1,
@@ -2875,7 +2778,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2889,7 +2792,7 @@
       "size": -1,
       "numberOfRooms": 2.5,
       "numberOfMates": -1,
-      "furniture": ["ארון 3 דלתות","מקרר"],
+      "furniture": 1,
       "phones": ["0544490025"],
       "cost": 2000,
       "timeFromUni": -1,
@@ -2898,7 +2801,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2912,7 +2815,7 @@
       "size": -1,
       "numberOfRooms": 3,
       "numberOfMates": -1,
-      "furniture": [],
+      "furniture": -1,
       "phones": ["0505298705"],
       "cost": 2500,
       "timeFromUni": -1,
@@ -2921,7 +2824,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2935,7 +2838,7 @@
       "size": 80,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0532731622"],
       "cost": 1050,
       "timeFromUni": -1,
@@ -2944,7 +2847,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2959,7 +2862,7 @@
       "size": -1,
       "numberOfRooms": 4,
       "numberOfMates": 3,
-      "furniture": [],
+      "furniture": 2,
       "phones": ["0525447662"],
       "cost": 1100,
       "timeFromUni": -1,
@@ -2968,7 +2871,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -2982,7 +2885,7 @@
       "size": -1,
       "numberOfRooms": -1,
       "numberOfMates": 3,
-      "furniture": ["מיטה זוגית","מזרן","ארון בגדים","טלוויזיה","מקרר מיני בר","שולחן כתיבה"],
+      "furniture": 1,
       "phones": ["0524601230"],
       "cost": 1200,
       "timeFromUni": -1,
@@ -2991,8 +2894,8 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 1,
-      "roomType": 0
+      "seperatedShowerToilet": -1,
+      "roomType": 1
     }
   },
   {
@@ -3004,8 +2907,8 @@
       "floor": 3,
       "size": -1,
       "numberOfRooms": 4,
-      "numberOfMates": -1,
-      "furniture": ["מקרר","ארונות בגדים","שולחנות כתיבה","מיטות","3 מזגנים","תנור-גז","מיקרוגל","מכונת כביסה","מייבש","סלון"],
+      "numberOfMates": 3,
+      "furniture": 2,
       "phones": ["0556674505","0549415606"],
       "cost": 2200,
       "timeFromUni": -1,
@@ -3014,7 +2917,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   },
@@ -3028,7 +2931,7 @@
       "size": 78,
       "numberOfRooms": 4,
       "numberOfMates": -1,
-      "furniture": ["מכונת כביסה"],
+      "furniture": 1,
       "phones": ["0543134989","0506899821"],
       "cost": 1000,
       "timeFromUni": -1,
@@ -3037,7 +2940,7 @@
       "protectedSpace": 0,
       "wareHouse": 0,
       "pets": 0,
-      "seperatedShowerToilet": 0,
+      "seperatedShowerToilet": -1,
       "roomType": 0
     }
   }

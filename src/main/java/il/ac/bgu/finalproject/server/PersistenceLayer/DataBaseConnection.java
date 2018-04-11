@@ -30,6 +30,9 @@ public class DataBaseConnection {
         }
     }
 
+
+
+
     public void addPost(String id, String date, String message) {
         try {
             String sql = "INSERT INTO Facebook(id,date,message) VALUES(?,?,?)";
@@ -44,6 +47,8 @@ public class DataBaseConnection {
             //System.out.println(e.getMessage());
         }
     }
+
+
 
 
     public void update(String id, String date, String message) {
