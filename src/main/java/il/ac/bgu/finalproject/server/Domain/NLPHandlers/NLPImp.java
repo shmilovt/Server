@@ -35,10 +35,10 @@ public class NLPImp implements NLPInterface {
         String[] aS = str.toLowerCase().split("[ \t]+");
         int i = 0;
         for (String t : aS) {
-            if (t.equals(a)) {
+            if (t.equals(a) || (t.length()>1 && t.substring(1).equals(a))) {
                 aIndex = i;
             }
-            if (t.equals(b)) {
+            if (t.equals(b) || (t.length()>1 && t.substring(1).equals(b))) {
                 bIndex = i;
             }
             if (aIndex != -1 && bIndex != -1) {
@@ -157,6 +157,8 @@ public class NLPImp implements NLPInterface {
         List<Integer> priceList = ads.GetEnvsIndex(Classify.PRICE);
         List<Integer> priceWordList = ads.GetEnvsIndex(Classify.WORD_PRICE);
         List<Integer> rommateList = ads.GetEnvsIndex(Classify.ROMMATE);
+        List<Integer> roomsList = ads.GetEnvsIndex(Classify.ROOM_DES);
+        rommateList.addAll(roomsList);
         List<Integer> suspicious = new LinkedList<Integer>();
         suspicious = intersectList(priceList,priceWordList);
 
@@ -541,7 +543,6 @@ public class NLPImp implements NLPInterface {
     }
 
     private int furnitureDecision(AnalyzedDS ads) {
-        int size = 0;
         List<Integer> negativeList = ads.GetEnvsIndex(Classify.NEGATIVE);
         List<Integer> decisiveList = ads.GetEnvsIndex(Classify.DECISIVENESS);
         List<Integer> requirementList = ads.GetEnvsIndex(Classify.REQUIREMENT);
@@ -571,6 +572,81 @@ public class NLPImp implements NLPInterface {
     }
 
 
+    private int rommateDecision(AnalyzedDS ads) {
+        List<Integer> rommateQuantityeList = ads.GetEnvsIndex(Classify.ROMMATE_QUANTITY);
+        List<Integer> rommateList = ads.GetEnvsIndex(Classify.ROMMATE);
+        List<Integer> rommateExistList = ads.GetEnvsIndex(Classify.ROMMATE_EXIST);
+
+        boolean flag=false;
+        for(int val:rommateExistList)
+            if(val<2 || val>ads.getEnvLst().size()-2)
+                flag=true;
+
+
+
+
+        List<Integer> quantityAndRommate = intersectList(rommateList,rommateQuantityeList);
+        int size = quantityAndRommate.size();
+        if(size==0) {
+            if (flag)
+                return 1;
+            else
+                return -1;
+        }
+        if(size==1) {
+                int envIndex = quantityAndRommate.get(0);
+                List<String> q = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE_QUANTITY, envIndex);
+                String r = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE, envIndex).iterator().next();
+                int ans = 0;
+                for(String str:q)
+                {
+                    String sentence = ads.getEnvLst().get(envIndex).getEnvString();
+                    int dis = distance(sentence,r,str);
+                    if(dis>=-2)
+                        ans = Integer.parseInt(str);
+                }
+            if (flag)
+                return 1 + ans;
+            else
+                return ans;
+        }
+
+        List<String> ans = new LinkedList<>();
+        for(int i=0;i<size;i++) {
+            int envIndex = quantityAndRommate.get(i);
+            List<String> q = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE_QUANTITY, envIndex);
+            String r = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE, envIndex).iterator().next();
+            for(String str:q)
+            {
+                String sentence = ads.getEnvLst().get(envIndex).getEnvString();
+                int dis = distance(sentence,r,str);
+                if(dis>=-2)
+                    ans.add(str);
+            }
+        }
+        if(ans.isEmpty())
+            return -1;
+        List<Integer> listIntegers = new ArrayList<Integer>(ans.size());
+        for(String current:ans)
+            listIntegers.add(Integer.parseInt(current));
+        if(flag)
+            return 1+Collections.max(listIntegers);
+        else
+            return Collections.max(listIntegers);
+            /*List<String> q = ads.GetResultsByClassifyAndIndex(Classify.ROMMATE_QUANTITY,quantityAndRommate.get(0));
+        for(int i=1;i<size;i++)
+            q.addAll(ads.GetResultsByClassifyAndIndex(Classify.ROMMATE_QUANTITY,quantityAndRommate.get(i)));
+        List<Integer> listIntegers = new ArrayList<Integer>(q.size());
+        for(String current:q)
+            listIntegers.add(Integer.parseInt(current));
+        if(flag)
+            return 1+Collections.max(listIntegers);
+        else
+            return Collections.max(listIntegers);
+*/
+
+    }
+
 
 
         @Override
@@ -580,6 +656,8 @@ public class NLPImp implements NLPInterface {
         AnalyzedDS ads= new AnalyzedDS(l);
 
         Apartment ap = new Apartment();
+
+        ap.setNumberOfMates(rommateDecision(ads));
 
         ap.setFurniture(furnitureDecision(ads));
 
@@ -635,6 +713,7 @@ public class NLPImp implements NLPInterface {
         String s = "להשכרה קוטג' 3 חדרים בשכונת נחל עשן\n\nממוזגת\nמשופצת\nכניסה מיידית\n65 מ\"ר\nגינה 230 מ\"ר\n\nריהוט: מקרר.\n\nמחיר: רק ב3,500.\n\nטלפון: 052-477-8940\n";
         NLPImp n = new NLPImp();
         n.extractApartment(s);*/
-        System.out.println(rootAndWord("רהט","מרוהטת"));
+        //System.out.println(rootAndWord("סטדנט","סטודנטים"));
+        System.out.println(distance("להמלך ראיתי את שביט","שביט","המלך"));
     }
 }

@@ -187,7 +187,11 @@ public class AnalyzedResult
         pets=-1;
         balcony = -1;
         furniture = -1;
+        numberOfMates=-1;
+        numberOfRooms=-1;
         if(apartment != null) {
+            numberOfMates=apartment.getNumberOfMates();
+            numberOfRooms=apartment.getNumberOfRooms();
             furniture=apartment.getFurniture();
             balcony=apartment.getBalcony();
             pets=apartment.getAnimal();

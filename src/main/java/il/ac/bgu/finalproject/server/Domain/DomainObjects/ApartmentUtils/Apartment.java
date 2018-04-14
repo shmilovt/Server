@@ -18,6 +18,8 @@ public class Apartment {
     private int animal;
     private int balcony;
     private int furniture;
+    private int numberOfMates;
+    private int numberOfRooms;
 
     public Apartment() {
         postIDs = new ArrayList<>();
@@ -31,6 +33,8 @@ public class Apartment {
         animal=-1;
         balcony=-1;
         furniture=-1;
+        numberOfMates=-1;
+        numberOfRooms=-1;
         contacts = new HashSet<>();
     }
 
@@ -45,6 +49,8 @@ public class Apartment {
         animal=-1;
         balcony=-1;
         furniture=-1;
+        numberOfMates=-1;
+        numberOfRooms=-1;
         contacts = new HashSet<>();
     }
 
@@ -60,6 +66,8 @@ public class Apartment {
         animal=-1;
         balcony=-1;
         furniture=-1;
+        numberOfMates=-1;
+        numberOfRooms=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
@@ -74,6 +82,8 @@ public class Apartment {
         animal=-1;
         balcony=-1;
         furniture=-1;
+        numberOfMates=-1;
+        numberOfRooms=-1;
     }
 
     public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
@@ -88,6 +98,8 @@ public class Apartment {
         animal=-1;
         balcony=-1;
         furniture=-1;
+        numberOfMates=-1;
+        numberOfRooms=-1;
     }
 
     public ApartmentLocation getApartmentLocation() {
@@ -128,6 +140,22 @@ public class Apartment {
 
     public void setAnimal(int animal) {
         this.animal = animal;
+    }
+
+    public int getNumberOfMates() {
+        return numberOfMates;
+    }
+
+    public void setNumberOfMates(int numberOfMates) {
+        this.numberOfMates = numberOfMates;
+    }
+
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
     }
 
     public int getFurniture() {
@@ -204,6 +232,9 @@ public class Apartment {
         String gardenSize = "garden size: " + this.gardenSize + "\n";
         String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n" + "street: " + apartmentLocation.getAddress().getStreet() +  "\n" +"building number: " + apartmentLocation.getAddress().getNumber() + "\n";
         String furniture= "Furniture: " +this.furniture + "\n";
-        return title + contactDetails + cost + garden + gardenSize + warehouse + protectedSpace + size + location + furniture;
+        String mates= "number of mates: " +this.numberOfMates + "\n";
+        String rooms= "number of rooms: " +this.numberOfRooms + "\n";
+
+        return title + contactDetails + cost + garden + gardenSize + warehouse + protectedSpace + size + location + furniture + mates + rooms;
     }
 }

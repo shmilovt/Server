@@ -36,6 +36,9 @@ public class  Analyzer {
     private static List<String> requirementList;
     private static List<String> furnitureList;
     private static List<String> almostDescList;
+    private static List<String> rommateQuantityList;
+    private static List<String> roomList;
+    private static List<String> roommateExistList;
 
     public List<String> loadFile(String fileName){
         String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
@@ -82,6 +85,9 @@ public class  Analyzer {
         requirementList = loadFile("requirement.txt");
         furnitureList = loadFile("furniture.txt");
         almostDescList = loadFile("almostDescription.txt");
+        rommateQuantityList = loadFile("rommate_quantity.txt");
+        roomList = loadFile("roomDes.txt");
+        roommateExistList = loadFile("rommateExist.txt");
         // we will load the Dictionaries
     }
 
@@ -368,6 +374,18 @@ public class  Analyzer {
         }
     }
 
+    private void extractRommate() {
+        int size = aDS.getEnvLst().size();
+        for (int i = 0; i < size; i++) {
+            String str = aDS.getEnvLst().get(i).getEnvString();
+            String[] splitedStr = str.split(" ");
+            for (int j = 0; j < splitedStr.length; j++)
+                if (rootAndWord("שתפ", splitedStr[j]) || rootAndWord("שתף", splitedStr[j]) )
+                    aDS.Insert(Classify.ROMMATE, i, splitedStr[j]);
+        }
+    }
+
+
     public void analyze()
     {
         String notToIncludeRegex = "([!,~@#$%:״^&*\\)]|\\d)";
@@ -379,6 +397,13 @@ public class  Analyzer {
         extractWord(Classify.FURNITURE,furnitureList,notToIncludeRegex);
         extractWord(Classify.ALMOST_DESC,almostDescList,notToIncludeRegex);
 
+        extractRommate();
+        extractAddress(Classify.ROMMATE_QUANTITY,rommateQuantityList,notToIncludeStreetRegex);
+        extractWord(Classify.ROOM_DES,roomList,notToIncludeRegex);
+        extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
+        extractWord(Classify.ROMMATE_EXIST,roommateExistList,notToIncludeRegex);
+
+
         extractWord(Classify.ANIMELNAME,animalNameList,notToIncludeRegex);
         extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
         extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
@@ -387,7 +412,6 @@ public class  Analyzer {
         extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
         extractWord(Classify.PROTECTED_SPACE,protectedSpace,notToIncludeRegex);
         extractPhoneNumber();
-        extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
         extractWord(Classify.BLACKLIST,blackList,notToIncludeRegex);
         extractAddress(Classify.WORD_LOCATION,wordLocationList,notToIncludeRegex);
         extractFirstName(firstNamesList,notToIncludeRegex);

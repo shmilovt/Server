@@ -29,4 +29,7 @@ public enum Classify {
     DECISIVENESS,
     REQUIREMENT,
     ALMOST_DESC,
+    ROMMATE_QUANTITY,
+    ROMMATE_EXIST,
+    ROOM_DES,
 }
