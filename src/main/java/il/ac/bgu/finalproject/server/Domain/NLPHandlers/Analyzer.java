@@ -27,6 +27,18 @@ public class  Analyzer {
     private static List<String> neighborhoodList ;
     private static List<String> wordStreetList ;
     private static List<String> locationsList;
+    private static List<String> protectedSpace;
+    private static List<String> warehouseList;
+    private static List<String> animalNameList;
+    private static List<String> animalExistList;
+    private static List<String> balconyList;
+    private static List<String> decisivenessList;
+    private static List<String> requirementList;
+    private static List<String> furnitureList;
+    private static List<String> almostDescList;
+    private static List<String> rommateQuantityList;
+    private static List<String> roomList;
+    private static List<String> roommateExistList;
 
     public List<String> loadFile(String fileName){
         String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
@@ -64,6 +76,18 @@ public class  Analyzer {
         neighborhoodList = loadFile("neighborhood.txt");
         wordStreetList = loadFile("streetWord.txt");
         locationsList = loadFile("locations.txt");
+        protectedSpace = loadFile("protectedSpace.txt");
+        warehouseList = loadFile("warehouse.txt");
+        animalExistList = loadFile("animalExist.txt");
+        animalNameList = loadFile("animalName.txt");
+        balconyList = loadFile("balcony.txt");
+        decisivenessList = loadFile("decisiveness.txt");
+        requirementList = loadFile("requirement.txt");
+        furnitureList = loadFile("furniture.txt");
+        almostDescList = loadFile("almostDescription.txt");
+        rommateQuantityList = loadFile("rommate_quantity.txt");
+        roomList = loadFile("roomDes.txt");
+        roommateExistList = loadFile("rommateExist.txt");
         // we will load the Dictionaries
     }
 
@@ -231,16 +255,22 @@ public class  Analyzer {
         }
     }
 
+    private String cleanEmojis(String str)
+    {
+        return str.replaceAll("\uD83D\uDC8E","");
+    }
+
     public void extractWord(Classify classify, List<String> dictionary, String notToInclude)
     {
         int size = aDS.getEnvLst().size();
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
+            str=cleanEmojis(str.replaceAll(notToInclude,"").replaceAll("[+-]"," "));
             String[] splited = str.split(" ");
             for (String s : splited) {
-                s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
+               // s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
                 if(!s.isEmpty()) {
-                    if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
+                    if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && (classify.equals(Classify.BALCONY) || classify.equals(Classify.REQUIREMENT))) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
                         aDS.Insert(classify, i, s);
                 }
             }
@@ -262,6 +292,15 @@ public class  Analyzer {
         }
     }
 
+    /*
+    public void extractProtectedSpace() {
+        int size = aDS.getEnvLst().size();
+        for (int i = 0; i < size; i++) {
+            String str = aDS.getEnvLst().get(i).getEnvString();
+
+
+        }
+    }*/
 
     public void extractGapNumber(Classify classify,int min, int max) {
         int size = aDS.getEnvLst().size();
@@ -303,14 +342,76 @@ public class  Analyzer {
         return count;
     }
 
+    //    ****************************************************************
+    //    ****************************************************************                i used this helper fun also in NLPImp
+    //    ****************************************************************
+    private static boolean rootAndWord (String root, String word){
+        String reg="ו?(הו?|מו?|א|י|תו?|נ)?"+root.charAt(0);
+        String temp=root;
+        for (int i=1; i<root.length();i++){
+            reg=reg+"[וי]?";
+            reg=reg+root.charAt(i);
+        }
+        reg=reg+"(ה|ות?|ים?|ת[יםן]?|נ[וה])?";
+        Pattern p = Pattern.compile(reg);
+        Matcher m = p.matcher(word);
+        String temp2;
+        while(m.find()) {
+            temp2=word.substring(m.start(),m.end());
+            return true;
+        }
+        return false;
+    }
+
+    private void extractFurnitureType() {
+        int size = aDS.getEnvLst().size();
+        for (int i = 0; i < size; i++) {
+            String str = aDS.getEnvLst().get(i).getEnvString();
+            String[] splitedStr = str.split(" ");
+            for (int j = 0; j < splitedStr.length; j++)
+                if (rootAndWord("אבזר", splitedStr[j]) || rootAndWord("רהט", splitedStr[j]))
+                    aDS.Insert(Classify.FURNITURE_EXIST, i, splitedStr[j].replaceAll(":",""));
+        }
+    }
+
+    private void extractRommate() {
+        int size = aDS.getEnvLst().size();
+        for (int i = 0; i < size; i++) {
+            String str = aDS.getEnvLst().get(i).getEnvString();
+            String[] splitedStr = str.split(" ");
+            for (int j = 0; j < splitedStr.length; j++)
+                if (rootAndWord("שתפ", splitedStr[j]) || rootAndWord("שתף", splitedStr[j]) )
+                    aDS.Insert(Classify.ROMMATE, i, splitedStr[j]);
+        }
+    }
+
+
     public void analyze()
     {
-        String notToIncludeRegex = "([!,~@#$%-:״^&*\\)]|\\d)";
+        String notToIncludeRegex = "([!,~@#$%:״^&*\\)]|\\d)";
         String notToIncludeStreetRegex = "[*!@#'$%^&)]";
+        extractFurnitureType();
+        extractWord(Classify.DECISIVENESS,decisivenessList,notToIncludeRegex);
+        extractWord(Classify.DECISIVENESS,decisivenessList,notToIncludeRegex);
+        extractWord(Classify.REQUIREMENT,requirementList,notToIncludeRegex);
+        extractWord(Classify.FURNITURE,furnitureList,notToIncludeRegex);
+        extractWord(Classify.ALMOST_DESC,almostDescList,notToIncludeRegex);
 
-        extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
-        extractPhoneNumber();
+        extractRommate();
+        extractAddress(Classify.ROMMATE_QUANTITY,rommateQuantityList,notToIncludeStreetRegex);
+        extractWord(Classify.ROOM_DES,roomList,notToIncludeRegex);
         extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
+        extractWord(Classify.ROMMATE_EXIST,roommateExistList,notToIncludeRegex);
+
+
+        extractWord(Classify.ANIMELNAME,animalNameList,notToIncludeRegex);
+        extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
+        extractWord(Classify.ANIMEL_EXIST,animalExistList,notToIncludeRegex);
+        extractWord(Classify.BALCONY,balconyList,notToIncludeRegex);
+        extractWord(Classify.WAREHOUSE,warehouseList,notToIncludeRegex);
+        extractWord(Classify.GARDEN,gardenList,notToIncludeRegex);
+        extractWord(Classify.PROTECTED_SPACE,protectedSpace,notToIncludeRegex);
+        extractPhoneNumber();
         extractWord(Classify.BLACKLIST,blackList,notToIncludeRegex);
         extractAddress(Classify.WORD_LOCATION,wordLocationList,notToIncludeRegex);
         extractFirstName(firstNamesList,notToIncludeRegex);
