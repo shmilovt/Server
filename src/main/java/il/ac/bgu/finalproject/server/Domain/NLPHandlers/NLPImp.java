@@ -685,23 +685,7 @@ public class NLPImp implements NLPInterface {
         return ap;
     }
 
-    @Override
-    public void run() {
-        while(true){
-            try {
-                //System.out.println("i am NLPimp");
-                //System.out.println(NLPController.postsQueue.size());
-                il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post post = NLPController.postsQueue.poll();
-                if(post!=null) {
-                    System.out.println("thread get the string : \n\n" + post.getText());
-                }
-                //extractApartment(post.getText());
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
     public static void main(String[] args) throws IOException {

@@ -11,6 +11,7 @@ public class DataBaseConnectionTest {
     @BeforeClass
     public static void setup(){
         dbc.connect();
+        dbc.resetAllTables();
     }
 
     @AfterClass
@@ -102,5 +103,6 @@ public class DataBaseConnectionTest {
 
     @Test
     public void main() {
+
     }
 }

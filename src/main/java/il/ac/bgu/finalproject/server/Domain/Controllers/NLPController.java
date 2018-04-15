@@ -1,23 +1,30 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPImp;
+import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPInterface;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class NLPController {
-    public static LinkedBlockingQueue<Post>  postsQueue = new LinkedBlockingQueue<>();
-    private NLPImp nlpImp;
+    private NLPInterface nlp;
+    private DataBaseRequestController dataBaseRequestController;
 
     public NLPController(){
-        nlpImp = new NLPImp();
+        nlp = new NLPImp();
+        dataBaseRequestController = new DataBaseRequestController();
 
     }
 
 
-    public void setupNLPThreads(){
-        new Thread(nlpImp).run();
+
+
+    public void generateNLP(Post post) {
+        Apartment apartment = nlp.extractApartment(post.getText());
+        dataBaseRequestController.manageApartment(apartment, post);
+
+
+
     }
-
-
 }

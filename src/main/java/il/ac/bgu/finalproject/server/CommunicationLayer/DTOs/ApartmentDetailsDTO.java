@@ -23,8 +23,8 @@ public class ApartmentDetailsDTO {
 
     public ApartmentDetailsDTO(){}
     public ApartmentDetailsDTO(Apartment apartment){
-        List<Integer> postIDs = apartment.getPostIDs();
-        postID = postIDs.get(postIDs.size()-1);
+       // List<Integer> postIDs = apartment.getPostIDs();
+        //postID = postIDs.get(postIDs.size()-1);
         street = apartment.getApartmentLocation().getAddress().getStreet();
         number = apartment.getApartmentLocation().getAddress().getNumber();
         neighborhood = apartment.getApartmentLocation().getNeighborhood();

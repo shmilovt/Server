@@ -127,7 +127,8 @@ public class FacebookHandler {
 
 
     public void newPost_changesInDB(Post apost, DataBaseConnection dbConn ){
-        int tempForApartmentD, tempForApartment;
+       String  tempForApartment;
+       int tempForApartmentD;
         Apartment apartment;
         apartment= nlp.extractApartment(apost.getMessage());
         tempForApartmentD= dbConn.addAddressDetailsRecord(
@@ -137,8 +138,8 @@ public class FacebookHandler {
                 1, 47.0, 47.0);
         //TODO: calc longitude, latitude, neighborhood
         tempForApartment= dbConn.addApartmentRecord(
-                apartment.getPostIDs().get(0),
-                apartment.getNumOfRooms(),
+                apost.getId().toString(),
+                apartment.getNumberOfRooms(),
                 apartment.getApartmentLocation().getFloor(),
                 apartment.getSize(),
                 apartment.getCost(),

@@ -8,8 +8,8 @@ import java.util.Set;
 public class Apartment {
     private List<String> postIDs;
     private ApartmentLocation apartmentLocation;
-    private double cost;
-    private double size;
+    private int cost;
+    private int size;
     private Set<Contact> contacts;
     private int garden;
     private int gardenSize;
@@ -70,7 +70,7 @@ public class Apartment {
         numberOfRooms=-1;
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, double cost, Set<Contact> contacts) {
+    public Apartment(ApartmentLocation apartmentLocation, int cost, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
@@ -86,7 +86,7 @@ public class Apartment {
         numberOfRooms=-1;
     }
 
-    public Apartment(ApartmentLocation apartmentLocation, double cost, double size, Set<Contact> contacts) {
+    public Apartment(ApartmentLocation apartmentLocation, int cost, int size, Set<Contact> contacts) {
         this.apartmentLocation = apartmentLocation;
         this.cost = cost;
         this.contacts = contacts;
@@ -110,11 +110,11 @@ public class Apartment {
         this.apartmentLocation = apartmentLocation;
     }
 
-    public double getCost() {
+    public int getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(int cost) {
         this.cost = cost;
     }
 
@@ -198,11 +198,11 @@ public class Apartment {
         this.contacts = contacts;
     }
 
-    public double getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(double size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
