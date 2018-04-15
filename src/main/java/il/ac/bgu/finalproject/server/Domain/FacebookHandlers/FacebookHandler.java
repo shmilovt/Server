@@ -69,19 +69,10 @@ public class FacebookHandler {
                         System.out.println("here3");
                         if (tempPost.getText().compareTo(apost.getMessage()) != 0) {
                             System.out.println("\n" + "***** db: post updated *****" + "\n");
-                            //dbConn.updateO(apost.getId(), apost.getUpdatedTime().toString(), apost.getMessage());
-                            apartment= nlp.extractApartment(apost.getMessage());
-                            //tempForApartmentD= dbConn.addAddressDetailsRecord(
-                             //       apartment.getApartmentLocation().getAddress().getStreet(),
-                             //       apartment.getApartmentLocation().getAddress().getNumber()+"",
-                              //      apartment.getApartmentLocation().getDistanceFromUniversity(),
-                               //     1, 47.0, 47.0
-                                //    );
-                         //   //TODO: calc longitude, latitude, neighborhood
-                          //  tempForApartment= dbConn.addApartmentRecord(apartment., apartment.geNumOfRooms(),
-                           //         apartment.getApartmentLocation().getFloor(), apartment.getSize(),
-                            //        apartment.getCost(), tempForApartmentD);
+                            postUpdated_changesInDB(apost,dbConn);
                             dbConn.update(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+11111111);
+
+
                             /*try {
                                 NLPController.postsQueue.put(new il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post(apost.getMessage()));
                             } catch (InterruptedException e) {
@@ -91,22 +82,7 @@ public class FacebookHandler {
                     } else {
                         System.out.println("here4");
                         System.out.println("\n" + "***** db: post added *****" + "\n");
-                        //dbConn.addPostO(apost.getId(),apost.getUpdatedTime().toString(),apost.getMessage());
-                        apartment= nlp.extractApartment(apost.getMessage());
-                        tempForApartmentD= dbConn.addAddressDetailsRecord(
-                                apartment.getApartmentLocation().getAddress().getStreet(),
-                                apartment.getApartmentLocation().getAddress().getNumber()+"",
-                                apartment.getApartmentLocation().getDistanceFromUniversity(),
-                                1, 47.0, 47.0);
-                        //TODO: calc longitude, latitude, neighborhood
-                        tempForApartment= dbConn.addApartmentRecord(
-                                apartment.getPostIDs().get(0),
-                                apartment.getNumOfRooms(),
-                                apartment.getApartmentLocation().getFloor(),
-                                apartment.getSize(),
-                                apartment.getCost(),
-                                tempForApartmentD);
-                        dbConn.addPost(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+tempForApartment);
+                        newPost_changesInDB(apost,dbConn);
 
                         /* try {
 
@@ -147,5 +123,39 @@ public class FacebookHandler {
                 IsDeleted(ids);
             }
         }
+    }
+
+
+    public void newPost_changesInDB(Post apost, DataBaseConnection dbConn ){
+        int tempForApartmentD, tempForApartment;
+        Apartment apartment;
+        apartment= nlp.extractApartment(apost.getMessage());
+        tempForApartmentD= dbConn.addAddressDetailsRecord(
+                apartment.getApartmentLocation().getAddress().getStreet(),
+                apartment.getApartmentLocation().getAddress().getNumber()+"",
+                apartment.getApartmentLocation().getDistanceFromUniversity(),
+                1, 47.0, 47.0);
+        //TODO: calc longitude, latitude, neighborhood
+        tempForApartment= dbConn.addApartmentRecord(
+                apartment.getPostIDs().get(0),
+                apartment.getNumOfRooms(),
+                apartment.getApartmentLocation().getFloor(),
+                apartment.getSize(),
+                apartment.getCost(),
+                tempForApartmentD);
+        dbConn.addPost(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+tempForApartment);
+
+    }
+    public void postDeleted_changesInDB(Post apost, DataBaseConnection dbConn ){
+        String postID = apost.getId();
+        String apartmentID = dbConn.getPost(postID).getApartmentID();
+        dbConn.deletePost(apost.getId());
+        if (!dbConn.morePostsWithApartmentID(apartmentID)){
+            dbConn.deleteApartmentRecord(apartmentID);
+        }
+    }
+    public void postUpdated_changesInDB(Post apost, DataBaseConnection dbConn ){
+        dbConn.update(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+11111111);
+
     }
 }
