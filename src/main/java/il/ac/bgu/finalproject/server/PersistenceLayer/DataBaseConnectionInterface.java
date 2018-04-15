@@ -72,7 +72,7 @@ public interface DataBaseConnectionInterface {
     void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures);
     List<Apartment> SearchQuery(List<CostCategory> catagories);
     void updateApartment(Apartment apartment, String post);
-
+    Boolean morePostsWithApartmentID(String id);
     boolean isApartmentExist(Apartment apartment);
 }
 

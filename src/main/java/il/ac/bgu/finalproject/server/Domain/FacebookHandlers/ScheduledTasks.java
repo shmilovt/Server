@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.FacebookHandlers;
 
+import il.ac.bgu.finalproject.server.Domain.Controllers.FacebookController;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import java.util.List;
 @Component
 public class ScheduledTasks {
 
+    private static FacebookController fbController=new FacebookController();
     private static FacebookHandler fb= new FacebookHandler();
     private static DataBaseConnection conn=new DataBaseConnection();
 
@@ -31,7 +33,7 @@ public class ScheduledTasks {
         System.out.println("checkDeleted");
         final int maxListSize=50;
         // ask for List of all the posts Ids and save in a
-        List<String> a=conn.GetAllPostsId();
+        List<String> a=fbController.getAllPostsId();
         for(int i=0;i<a.size();i=i+maxListSize)
             if(i+maxListSize<a.size())
                 fb.IsDeleted(a.subList(i, i + maxListSize));
