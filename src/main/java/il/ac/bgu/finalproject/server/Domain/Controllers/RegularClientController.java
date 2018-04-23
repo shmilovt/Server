@@ -5,13 +5,13 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.UserPreferences;
+
 
 import java.util.*;
 
 public class RegularClientController {
 
-    public List<Apartment> searchApartments (UserPreferences userPreferences)  {
+    /*public List<Apartment> searchApartments (UserPreferences userPreferences)  {
         Set<Contact> contacts = new HashSet<>();
         contacts.add(new Contact("tamir" , "0522204747"));
         Apartment apartment1 = new Apartment(new ApartmentLocation(new Address("atehena" , 3)), 1000, contacts );
@@ -21,7 +21,7 @@ public class RegularClientController {
         lst.add(apartment2);
         return lst;
 
-    }
+    }*/
 
     public Collection<Apartment> filterIntersection (Collection<Apartment> apartments, List<CategoryQuery> categories){
         Collection<Apartment> result = new ArrayList<Apartment>();

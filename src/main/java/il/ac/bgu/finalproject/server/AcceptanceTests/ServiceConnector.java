@@ -14,9 +14,7 @@ public class ServiceConnector {
     }
 
 
-    public Reply login(String username, String password) {
-        return bridge.login(username, password);
-    }
+
 
 
 

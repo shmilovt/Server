@@ -16,13 +16,7 @@ public class AdminCommunicationController {
     @Autowired
     private IService service;
 
-    @RequestMapping(value = "/login" , method = {RequestMethod.POST, RequestMethod.GET})
-    public Reply login(@RequestParam Map<String, String> requestParams){
-        String username=requestParams.get("username");
-        String password=requestParams.get("password");
-        return service.login(username, password);
 
-    }
 
 
 

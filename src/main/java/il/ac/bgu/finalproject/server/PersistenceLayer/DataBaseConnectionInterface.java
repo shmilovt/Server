@@ -2,7 +2,6 @@ package il.ac.bgu.finalproject.server.PersistenceLayer;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CostCategory;
 
 import java.util.List;
 
@@ -70,7 +69,6 @@ public interface DataBaseConnectionInterface {
     void deleteAddressDetailsRecord(String id);
     Boolean moreApartmentsWithAddressDetailsNum(String addressDetailsNum);
     void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures);
-    List<Apartment> SearchQuery(List<CostCategory> catagories);
     void updateApartment(Apartment apartment, String post);
     Boolean morePostsWithApartmentID(String id);
     boolean isApartmentExist(Apartment apartment);

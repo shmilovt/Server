@@ -75,6 +75,16 @@
 			<artifactId>modelmapper</artifactId>
 			<version>0.7.4</version>
 		</dependency>
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>0.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.25</version>
+        </dependency>
 	</dependencies>
 
 	<build>

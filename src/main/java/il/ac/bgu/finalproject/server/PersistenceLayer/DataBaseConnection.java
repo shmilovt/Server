@@ -1,7 +1,7 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CostCategory;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -647,7 +647,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         } catch (SQLException e) { }
     }
 
-    public List<Apartment> SearchQuery (List<CostCategory> catagories){
+ /* public List<Apartment> SearchQuery (List<CostCategory> catagories){
         List<Apartment> apartments = new LinkedList<Apartment>();
         Apartment temp= new Apartment();
         try {
@@ -672,7 +672,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
         } catch (SQLException e) { }
         return apartments;
-    }
+    }*/
 
     @Override
     public void updateApartment(Apartment apartment, String post) {
