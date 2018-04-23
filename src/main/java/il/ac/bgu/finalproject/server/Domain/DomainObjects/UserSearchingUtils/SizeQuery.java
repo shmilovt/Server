@@ -7,14 +7,16 @@ public class SizeQuery extends CategoryQuery {
     private int max;
 
     public SizeQuery(int min, int max){
-        min= min;
-        max=max;
+        this.min= min;
+        this.max=max;
     }
 
     public boolean mainQuery(Apartment apartment){
         int size= apartment.getSize();
-        if(size>max && size<min)
-            return false;
-        return true;
+        if(min==-1)
+            return size<=max;
+        else if (max==-1)
+            return size<=min;
+        else return (size<=max && size>=min);
     }
 }

@@ -5,11 +5,22 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
  */
 
 public enum NumberOfRooms {
-    one,
-    two,
-    three,
-    four,
-    five,
-    sixAndMore
+    unknown(-1),
+    one(1),
+    two(2),
+    three(3),
+    four(4),
+    five(5),
+    sixAndMore(6);
+
+    private final int value;
+    private NumberOfRooms(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
 
 }

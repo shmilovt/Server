@@ -1,15 +1,14 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-public enum Furniture {
+public enum DistanceFromUniversity {
     unknown(-1),
-    without(0),
-    partial(1),
-    full(2);
-
-
+    until5(5),
+    until10(10),
+    until15(15),
+    until20(20);
 
     private final int value;
-    private  Furniture (int value) {
+    private  DistanceFromUniversity(int value) {
         this.value = value;
     }
 

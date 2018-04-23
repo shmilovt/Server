@@ -2,13 +2,13 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 
-public class MustHaveQuery {
+public class MustHaveQuery extends CategoryQuery{
     MustHaveThing thing;
     public MustHaveQuery(MustHaveThing thing){
         this.thing=thing;
     }
     public enum MustHaveThing{
-        pool,
+        protectedSpace,
         garden,
         balcony,
         pets,
@@ -25,8 +25,8 @@ public class MustHaveQuery {
         } else if (thing == MustHaveThing.pets) {
             if (apartment.getAnimal() == 1)
                 return true;
-        } else if (thing == MustHaveThing.pool) {
-            if (apartment.getAnimal() == 1)
+        } else if (thing == MustHaveThing.protectedSpace) {
+            if (apartment.getProtectedSpace() == 1)
                 return true;
         } else if (thing == MustHaveThing.warehouse) {
             if (apartment.getWarehouse() == 1)

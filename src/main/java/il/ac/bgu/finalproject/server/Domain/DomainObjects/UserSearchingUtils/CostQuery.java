@@ -13,8 +13,10 @@ public class CostQuery extends CategoryQuery{
 
     public boolean mainQuery(Apartment apartment){
         int cost= apartment.getCost();
-        if(cost>max && cost<min)
-            return false;
-        return true;
+        if(min==-1)
+            return cost<=max;
+        else if (max==-1)
+            return cost<=min;
+        else return (cost<=max && cost>=min);
     }
 }

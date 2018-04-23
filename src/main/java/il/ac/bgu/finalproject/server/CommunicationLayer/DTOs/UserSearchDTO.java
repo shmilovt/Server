@@ -5,8 +5,9 @@ import com.google.gson.Gson;
 
 public class UserSearchDTO {
     private CategoryType[] priorities;
+    private ApartmentSize apartmentSize;
     private String neighborhood;
-    private Integer distanceFromUniversity;
+    private DistanceFromUniversity distanceFromUniversity;
     private Floor floor;
     private Cost cost;
     private Furniture furniture;
@@ -18,7 +19,20 @@ public class UserSearchDTO {
     private Boolean yard;
     private Boolean warehouse;
 
-    public UserSearchDTO(){}
+    public UserSearchDTO(String userSearchDTOString){
+        Gson gson = new Gson();
+        UserSearchDTO userSearchDTO = gson.fromJson(userSearchDTOString, UserSearchDTO.class);
+        /*
+
+
+
+
+
+
+         */
+
+
+    }
 
 
     public CategoryType[] getPriorities() {
@@ -37,11 +51,13 @@ public class UserSearchDTO {
         this.neighborhood = neighborhood;
     }
 
-    public Integer getDistanceFromUniversity() {
+    public DistanceFromUniversity getDistanceFromUniversity() {
         return distanceFromUniversity;
     }
 
-    public void setDistanceFromUniversity(Integer distanceFromUniversity) {
+
+
+    public void setDistanceFromUniversity(DistanceFromUniversity distanceFromUniversity) {
         this.distanceFromUniversity = distanceFromUniversity;
     }
 
@@ -130,4 +146,11 @@ public class UserSearchDTO {
         return gson.toJson(this);
     }
 
+    public ApartmentSize getApartmentSize() {
+        return apartmentSize;
+    }
+
+    public void setApartmentSize(ApartmentSize apartmentSize) {
+        this.apartmentSize = apartmentSize;
+    }
 }
