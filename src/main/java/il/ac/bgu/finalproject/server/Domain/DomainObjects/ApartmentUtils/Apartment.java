@@ -230,7 +230,9 @@ public class Apartment {
         String protectedSpace = "protectedSpace: " + this.protectedSpace + "\n";
         String garden = "garden: " + this.getGarden() + "\n";
         String gardenSize = "garden size: " + this.gardenSize + "\n";
-        String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n" + "street: " + apartmentLocation.getAddress().getStreet() +  "\n" +"building number: " + apartmentLocation.getAddress().getNumber() + "\n";
+        String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n"
+                + "street: " + apartmentLocation.getAddress().getStreet() +  "\n"
+                +"building number: " + apartmentLocation.getAddress().getNumber() + "\n";
         String furniture= "Furniture: " +this.furniture + "\n";
         String mates= "number of mates: " +this.numberOfMates + "\n";
         String rooms= "number of rooms: " +this.numberOfRooms + "\n";

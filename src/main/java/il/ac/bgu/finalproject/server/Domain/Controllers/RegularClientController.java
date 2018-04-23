@@ -39,7 +39,7 @@ public class RegularClientController {
     }
 
     public Collection<Apartment> filterMoreResults (Collection<Apartment> apartments, List<CategoryQuery> categories) {
-        Collection<Apartment> result = new ArrayList<Apartment>();
+        Collection<Apartment> result = new ArrayList<Apartment>() , r2, r3, r4, r5;
         int size = categories.size();
         CategoryQuery c1, c2, c3;
         if (size < 2)
@@ -47,39 +47,39 @@ public class RegularClientController {
         else {
             c1 = categories.get(0);
             c2 = categories.get(1);
+            r2 = new ArrayList<Apartment>();
             if (size == 2) {
                 for (Apartment element : apartments) {
                     if (c1.mainQuery(element) && (!c2.mainQuery(element)))
                         result.add(element);
-                }
-                for (Apartment element : apartments) {
                     if ((!c1.mainQuery(element)) && c2.mainQuery(element))
-                        result.add(element);
+                        r2.add(element);
                 }
+                result.addAll(r2);
             } else {
                 c3 = categories.get(2);
-                if (size > 3) {
-                    for (Apartment element : apartments) {
-                        if (c1.mainQuery(element) && c2.mainQuery(element) && c3.mainQuery(element))
+                r2 = new ArrayList<Apartment>();
+                r3 = new ArrayList<Apartment>();
+                r4 = new ArrayList<Apartment>();
+                r5 = new ArrayList<Apartment>();
+                Boolean sizeIsGT3 = size > 3;
+                for (Apartment element : apartments) {
+                    if (c1.mainQuery(element) && c2.mainQuery(element) && c3.mainQuery(element)) {
+                        if (sizeIsGT3)
                             result.add(element);
-                    }
+                    } else if (c1.mainQuery(element) && c2.mainQuery(element) && (!c3.mainQuery(element)))
+                        r2.add(element);
+                    else if (c1.mainQuery(element) && (!c2.mainQuery(element)) && c3.mainQuery(element))
+                        r3.add(element);
+                    else if (c1.mainQuery(element) && (!c2.mainQuery(element)) && (!c3.mainQuery(element)))
+                        r4.add(element);
+                    else if ((!c1.mainQuery(element)) && c2.mainQuery(element) && c3.mainQuery(element))
+                        r5.add(element);
                 }
-                for (Apartment element : apartments) {
-                    if (c1.mainQuery(element) && c2.mainQuery(element) && (!c3.mainQuery(element)))
-                        result.add(element);
-                }
-                for (Apartment element : apartments) {
-                    if (c1.mainQuery(element) && (!c2.mainQuery(element)) && c3.mainQuery(element))
-                        result.add(element);
-                }
-                for (Apartment element : apartments) {
-                    if (c1.mainQuery(element) && (!c2.mainQuery(element)) && (!c3.mainQuery(element)))
-                        result.add(element);
-                }
-                for (Apartment element : apartments) {
-                    if ((!c1.mainQuery(element)) && c2.mainQuery(element) && c3.mainQuery(element))
-                        result.add(element);
-                }
+                result.addAll(r2);
+                result.addAll(r3);
+                result.addAll(r4);
+                result.addAll(r5);
             }
         }
         return result;
