@@ -97,4 +97,7 @@ public class Converter {
     }
 
 
+    public SearchResultsDTO convertToDTO(List<Apartment> searchResult) {
+        return null;
+    }
 }

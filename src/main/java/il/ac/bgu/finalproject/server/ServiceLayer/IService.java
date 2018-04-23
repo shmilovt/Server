@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface IService {
 
-   SearchResultsDTO searchApartments(List<CategoryQuery> categoryQueryList);
-    boolean userSuggestion (Integer apartmentID, UserSuggestion UserSuggestion);
+   List<Apartment> searchApartments(List<CategoryQuery> categoryQueryList);
+
 
 
 }

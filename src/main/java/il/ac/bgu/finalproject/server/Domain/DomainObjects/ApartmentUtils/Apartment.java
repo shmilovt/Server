@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public class Apartment {
+
     private List<String> postIDs;
     private ApartmentLocation apartmentLocation;
     private int cost;

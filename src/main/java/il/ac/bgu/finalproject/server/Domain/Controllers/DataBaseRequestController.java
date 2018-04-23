@@ -15,33 +15,31 @@ public class DataBaseRequestController {
     }
 
     public void manageApartment(Apartment apartment, Post post) {
-        if( dataBaseConnectionInterface.isApartmentExist(apartment)){
-            dataBaseConnectionInterface.updateApartment(apartment, post.getID());
+        dataBaseConnectionInterface.connect();
+        int apartmentId=dataBaseConnectionInterface.isApartmentExist(apartment);
+        if (apartmentId!=-1) {
+            dataBaseConnectionInterface.updateApartmentDerivatives(apartment, ""+apartmentId);
+        } else {
+            dataBaseConnectionInterface.addApartmentDerivatives(apartment, post.getID());
         }
-        else{
-           // dataBaseConnectionInterface.addApartmentRecord()
-        }
-
-        }
+        dataBaseConnectionInterface.disConnect();
+    }
 
     public Post getPost(String id){
         return dataBaseConnectionInterface.getPost(id);
     }
 
-    public void updatePost(Post post)
-    {
+    public void updatePost(Post post){
         dataBaseConnectionInterface.update(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
     }
 
 
-    public void addPost(Post post)
-    {
+    public void addPost(Post post){
         dataBaseConnectionInterface.addPost(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
     }
 
 
-    public void deletePost(String id)
-    {
+    public void deletePost(String id){
         String apartmentID = dataBaseConnectionInterface.getPost(id).getApartmentID();
         dataBaseConnectionInterface.deletePost(id);
 
@@ -54,5 +52,9 @@ public class DataBaseRequestController {
     public List<String> getAllPostsId()
     {
         return dataBaseConnectionInterface.GetAllPostsId();
+    }
+
+    public List<Apartment> allApartments() {
+        return dataBaseConnectionInterface.allApartmentFromDB();
     }
 }
