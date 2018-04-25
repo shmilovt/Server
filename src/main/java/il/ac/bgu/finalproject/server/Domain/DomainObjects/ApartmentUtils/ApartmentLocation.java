@@ -8,6 +8,8 @@ public class ApartmentLocation {
     private int floor;
     private int apartmentNumber;
     private double distanceFromUniversity;
+    private double longitude;
+    private double latitude;
 
 
     public ApartmentLocation(){}
@@ -79,4 +81,19 @@ public class ApartmentLocation {
     }
 
 
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 }

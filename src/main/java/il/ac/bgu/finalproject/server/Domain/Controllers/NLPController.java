@@ -5,26 +5,24 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPImp;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPInterface;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class NLPController {
     private NLPInterface nlp;
-    private DataBaseRequestController dataBaseRequestController;
+    private GoogleMapsController googleMapsController;
 
     public NLPController(){
         nlp = new NLPImp();
-        dataBaseRequestController = new DataBaseRequestController();
-
+        googleMapsController= new GoogleMapsController();
     }
 
 
 
 
-    public void generateNLP(Post post) {
+    public Apartment generateNLP(Post post) {
         Apartment apartment = nlp.extractApartment(post.getText());
-        dataBaseRequestController.manageApartment(apartment, post);
-
-
-
+        //googleMapsController ==> get Latitude, Longitude and TimeFromUNI
+//        apartment.getApartmentLocation().setLatitude();
+//        apartment.getApartmentLocation().setLongitude();
+//        apartment.getApartmentLocation().setUniversity_distance();
+        return  apartment;
     }
 }

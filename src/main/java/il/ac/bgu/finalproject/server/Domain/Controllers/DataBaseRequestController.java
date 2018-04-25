@@ -14,13 +14,13 @@ public class DataBaseRequestController {
         dataBaseConnectionInterface = new DataBaseConnection();
     }
 
-    public void manageApartment(Apartment apartment, Post post) {
+    public void manageApartment(Apartment apartment, String postID) {
         dataBaseConnectionInterface.connect();
         int apartmentId=dataBaseConnectionInterface.isApartmentExist(apartment);
         if (apartmentId!=-1) {
             dataBaseConnectionInterface.updateApartmentDerivatives(apartment, ""+apartmentId);
         } else {
-            dataBaseConnectionInterface.addApartmentDerivatives(apartment, post.getID());
+            dataBaseConnectionInterface.addApartmentDerivatives(apartment, postID);
         }
         dataBaseConnectionInterface.disConnect();
     }

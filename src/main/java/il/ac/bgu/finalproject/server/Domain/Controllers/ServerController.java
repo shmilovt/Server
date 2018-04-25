@@ -1,35 +1,35 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 
 import java.util.List;
 
-public class FacebookController {
+public class ServerController {
     private NLPController nlpController;
     private DataBaseRequestController dbController;
 
-    public FacebookController(){
+    public ServerController(){
         nlpController = new NLPController();
         dbController = new DataBaseRequestController();
     }
 
-    public void generateNLP(Post post){
-        nlpController.generateNLP(post);
-    }
-
-    public Post getPost(String id)
-    {
+    public Post getPost(String id){
         return dbController.getPost(id);
     }
 
-    public void updatePost(Post post)
-    {
-        dbController.updatePost(post);
+    public void newPost(Post ourPost){
+        dbController.addPost(ourPost);
+        Apartment apartment = nlpController.generateNLP(ourPost);
+        dbController.manageApartment(apartment, ourPost.getID());
+
     }
 
-    public void addPost(Post post)
-    {
-        dbController.addPost(post);
+    public void updatePost(Post ourPost){
+        dbController.updatePost(ourPost);
+        Apartment apartment = nlpController.generateNLP(ourPost);
+
+        dbController.manageApartment(apartment, ourPost.getID());
     }
 
     public void deletePost(String id)

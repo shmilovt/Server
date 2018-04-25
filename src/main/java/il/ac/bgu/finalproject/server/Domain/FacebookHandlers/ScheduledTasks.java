@@ -1,16 +1,14 @@
 package il.ac.bgu.finalproject.server.Domain.FacebookHandlers;
 
-import il.ac.bgu.finalproject.server.Domain.Controllers.FacebookController;
+import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class ScheduledTasks {
 
-    private static FacebookController fbController=new FacebookController();
+    private static ServerController fbController=new ServerController();
     private static FacebookHandler fb= new FacebookHandler();
     private static DataBaseConnection conn=new DataBaseConnection();
 
