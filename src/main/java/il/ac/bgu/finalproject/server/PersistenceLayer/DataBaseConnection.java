@@ -1,9 +1,11 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
+import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +68,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         catch (SQLException e){}
     }
-
 
     public void resetAddressDetailsTable(){
         String sql= "DROP TABLE addressDetails";
@@ -209,7 +210,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             String sql = "INSERT INTO posts(postID, dateOfPublish, publisherName, " +
                     "postText, apartmentID) VALUES(?,?,?,?,?)";
 
-
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, id);
             pstmt.setString(2, date);
@@ -217,12 +217,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(4, message);
             pstmt.setString(5, apartmentID);
             pstmt.executeUpdate();
-            //System.out.println("Added");
         } catch (SQLException e) {
             //System.out.println(e.getMessage());
         }
     }
-
 
     public void update(String id, String date, String publisherName, String message, String apartmentID) {
         String sql= "UPDATE Posts SET dateOfPublish= ?, publisherName= ?, postText= ?, apartmentID= ? "
@@ -288,14 +286,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     ///===========ADDRESS DETAILS TABLE==============///
-    //strinf street, string numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude, int addressDetailsNum,
     public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude) {
         int t;
         try {
             String sql = "INSERT INTO AddressDetails(street, numOfBuilding, timeFromUni, "+
                     "neighborhood, longitude, latitude, addressDetailsNum)"+
                     " VALUES(?,?,?,?,?,?,?)";
-
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, street);
@@ -340,43 +336,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public Post getPostaaaa(String id) {
-        try {
-            //List<String> post = new LinkedList<String>();
-            //Post post;
-            String sql = "SELECT * FROM posts where postID =" + "'" + id + "'";
-            Statement stmt  = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-            //post.add(rs.getString(1));
-            //post.add(rs.getString(2));
-            //post.add(rs.getString(3));
-            //System.out.println(rs.getString(3));
-            Post post= new Post(rs.getString(1),rs.getDate(2),
-                    rs.getString(3),rs.getString(4),
-                    rs.getString(5));
-            return post;
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-    public void deletePostaaa(String id) {
-        //  System.out.println("Hello deletePost");
-        String sql = "DELETE FROM posts WHERE postID = ?";
+    public void deleteAddressDetailsRecord(String id) {
+        String sql = "DELETE FROM AddressDetails WHERE addressDetailsNum= id";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, id);
             pstmt.executeUpdate();
-        }
-        catch(SQLException e){
-            // System.out.println("Hello deletePost failed");
-
-        }
+        } catch (SQLException e) {}
     }
-
     ///===========CONTACTS TABLE==============///
-    //String phone, String name text
+
     public void addContactsRecord(String phone, String name) {
         try {
             String sql = "INSERT INTO Contacts(phone, name)"+
@@ -391,9 +359,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             //System.out.println(e.getMessage());
         }
     }
-
     ///===========APARTMENT_CONTACTS TABLE==============///
-    //int apartmentID , String phoneNumber
+
     public void addApartmentContactsRecord(String apartmentID , String phoneNumber) {
         try {
             String sql = "INSERT INTO ApartmentContacts(apartmentID, phoneNumber)"+
@@ -408,9 +375,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             //System.out.println(e.getMessage());
         }
     }
-
     ///===========APARTMENT TABLE==============///
-    //int apartmentID, int numOfRooms, int floor, double size, int cost, int addressDetailsID
+
     public String addApartmentRecord(String apartmentID, int numOfRooms, int floor,
                                      int size, int cost, int addressDetailsID,
                                      int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
@@ -450,50 +416,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return ""+apartmentIdCreator();
     }
 
-    public ApartmentLocation getAddressDetils (int addressDetilsID ){
-        ApartmentLocation location= new ApartmentLocation();
-        String sql = "SELECT * FROM apartment where apartmentID =" + "'" + addressDetilsID  + "'";
-        Statement stmt  = null;
-        try {
-            stmt = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return location;
-    }
-    public Apartment getApartmentRecordTBD(String id) {
-        try {
-            String sql = "SELECT * FROM apartment where apartmentID =" + "'" + id + "'";
-            Statement stmt  = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-
-
-            ApartmentLocation location= new ApartmentLocation();
-            location = getAddressDetils(rs.getInt(6));
-            location.setFloor(rs.getInt(3));
-
-            Apartment apartment= new Apartment();
-            apartment.setNumberOfRooms(rs.getInt(2));
-            apartment.setSize(rs.getInt(4));
-            apartment.setCost(rs.getInt(5));
-            apartment.setGarden(rs.getInt(7));
-            apartment.setGardenSize(rs.getInt(8));
-            apartment.setProtectedSpace(rs.getInt(9));
-            apartment.setWarehouse(rs.getInt(10));
-            apartment.setAnimal(rs.getInt(11));
-            apartment.setBalcony(rs.getInt(12));
-            apartment.setFurniture(rs.getInt(13));
-            apartment.setNumberOfMates(rs.getInt(14));
-            apartment.setApartmentLocation(location);
-            return apartment;
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
-            return null;
-        }
-    }
-
-
     public void deleteApartmentRecord(String id) {
         String sql = "SELECT addressDetailsID FROM Apartment WHERE apartmentID= "+id;
         int t=-1;
@@ -522,13 +444,108 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){ }
     }
 
-    public void deleteAddressDetailsRecord(String id) {
-        String sql = "DELETE FROM AddressDetails WHERE addressDetailsNum= id";
+    ///===========GET OBJECTS FROM DB==============///
+
+    public ApartmentLocation getAddressDetils (int addressDetilsID ){
+        ApartmentLocation location= new ApartmentLocation();
+        Address address;
+        String sql = "SELECT street, numOfBuilding, timeFromUni, neighborhood " +
+                "FROM AddressDetails where addressDetailsNum= "  + addressDetilsID  ;
+        Statement stmt  = null;
         try {
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {}
+            stmt = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            address=new Address(rs.getString(1),rs.getInt(2));
+            location.setAddress(address);
+            location.setUniversity_distance(rs.getInt(3));
+            location.setNeighborhood(rs.getString(4));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return location;
     }
+
+    public Apartment getApartmentRecordTBD(String id) {
+        try {
+            String sql = "SELECT * " +
+                    "FROM apartment where apartmentID =" + "'" + id + "'";
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+
+            ApartmentLocation location= new ApartmentLocation();
+            location = getAddressDetils(rs.getInt(1));
+            location.setFloor(rs.getInt(3));
+
+            Set<Contact> contacts= getApartmentContacts(id);
+
+            Apartment apartment= new Apartment();
+            apartment.setContacts(contacts);
+            apartment.setNumberOfRooms(rs.getInt(2));
+            apartment.setSize(rs.getInt(4));
+            apartment.setCost(rs.getInt(5));
+            apartment.setGarden(rs.getInt(7));
+            apartment.setGardenSize(rs.getInt(8));
+            apartment.setProtectedSpace(rs.getInt(9));
+            apartment.setWarehouse(rs.getInt(10));
+            apartment.setAnimal(rs.getInt(11));
+            apartment.setBalcony(rs.getInt(12));
+            apartment.setFurniture(rs.getInt(13));
+            apartment.setNumberOfMates(rs.getInt(14));
+            apartment.setApartmentLocation(location);
+            return apartment;
+        } catch (SQLException e) {
+            //System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public List<Apartment> allApartmentFromDB (){
+        List<Apartment> apartments = new LinkedList<Apartment>();
+        Apartment temp= new Apartment();
+        try {
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost"
+                    + " FROM Apartment";
+
+            Statement stmt = conn.createStatement();
+            ResultSet rs= stmt.executeQuery(sql);
+            while (rs.next()) {
+                Set <Contact> contacts= getApartmentContacts(rs.getString(1));
+                System.out.println(contacts.toString());
+                ApartmentLocation location= getAddressDetils(rs.getInt(2));
+                location.setFloor(rs.getInt(3));
+                System.out.println(location.toString());
+//                temp= new Apartment(location,rs.getInt(4),rs.getInt(5), contacts);
+                temp= new Apartment(location,rs.getInt(4),-1, contacts);
+
+                System.out.println(temp.toString());
+                apartments.add(temp);
+            }
+
+        } catch (SQLException e) { }
+        //    disConnect();
+        return apartments;
+    }
+
+    public Set<Contact> getApartmentContacts(String id) {
+        Set<Contact> contacts= new HashSet<Contact>();
+        Contact tempContact;
+        String sql = "SELECT phone, name FROM Contacts " +
+                "JOIN ApartmentContacts C2 ON Contacts.phone = C2.phoneNumber" +
+                " WHERE apartmentID= "  + id ;
+        Statement stmt  = null;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            while (rs.next()){
+                tempContact= new Contact(rs.getString(2),rs.getString(1));
+                contacts.add(tempContact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return  contacts;
+    }
+    ///===========MORE FROM... (BOOLEAN) ==============///
 
     public Boolean morePostsWithApartmentID(String id){
         String sql = "SELECT * FROM posts where apartmentID =" + "'" + id + "'";
@@ -561,6 +578,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return false;
     }
 
+
     public void deleteAllRecords(String tablaName){
         String sql = "DELETE FROM ?;";
         try {
@@ -570,7 +588,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         catch(SQLException e){
             // System.out.println("Hello deletePost failed");
-
         }
     }
 
@@ -594,65 +611,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         } catch (SQLException e) { }
     }
 
-//    public List<Apartment> SearchQuery (List<CostCategory> catagories){
-//        List<Apartment> apartments = new LinkedList<Apartment>();
-//        Apartment temp= new Apartment();
-//        try {
-//            String sql = "SELECT Apartment.size, Apartment.cost "
-//                    + " FROM Apartment"
-//                    + " JOIN AddressDetails Detail ON Apartment.addressDetailsID = Detail.addressDetailsNum"
-//                    + " JOIN ApartmentContacts C2 ON Apartment.apartmentID = C2.apartmentID"
-//                    + " JOIN Contacts C3 ON C2.phoneNumber = C3.phone "
-//// TBD
-////                    + prepareCoditions(catagories)
-//                    + " ORDER BY Apartment.cost, Apartment.size DESC ";
-//
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs= stmt.executeQuery(sql);
-//            while (rs.next()) {
-//// TBD: set for all in Apartment OR contructor.... TBDAPARTMENT
-//                temp.setSize(rs.getInt(1));
-//                temp.setCostDTO(rs.getInt(2));
-//                System.out.println(temp.toString());
-//                apartments.add(temp);
-//            }
-//
-//        } catch (SQLException e) { }
-//        return apartments;
-//    }
-
-    public List<Apartment> allApartmentFromDB (){
-        //connect();
-        List<Apartment> apartments = new LinkedList<Apartment>();
-        Apartment temp= new Apartment();
-        try {
-            String sql = "SELECT street, numOfBuilding, floor, cost, Apartment.apartmentID, "
-                    + " FROM Apartment"
-                    + " JOIN AddressDetails Detail ON Apartment.addressDetailsID = Detail.addressDetailsNum"
-                    + " JOIN ApartmentContacts C2 ON Apartment.apartmentID = C2.apartmentID"
-//                    + " JOIN Contacts C3 ON C2.phoneNumber = C3.phone "
-                    + " ORDER BY Apartment.cost";
-
-            Statement stmt = conn.createStatement();
-            ResultSet rs= stmt.executeQuery(sql);
-            while (rs.next()) {
-                Address address= new Address(rs.getString("street"),rs.getInt("numOfBuilding"));
-                System.out.println(address.toString());
-                ApartmentLocation location= new ApartmentLocation(address, rs.getInt("floor"));
-                Set <Contact> contacts= new HashSet<Contact>();
-                contacts.add(new Contact(rs.getString("name"),rs.getString("phone")));
-                Apartment apartment= new Apartment(location,rs.getInt("cost"),rs.getInt("size"), contacts);
-
-//                System.out.println(temp.toString());
-                apartments.add(temp);
-            }
-
-        } catch (SQLException e) { }
-        //    disConnect();
-        return apartments;
-    }
-
-    //@Override
     public void updateApartmentRecord(Apartment apartment, String apartmentid) {
         try {
             String sql = "UPDATE Apartment SET numOfRooms=? , floor=? , size=? , cost=? ,  " +
@@ -682,7 +640,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    //@Override
     public int isApartmentExist(Apartment apartment) {
         Set<Contact> contacts = apartment.getContacts();
         for (Contact eachcotact : contacts) {
@@ -696,13 +653,9 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     +"' AND numOfBuilding= "+ apartment.getApartmentLocation().getAddress().getNumber();
             try {
                 stmt = conn.createStatement();
-//                stmt.setString(1, eachcotact.getPhone());
-//                stmt.setString(2, apartment.getApartmentLocation().getAddress().getStreet());
-//                stmt.setInt(3, apartment.getApartmentLocation().getAddress().getNumber());
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next()) {
                     return rs.getInt(1);
-                    //return true;
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -777,7 +730,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public void updateApartmentDerivatives(Apartment apartment,String apartmentID){
-
         //AddressDetailsRecord will not change
         updateApartmentRecord(apartment, apartmentID);
         Set<Contact> contacts= apartment.getContacts();
@@ -792,17 +744,77 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
         a.resetAllTables();
-//        a.addApartmentRecord("3",4,4,90,1000,1,1,0,0,0,0,0,0,3);
-//        a.addAddressDetailsRecord("בן ארי","34",12,2,12,12);
+        Date date= new Date();
+        Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
+                "כולל מדיח כלים אינטגרלי, מזגן מיני מרכזי, מזגנים עיליים בכל חדר (אינוורטר). תריסי אור חשמליים בכל הבית. 1200 שח\n" +
+                "לפרטים: \n" +
+                "ניר - 054-9449978 חן- 054-5802333",null);
+        Post p2=new Post("121213",date,"mikey1","יחידת דיור להשכרה בהר בוקר 26, זוהי יחידת דיור קרקע הכוללת : סלון, חדר שינה, חדר ממד וגינה .\n" +
+                "בדירה ישנו מיזוג גם בסלון וגם בחדר שינה , והדירה נכללת עם מיטה , ארון , פינת אוכל,סלון, מיקרוגל, תנור אובן, ועוד.\n" +
+                "הדירה מעולה לזוגות , לשותפים , סטודנטים ..\n" +
+                "(החדר מדד הוא מעבר דרך החדר שינה- יתאים לשותפים שהם חברים טובים או פתוחים אחד עם השני בלי קשר וכו׳)\n" +
+                "20 דק הליכה מהאוניברסיטה ו7 דק בתחבורה הציבורית.\n" +
+                "העלות של הדירה היא 2800 כולל מים ארנונה חשמל וכבלים!!!\n" +
+                "*ישנה אפשרות לבעלי חיים\n" +
+                "לפרטים :\n" +
+                "שירה 0546559992",null);
+        Post p3=new Post("121214",date,"mikey2","שאול המלך דירת 2 חדרים קומה קרקע כניסה מידית רק 1800\n" +
+                "₪ 1,800\n" +
+                "Беэр-Шева\n" +
+                "0546329669 דודי נכסים",null);
+        Post p4=new Post("121215",date,"mikey3","דירה 2 חדרים כ50 מ\"ר\n" +
+                "מתאימה לזוג או ליחיד \n" +
+                "נשאר בדירה מקרר ארון ומיטה\n" +
+                "הדירה נמצאת 2 דקות מכל המסעדות ברינגנבלום ו5 דקות מהאוניברסיטה\n" +
+                "(דירה לכל דבר לא יחידת דיור)\n" +
+                "רחוב שמעון ברנפלד 26\n" +
+                "אפשר ליצור קשר איתי ב 0524188278 \n" +
+                "או קיריל 0527021623",null);
+        Post p5=new Post("121216",date,"mikey4","למהירי החלטה דירת 4 חדרים להשכרה בשכונה ה המבוקשת ברחוב הצבי במיקום מרכזי במרחק הליכה מגרנד קניון, בית כנסת הכיפה, מוסדות חינוך, תחבורה ציבורית ומרכזי קניות\n" +
+                "דירה מרווחת ומתוכננת היטב בבניין בן 8 קומות כולל מעלית, ללא ריהוט.\n" +
+                "כניסה מיידית!!! ללא תיווך\n" +
+                "שכ\"ד: 2900ש\"ח בחודש\n" +
+                "וועד: 170ש\"ח בחודש\n" +
+                "ארנונה:650 ש\"ח לחודשיים.\n" +
+                "לפרטים נוספים ניתן ליצור קשר\n" +
+                "0549902222/0537476855",null);
+        Post p6=new Post("121217",date,"mikey5","***לסטודנטים ללא תיווך! ***\n" +
+                "להשכרה בשכונה ג,ברחוב יד ושם 24 מגדל בית שיאים, קומה 8 עם מעלית .\n" +
+                "דירת חדר שינה וסלון מרוהטת, שכונה שקטה במיקום מעולה.\n" +
+                "רבע שעה הליכה לקניון הנגב והרכבת, חמש דקות הליכה למכללה למנהל, חמש דקות נסיעה לבן גוריון\n" +
+                "מחיר 1850.\n" +
+                "יש עלות ועד בנין על סך 250 ש\"ח\n" +
+                "לפרטים וסיור בנכס:\n" +
+                "בן0524446286\n" +
+                "דוד 0544293989",null);
+        Post p7=new Post("121218",date,"mikey5","השכרה !! מגוון דירות סביב האוניברסיטה ללא דמי תיווך, לסטודנטים ולמורים בלבד!\n" +
+                "דירות ל2 3 ו4 שותפים\n" +
+                "-דירות עם שירותים ומקלחת פרטיים משופצות ומאובזרות\n" +
+                "-כניסות החל מ1.9 \n" +
+                "-דירות שמנוהלות עי חברת\n" +
+                "לדוגמא דירת 3 חדרים קרקע בשכונה ד' - 10 דק' מהאוניברסיטה\n" +
+                "מתאימה לזוג שותפים\n" +
+                "-בכל חדר שירותים ומקלחת לכל דייר\n" +
+                "-מאובזרת קומפלט\n" +
+                "מחיר - 2500 שח ללא חשבונות\n" +
+                "\n" +
+                "-מוזמנים לשלוח מספר טלפון בפוסט זה או לשלוח הודעה למספר 0525447662\n" +
+                "כל מי שמשאיר טלפון נכנס לרשימת תפוצה שבה ישלחו מגוון דירות להשכרה לשנת הלימודים הקרובה בהתאם לצרכים שלכם.\n" +
+                "נדאג למצוא לכל אחד את הדירה שתתאים לו! וכמובן סטודנטים ללא דמי תיווך!",null);
+        Post p8=new Post("121219",date,"mikey","להשכרה דירת 4.5 חדרים ללא דמי תיווך\n" +
+                "₪ 2,800\n" +
+                "תל אביב-יפו\n" +
+                "מעולה לסטודנטים. ו' הישנה. 100 מטר משער הכניסה לאוניברסיטה.מזגנים בחדרים. ריהוט חלקי. כניסה מיידית. השכירות לטווח ארוך.",null);
 
-//        a.resetSearchRecordsTable();
-//        a.addPost("1",null, "maayan", "דירה שחבל להפסיד", "1");
-//        a.addPost("2",null, "nof", "דירה מהממת", "2");
-//        a.addPost("3",null, "nof2", "דירה מהממת", "2");
-//        a.addPost("4",null, "nof3", "דירה מהממת", "4");
-//        a.addPost("4",null, "mani", "דירה מדהימה", "5");
-        // a.addSearchRecord("n","10","1000","3","90","מלא");
-        //a.resetAllTables();
+        NLPController nlpController= new NLPController();
+//        nlpController.generateNLP(p1);
+        nlpController.generateNLP(p2);
+        nlpController.generateNLP(p3);
+        nlpController.generateNLP(p4);
+        nlpController.generateNLP(p5);
+        nlpController.generateNLP(p6);
+        nlpController.generateNLP(p7);
+        nlpController.generateNLP(p8);
 
 //        Date date = new Date();
 //        a.updateO("516188885429510_516287808752951",date.toString(),"succ");

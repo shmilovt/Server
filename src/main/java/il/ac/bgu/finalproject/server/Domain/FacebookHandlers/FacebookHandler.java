@@ -4,8 +4,8 @@ import com.restfb.*;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
 import com.restfb.types.Post;
-import il.ac.bgu.finalproject.server.Domain.Controllers.FacebookController;
-import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
+import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 public class FacebookHandler {
     private static final String accessToken = "EAAESqCOZCzy4BANaOKhN4VeZAtYr0Ja9rAZCPEKVgsl8VFuyW0PY1yNZC5YMhiqPMRYN0VlV4WaZCIxsJz7GvrBHbbpZCIzeVDbXZBdCr2IhlMspJdAjGCZAqUnTRklPcIsDy2hD4ZBjfgL6DM5CBYTeYJS1bwC6FdOEZD";
     private static final FacebookClient fbClient = new DefaultFacebookClient(accessToken,Version.VERSION_2_11);
-    private FacebookController fbController = new FacebookController();
+    private ServerController fbController = new ServerController();
 
 
 
@@ -62,13 +62,11 @@ public class FacebookHandler {
                             //postUpdated_changesInDB(apost,dbConn);
                             //dbConn.update(apost.getId(),apost.getUpdatedTime().toString(),apost.getAdminCreator().getName(),apost.getMessage(),""+11111111);
                             fbController.updatePost(ourPost);
-                            fbController.generateNLP(ourPost);
                         }
                     } else {
                         System.out.println("here4");
                         System.out.println("\n" + "***** db: post added *****" + "\n");
-                        fbController.addPost(ourPost);
-                        fbController.generateNLP(ourPost);
+                        fbController.newPost(ourPost);
 
                         /* try {
 

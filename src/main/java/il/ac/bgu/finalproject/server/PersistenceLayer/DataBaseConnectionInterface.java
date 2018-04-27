@@ -1,9 +1,11 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 
 import java.util.List;
+import java.util.Set;
 
 public interface DataBaseConnectionInterface {
 
@@ -28,8 +30,6 @@ public interface DataBaseConnectionInterface {
 
     void addPost(String id, String date, String publisherName, String message, String apartmentID);
 
-    List<Apartment> allApartmentFromDB();
-
     void update(String id, String date, String publisherName, String message, String apartmentID);
 
     Post getPost(String id);
@@ -40,13 +40,12 @@ public interface DataBaseConnectionInterface {
 
     int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude);
 
+    List<Apartment> allApartmentFromDB();
+
+    Set<Contact> getApartmentContacts(String apartmentid);
+
 // I dont think this function is neccessary:
-//    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude, int addressDetailsNum);
-
-    Post getPostaaaa(String id);
-
-    void deletePostaaa(String id);
-
+    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude);
 
     void addContactsRecord(String phone, String name);
 
@@ -57,17 +56,16 @@ public interface DataBaseConnectionInterface {
                               int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                               int balcony, int furniture, int numberOfMates
     );
-
+    void deleteAddressDetailsRecord(String id);
     Apartment getApartmentRecordTBD(String id);
     void deleteApartmentRecord(String id);
-    void deleteAddressDetailsRecord(String id);
+    Boolean morePostsWithApartmentID(String id);
     Boolean moreApartmentsWithAddressDetailsNum(String addressDetailsNum);
     void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures);
     void updateApartmentRecord(Apartment apartment, String apartmentid);
-    Boolean morePostsWithApartmentID(String id);
     int isApartmentExist(Apartment apartment);
     void addApartmentDerivatives(Apartment apartment, String post);
     void updateApartmentDerivatives(Apartment apartment,String postID);
-}
+    }
 
 
