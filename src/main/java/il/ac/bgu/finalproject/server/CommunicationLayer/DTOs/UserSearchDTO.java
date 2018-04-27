@@ -25,12 +25,35 @@ public class UserSearchDTO {
 
 
 
+
+
+    public static String toJSON(UserSearchDTO userSearchDTO) {
+        Gson gson = new Gson();
+        return gson.toJson(userSearchDTO);
+    }
+
+    public static UserSearchDTO fromJSON(String userSearchDTOString){
+        Gson gson = new Gson();
+        UserSearchDTO userSearchDTO = gson.fromJson(userSearchDTOString, UserSearchDTO.class);
+        return userSearchDTO;
+
+    }
+
+
     public CategoryTypeDTO[] getPriorities() {
         return priorities;
     }
 
     public void setPriorities(CategoryTypeDTO[] priorities) {
         this.priorities = priorities;
+    }
+
+    public ApartmentSizeDTO getApartmentSizeDTO() {
+        return apartmentSizeDTO;
+    }
+
+    public void setApartmentSizeDTO(ApartmentSizeDTO apartmentSizeDTO) {
+        this.apartmentSizeDTO = apartmentSizeDTO;
     }
 
     public String getNeighborhood() {
@@ -44,10 +67,6 @@ public class UserSearchDTO {
     public DistanceFromUniversityDTO getDistanceFromUniversityDTO() {
         return distanceFromUniversityDTO;
     }
-
-
-
-
 
     public void setDistanceFromUniversityDTO(DistanceFromUniversityDTO distanceFromUniversityDTO) {
         this.distanceFromUniversityDTO = distanceFromUniversityDTO;
@@ -131,26 +150,5 @@ public class UserSearchDTO {
 
     public void setWarehouse(Boolean warehouse) {
         this.warehouse = warehouse;
-    }
-
-
-    public ApartmentSizeDTO getApartmentSizeDTO() {
-        return apartmentSizeDTO;
-    }
-
-    public void setApartmentSizeDTO(ApartmentSizeDTO apartmentSizeDTO) {
-        this.apartmentSizeDTO = apartmentSizeDTO;
-    }
-
-    public static String toJSON(UserSearchDTO userSearchDTO) {
-        Gson gson = new Gson();
-        return gson.toJson(userSearchDTO);
-    }
-
-    public static UserSearchDTO fromJSON(String userSearchDTOString){
-        Gson gson = new Gson();
-        UserSearchDTO userSearchDTO = gson.fromJson(userSearchDTOString, UserSearchDTO.class);
-        return userSearchDTO;
-
     }
 }
