@@ -3,21 +3,21 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 import com.google.gson.Gson;
 
 public class SearchResultsDTO {
-    private ApartmentDTO [] apartmentDTOS;
+    private ResultRecordDTO[] resultRecordDTOS;
     public SearchResultsDTO(){}
-    public SearchResultsDTO(ApartmentDTO [] apartmentDTOS ){
+    public SearchResultsDTO(ResultRecordDTO[] resultRecordDTOS){
 
-        this.apartmentDTOS = apartmentDTOS;
+        this.resultRecordDTOS = resultRecordDTOS;
 
     }
 
 
-    public ApartmentDTO[] getApartmentDTOS() {
-        return apartmentDTOS;
+    public ResultRecordDTO[] getResultRecordDTOS() {
+        return resultRecordDTOS;
     }
 
-    public void setApartmentDTOS(ApartmentDTO[] apartmentDTOS) {
-        this.apartmentDTOS = apartmentDTOS;
+    public void setResultRecordDTOS(ResultRecordDTO[] resultRecordDTOS) {
+        this.resultRecordDTOS = resultRecordDTOS;
     }
 
     public String toJson(){

@@ -1,6 +1,6 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-public class ApartmentDTO {
+public class ResultRecordDTO {
     private String street;
     private int number;
     private String neighborhood;
@@ -20,7 +20,7 @@ public class ApartmentDTO {
     private String text;
     private ContactDTO [] contacts;
 
-    public ApartmentDTO(){}
+    public ResultRecordDTO(){}
 
     public String getStreet() {
         return street;
