@@ -32,7 +32,6 @@ public class DataBaseConnectionTest {
 
     @Test
     public void addPost() {
-
         dbc.addPost("1", null, "maayan", "דירה שחבל להפסיד", "1");
         dbc.addPost("2", null, "nof", "דירה מהממת", "2");
         dbc.addPost("3", null, "nof2", "דירה מהממת", "2");
@@ -133,10 +132,6 @@ public class DataBaseConnectionTest {
     public void morePostsWithApartmentID() {
     }
 
-    @Test
-    public void main() {
-
-    }
 
     @Test
     public void isApartmentExist() {
@@ -149,7 +144,7 @@ public class DataBaseConnectionTest {
         contacts.add(c2);
         Apartment apartment = new Apartment(location, 1000, contacts);
         //dbc.addApartmentDerivatives(apartment,"2");
-        System.out.println(dbc.isApartmentExist(apartment));
+        assertTrue(dbc.isApartmentExist(apartment)!=-1);
 
     }
 

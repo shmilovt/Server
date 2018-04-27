@@ -30,27 +30,32 @@ public class DataBaseRequestController {
     }
 
     public void updatePost(Post post){
+        dataBaseConnectionInterface.connect();
         dataBaseConnectionInterface.update(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
+        dataBaseConnectionInterface.disConnect();
     }
 
 
     public void addPost(Post post){
+        dataBaseConnectionInterface.connect();
         dataBaseConnectionInterface.addPost(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
+        dataBaseConnectionInterface.disConnect();
     }
 
 
     public void deletePost(String id){
+        dataBaseConnectionInterface.connect();
         String apartmentID = dataBaseConnectionInterface.getPost(id).getApartmentID();
         dataBaseConnectionInterface.deletePost(id);
 
         if (!dataBaseConnectionInterface.morePostsWithApartmentID(apartmentID)){
             dataBaseConnectionInterface.deleteApartmentRecord(apartmentID);
         }
+        dataBaseConnectionInterface.disConnect();
     }
 
 
-    public List<String> getAllPostsId()
-    {
+    public List<String> getAllPostsId() {
         return dataBaseConnectionInterface.GetAllPostsId();
     }
 
