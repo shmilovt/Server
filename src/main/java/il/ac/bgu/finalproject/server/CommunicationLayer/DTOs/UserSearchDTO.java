@@ -4,15 +4,15 @@ import com.google.gson.Gson;
 
 
 public class UserSearchDTO {
-    private CategoryType[] priorities;
-    private ApartmentSize apartmentSize;
+    private CategoryTypeDTO[] priorities;
+    private ApartmentSizeDTO apartmentSizeDTO;
     private String neighborhood;
-    private DistanceFromUniversity distanceFromUniversity;
-    private Floor floor;
-    private Cost cost;
-    private Furniture furniture;
-    private NumberOfRooms numberOfRooms;
-    private NumberOfRoomates numberOfMates;
+    private DistanceFromUniversityDTO distanceFromUniversityDTO;
+    private FloorDTO floorDTO;
+    private CostDTO costDTO;
+    private FurnitureDTO furnitureDTO;
+    private NumberOfRoomsDTO numberOfRoomsDTO;
+    private NumberOfRoomatesDTO numberOfMates;
     private Boolean balcony;
     private Boolean animals;
     private Boolean protectedSpace;
@@ -35,11 +35,11 @@ public class UserSearchDTO {
     }
 
 
-    public CategoryType[] getPriorities() {
+    public CategoryTypeDTO[] getPriorities() {
         return priorities;
     }
 
-    public void setPriorities(CategoryType[] priorities) {
+    public void setPriorities(CategoryTypeDTO[] priorities) {
         this.priorities = priorities;
     }
 
@@ -51,53 +51,53 @@ public class UserSearchDTO {
         this.neighborhood = neighborhood;
     }
 
-    public DistanceFromUniversity getDistanceFromUniversity() {
-        return distanceFromUniversity;
+    public DistanceFromUniversityDTO getDistanceFromUniversityDTO() {
+        return distanceFromUniversityDTO;
     }
 
 
 
-    public void setDistanceFromUniversity(DistanceFromUniversity distanceFromUniversity) {
-        this.distanceFromUniversity = distanceFromUniversity;
+    public void setDistanceFromUniversityDTO(DistanceFromUniversityDTO distanceFromUniversityDTO) {
+        this.distanceFromUniversityDTO = distanceFromUniversityDTO;
     }
 
-    public Floor getFloor() {
-        return floor;
+    public FloorDTO getFloorDTO() {
+        return floorDTO;
     }
 
-    public void setFloor(Floor floor) {
-        this.floor = floor;
+    public void setFloorDTO(FloorDTO floorDTO) {
+        this.floorDTO = floorDTO;
     }
 
-    public Cost getCost() {
-        return cost;
+    public CostDTO getCostDTO() {
+        return costDTO;
     }
 
-    public void setCost(Cost cost) {
-        this.cost = cost;
+    public void setCostDTO(CostDTO costDTO) {
+        this.costDTO = costDTO;
     }
 
-    public Furniture getFurniture() {
-        return furniture;
+    public FurnitureDTO getFurnitureDTO() {
+        return furnitureDTO;
     }
 
-    public void setFurniture(Furniture furniture) {
-        this.furniture = furniture;
+    public void setFurnitureDTO(FurnitureDTO furnitureDTO) {
+        this.furnitureDTO = furnitureDTO;
     }
 
-    public NumberOfRooms getNumberOfRooms() {
-        return numberOfRooms;
+    public NumberOfRoomsDTO getNumberOfRoomsDTO() {
+        return numberOfRoomsDTO;
     }
 
-    public void setNumberOfRooms(NumberOfRooms numberOfRooms) {
-        this.numberOfRooms = numberOfRooms;
+    public void setNumberOfRoomsDTO(NumberOfRoomsDTO numberOfRoomsDTO) {
+        this.numberOfRoomsDTO = numberOfRoomsDTO;
     }
 
-    public NumberOfRoomates getNumberOfMates() {
+    public NumberOfRoomatesDTO getNumberOfMates() {
         return numberOfMates;
     }
 
-    public void setNumberOfMates(NumberOfRoomates numberOfMates) {
+    public void setNumberOfMates(NumberOfRoomatesDTO numberOfMates) {
         this.numberOfMates = numberOfMates;
     }
 
@@ -146,11 +146,11 @@ public class UserSearchDTO {
         return gson.toJson(this);
     }
 
-    public ApartmentSize getApartmentSize() {
-        return apartmentSize;
+    public ApartmentSizeDTO getApartmentSizeDTO() {
+        return apartmentSizeDTO;
     }
 
-    public void setApartmentSize(ApartmentSize apartmentSize) {
-        this.apartmentSize = apartmentSize;
+    public void setApartmentSizeDTO(ApartmentSizeDTO apartmentSizeDTO) {
+        this.apartmentSizeDTO = apartmentSizeDTO;
     }
 }

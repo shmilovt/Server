@@ -4,13 +4,13 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
  * Created by TAMIR on 4/21/2018.
  */
 
-public class ApartmentSize {
+public class ApartmentSizeDTO {
 
     private int minSize;
     private int maxSize;
 
-    public ApartmentSize(){}
-    public ApartmentSize(int minSize, int maxSize){
+    public ApartmentSizeDTO(){}
+    public ApartmentSizeDTO(int minSize, int maxSize){
         this.minSize = minSize;
         this.maxSize = maxSize;
     }

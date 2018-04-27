@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class Apartment {
 
+
     private List<String> postIDs;
     private ApartmentLocation apartmentLocation;
     private int cost;
@@ -232,7 +233,7 @@ public class Apartment {
         String garden = "garden: " + this.getGarden() + "\n";
         String gardenSize = "garden size: " + this.gardenSize + "\n";
         String location= "Neighborhood: " + apartmentLocation.getNeighborhood() + "\n" + "street: " + apartmentLocation.getAddress().getStreet() +  "\n" +"building number: " + apartmentLocation.getAddress().getNumber() + "\n";
-        String furniture= "Furniture: " +this.furniture + "\n";
+        String furniture= "FurnitureDTO: " +this.furniture + "\n";
         String mates= "number of mates: " +this.numberOfMates + "\n";
         String rooms= "number of rooms: " +this.numberOfRooms + "\n";
 

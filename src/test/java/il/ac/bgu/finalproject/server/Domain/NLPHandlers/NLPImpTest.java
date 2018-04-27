@@ -586,7 +586,7 @@ public class NLPImpTest {
             isPassColor = ANSI_RED;
         }
 
-        message = message + isPassColor+ "\nFurniture => ";
+        message = message + isPassColor+ "\nFurnitureDTO => ";
         message = message + "expected: ";
         message = message + expected.getFurniture();
         message = message + " , but was: ";
@@ -690,7 +690,7 @@ public class NLPImpTest {
 
     private String getPassMessage_Furniture(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
-                "pass test-case: \n\n"+input+"\n\n" + "Furniture: "+output.getFurniture() + ANSI_RESET ;
+                "pass test-case: \n\n"+input+"\n\n" + "FurnitureDTO: "+output.getFurniture() + ANSI_RESET ;
     }
 
     private String getPassMessage_ProtectedSpace(String input, AnalyzedResult output) {
@@ -746,7 +746,7 @@ public class NLPImpTest {
 
     private static String printSummary_Furniture(int passFurniture, int totalPostsNum) {
         String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
-        message = message + passFurniture + "/" + totalPostsNum +" Furniture correctly analyzed\n";
+        message = message + passFurniture + "/" + totalPostsNum +" FurnitureDTO correctly analyzed\n";
         message = message +  ANSI_RESET;
         return message;
     }

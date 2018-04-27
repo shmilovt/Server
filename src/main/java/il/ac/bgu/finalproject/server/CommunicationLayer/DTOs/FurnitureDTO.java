@@ -1,26 +1,20 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-/**
- * Created by TAMIR on 4/21/2018.
- */
-
-public enum NumberOfRoomates {
+public enum FurnitureDTO {
     unknown(-1),
-    couple(0),
-    one(1),
-    two(2),
-    three(3),
-    four(4),
-    fiveOrMore(5);
+    without(0),
+    partial(1),
+    full(2);
+
 
 
     private final int value;
-    private  NumberOfRoomates(int value) {
+    private FurnitureDTO(int value) {
         this.value = value;
     }
 
     public int getValue() {
         return value;
     }
-}
 
+}

@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.CommunicationLayer;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.*;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class RegularClientCommunicationController {
     public String searchApartments(@RequestParam String userSearchDTOString){
        UserSearchDTO userSearchDTO = new UserSearchDTO(userSearchDTOString);
         List<CategoryQuery> categoryQueryList = converter.convertFromDTO(userSearchDTO);
-        List<Apartment> searchResult =   service.searchApartments(categoryQueryList);
+       SearchResults searchResult =   service.searchApartments(categoryQueryList);
         SearchResultsDTO searchResultsDTO = converter.convertToDTO(searchResult);
         String jsonString = searchResultsDTO.toJson();
         return  jsonString;

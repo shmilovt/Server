@@ -10,7 +10,7 @@ public class SearchAlgorithm {
     public SearchAlgorithm(){}
 
 
-    public List<Apartment> filterIntersection (List<Apartment> apartments, List<CategoryQuery> categories){
+    public SearchResults filterIntersection (List<Apartment> apartments, List<CategoryQuery> categories){
         List<Apartment> result = new ArrayList<Apartment>();
         Boolean tempBool;
         for (Apartment element: apartments) {
@@ -22,15 +22,18 @@ public class SearchAlgorithm {
             if (tempBool)
                 result.add(element);
         }
-        return result;
+       // return result;
+        return null;
     }
 
-    public List<Apartment> filterMoreResults (List<Apartment> apartments, List<CategoryQuery> categories) {
+    public SearchResults filterMoreResults (List<Apartment> apartments, List<CategoryQuery> categories) {
         List<Apartment> result = new ArrayList<Apartment>();
         int size = categories.size();
         CategoryQuery c1, c2, c3;
-        if (size < 2)
-            return result;
+        if (size < 2) {
+            //return result;
+            return null;
+        }
         else {
             c1 = categories.get(0);
             c2 = categories.get(1);
@@ -69,6 +72,7 @@ public class SearchAlgorithm {
                 }
             }
         }
-        return result;
+        //return result;
+        return null;
     }
 }

@@ -1,11 +1,11 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-public class Cost { // -1 indicate no limit
+public class CostDTO { // -1 indicate no limit
     private int minCost;
     private int maxCost;
 
-    public Cost(){}
-    public Cost(int minCost, int maxCost){
+    public CostDTO(){}
+    public CostDTO(int minCost, int maxCost){
         this.minCost = minCost;
         this.maxCost = maxCost;
     }

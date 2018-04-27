@@ -612,7 +612,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //            while (rs.next()) {
 //// TBD: set for all in Apartment OR contructor.... TBDAPARTMENT
 //                temp.setSize(rs.getInt(1));
-//                temp.setCost(rs.getInt(2));
+//                temp.setCostDTO(rs.getInt(2));
 //                System.out.println(temp.toString());
 //                apartments.add(temp);
 //            }

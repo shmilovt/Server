@@ -14,42 +14,38 @@ public class Converter {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ApartmentDetailsDTO convertToDTO(Apartment apartment) {
-        ApartmentDetailsDTO apartmentDetailsDTO = new ApartmentDetailsDTO(apartment);
-        return apartmentDetailsDTO;
-    }
 
 
     public List<CategoryQuery> convertFromDTO(UserSearchDTO userSearchDTO) {
         List<CategoryQuery> categoryQueries = new ArrayList<>();
-        CategoryType [] categoryTypes = userSearchDTO.getPriorities();
-        for(CategoryType categoryType: categoryTypes){
-           switch (categoryType){
+        CategoryTypeDTO[] categoryTypeDTOS = userSearchDTO.getPriorities();
+        for(CategoryTypeDTO categoryTypeDTO : categoryTypeDTOS){
+           switch (categoryTypeDTO){
                case numRooms:
-                   NumberOfRooms numberOfRoomsEnum = userSearchDTO.getNumberOfRooms();
-                   int numberOfRooms = numberOfRoomsEnum.getValue();
+                   NumberOfRoomsDTO numberOfRoomsDTOEnum = userSearchDTO.getNumberOfRoomsDTO();
+                   int numberOfRooms = numberOfRoomsDTOEnum.getValue();
                    NumOfRoomsQuery numOfRoomsQuery = new NumOfRoomsQuery(numberOfRooms);
                    categoryQueries.add(numOfRoomsQuery);
                    break;
                case numRoomates:
-                   NumberOfRoomates numberOfRoomatesEnum = userSearchDTO.getNumberOfMates();
-                   int numberOfRoomaes = numberOfRoomatesEnum.getValue();
+                   NumberOfRoomatesDTO numberOfRoomatesDTOEnum = userSearchDTO.getNumberOfMates();
+                   int numberOfRoomaes = numberOfRoomatesDTOEnum.getValue();
                    NumOfRoomatesQuery numOfRoomatesQuery = new NumOfRoomatesQuery(numberOfRoomaes);
                    categoryQueries.add(numOfRoomatesQuery);
                    break;
                case cost:
-                   Cost cost = userSearchDTO.getCost();
-                   CostQuery costQuery = new CostQuery(cost.getMinCost(), cost.getMaxCost());
+                   CostDTO costDTO = userSearchDTO.getCostDTO();
+                   CostQuery costQuery = new CostQuery(costDTO.getMinCost(), costDTO.getMaxCost());
                    categoryQueries.add(costQuery);
                    break;
                case floor:
-                   Floor floor = userSearchDTO.getFloor();
-                   FloorQuery floorQuery= new FloorQuery(floor.getMinFloor(), floor.getMaxFloor());
+                   FloorDTO floorDTO = userSearchDTO.getFloorDTO();
+                   FloorQuery floorQuery= new FloorQuery(floorDTO.getMinFloor(), floorDTO.getMaxFloor());
                    categoryQueries.add(floorQuery);
                    break;
                case distanceFromUniversity:
-                   DistanceFromUniversity distanceFromUniversityEnum = userSearchDTO.getDistanceFromUniversity();
-                   int distanceFromUniversity = distanceFromUniversityEnum.getValue();
+                   DistanceFromUniversityDTO distanceFromUniversityDTOEnum = userSearchDTO.getDistanceFromUniversityDTO();
+                   int distanceFromUniversity = distanceFromUniversityDTOEnum.getValue();
                    TimeFromUniQuery timeFromUniQuery = new TimeFromUniQuery(distanceFromUniversity);
                    categoryQueries.add(timeFromUniQuery);
                    break;
@@ -59,13 +55,13 @@ public class Converter {
                    categoryQueries.add( neighborhoodQuery);
                    break;
                case  apartmentSize:
-                   ApartmentSize apartmentSize = userSearchDTO.getApartmentSize();
-                   SizeQuery sizeQuery = new SizeQuery(apartmentSize.getMinSize(), apartmentSize.getMaxSize());
+                   ApartmentSizeDTO apartmentSizeDTO = userSearchDTO.getApartmentSizeDTO();
+                   SizeQuery sizeQuery = new SizeQuery(apartmentSizeDTO.getMinSize(), apartmentSizeDTO.getMaxSize());
                    categoryQueries.add(sizeQuery);
                    break;
                case furniture:
-                   Furniture furnitureEnum = userSearchDTO.getFurniture();
-                   int furniture = furnitureEnum.getValue();
+                   FurnitureDTO furnitureDTOEnum = userSearchDTO.getFurnitureDTO();
+                   int furniture = furnitureDTOEnum.getValue();
                    FurnitureQuery furnitureQuery = new FurnitureQuery(furniture);
                    categoryQueries.add(furnitureQuery);
                    break;
@@ -97,7 +93,7 @@ public class Converter {
     }
 
 
-    public SearchResultsDTO convertToDTO(List<Apartment> searchResult) {
+    public SearchResultsDTO convertToDTO(SearchResults searchResulta) {
         return null;
     }
 }

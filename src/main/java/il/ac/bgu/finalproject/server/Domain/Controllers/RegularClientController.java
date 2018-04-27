@@ -7,6 +7,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartme
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchAlgorithm;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 
 
 import java.util.*;
@@ -32,7 +33,7 @@ public class RegularClientController {
 
     }*/
 
-    public List<Apartment> searchApartments(List<CategoryQuery> categoryQueryList) {
+    public SearchResults searchApartments(List<CategoryQuery> categoryQueryList) {
         SearchAlgorithm searchAlgorithm = new SearchAlgorithm();
         List<Apartment> apartmentList = dataBaseRequestController.allApartments();
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);

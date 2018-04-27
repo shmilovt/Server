@@ -5,6 +5,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartme
 import il.ac.bgu.finalproject.server.Domain.Controllers.AdminClientController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestionUtils.UserSuggestion;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,7 +20,7 @@ public class Service implements IService {
 
 
     @Override
-    public List<Apartment> searchApartments(List<CategoryQuery> categoryQueryList) {
+    public SearchResults searchApartments(List<CategoryQuery> categoryQueryList) {
        return regularClientController.searchApartments(categoryQueryList);
 
     }

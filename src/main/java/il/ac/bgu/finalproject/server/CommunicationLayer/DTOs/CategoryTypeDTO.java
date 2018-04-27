@@ -1,6 +1,6 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-public enum CategoryType{
+public enum CategoryTypeDTO {
     numRooms,
     numRoomates,
     cost,

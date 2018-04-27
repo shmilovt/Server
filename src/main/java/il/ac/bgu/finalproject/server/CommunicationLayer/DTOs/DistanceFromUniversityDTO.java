@@ -1,6 +1,6 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
-public enum DistanceFromUniversity {
+public enum DistanceFromUniversityDTO {
     unknown(-1),
     until5(5),
     until10(10),
@@ -8,7 +8,7 @@ public enum DistanceFromUniversity {
     until20(20);
 
     private final int value;
-    private  DistanceFromUniversity(int value) {
+    private DistanceFromUniversityDTO(int value) {
         this.value = value;
     }
 
