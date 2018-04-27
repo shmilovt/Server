@@ -1,5 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,13 +27,59 @@ public class EnvList extends LinkedList<Environment> {
             return s + ".";
     }
 
+    private String convertNumberDotToComma(String s)
+    {
+        int index = s.indexOf('.');
+        while (index >= 0) {
+          /*  int l = s.length();
+            int x = index-1;
+            int y=index+1;
+            boolean t = Character.isDigit(s.charAt(index-1));
+            boolean z = Character.isDigit(s.charAt(index+1));*/
+            if((index-1>=0 && Character.isDigit(s.charAt(index-1))) && (index+1<s.length() && Character.isDigit(s.charAt(index+1))))
+                s = s.substring(0,index) + "|" + s.substring(index+1);
+            index = s.indexOf(s, index + 1);
+        }
+        return s;
+    }
+
+    private boolean isContain(char[] charArray,char ch){
+        boolean contains = false;
+        for (char c : charArray)
+            if (c == ch)
+                return true;
+        return false;
+        }
+
+    private String makeSpaceBetweencharAndDigit(String s)
+    {
+        char[] sym={',',':','.','!',' ','-','/','\\'};
+        for(int i=0;i<s.length();i++)
+        {
+
+            if(Character.isDigit(s.charAt(i)))
+            {
+//                char x= s.charAt(i+1);
+  //              boolean b = Character.isDigit(x);
+                if(i+1<s.length() && !Character.isDigit(s.charAt(i+1)) && !isContain(sym,s.charAt(i+1)))
+                    s=s.substring(0,i+1) + " " + s.substring(i+1);
+            /*    if(i-1>0 && !Character.isDigit(s.charAt(i-1)) && !Arrays.asList(sym).contains(s.charAt(i-1))) {
+                    s = s.substring(0, i) + " " + s.substring(i);
+                }*/
+            }
+        }
+        return s;
+    }
+
     public EnvList(Environment env) {
     this.add(env);
     }
     public EnvList(String post)
     {
+        post = makeSpaceBetweencharAndDigit(post);
         post = checkIfEndWithDelimeter(post);
         post = cleanPricesComma(post);
+        post = convertNumberDotToComma(post);
         String[] splitedPost = post.split("[\\n,.]");
         int offset=0;
         int index=0;

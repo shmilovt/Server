@@ -64,22 +64,21 @@ public class GoogleMapsController {
         try {
             results = GeocodingApi.geocode(context,address).await();
         } catch (ApiException e) {
-            //   e.printStackTrace();
+         //   e.printStackTrace();
         } catch (InterruptedException e) {
-            //   e.printStackTrace();
+         //   e.printStackTrace();
         } catch (IOException e) {
-            //   e.printStackTrace();
+         //   e.printStackTrace();
         }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         System.out.println(gson.toJson(results));
-    }
+}
 
 
     public static void main(String [] args){
         GoogleMapsController googleMapsController = new GoogleMapsController();
         //googleMapsController.getCoordinates("יצחק רגר", 20);
         //System.out.println(googleMapsController.getTimeWalkingFromUniByMin("יצחק רגר",20));
+       // System.out.println("*קומה 8\\8\n".replaceAll("[ *\\\\ ]"," "));
     }
-
-
 }

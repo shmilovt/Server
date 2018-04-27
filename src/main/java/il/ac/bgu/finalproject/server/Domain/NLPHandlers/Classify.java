@@ -32,4 +32,6 @@ public enum Classify {
     ROMMATE_QUANTITY,
     ROMMATE_EXIST,
     ROOM_DES,
+    ROOMS_DES,
+    FLOOR_QUANTITY,
 }

@@ -14,7 +14,7 @@ public class AnalyzedResult
     private int buildingNumber = -1 ;
     private int floor = -2;
     private int size= -1;
-    private int numberOfRooms= -1;
+    private double numberOfRooms= -1;
     private int numberOfMates= -1;
     private int furniture = -1;
     private Set<String> phones = new HashSet<>() ;
@@ -124,7 +124,7 @@ public class AnalyzedResult
         this.size = size;
     }
 
-    public int getNumberOfRooms() {
+    public double getNumberOfRooms() {
         return numberOfRooms;
     }
 
@@ -189,6 +189,7 @@ public class AnalyzedResult
         furniture = -1;
         numberOfMates=-1;
         numberOfRooms=-1;
+        floor=-2;
         if(apartment != null) {
             numberOfMates=apartment.getNumberOfMates();
             numberOfRooms=apartment.getNumberOfRooms();
@@ -202,6 +203,7 @@ public class AnalyzedResult
                 if(apartment.getApartmentLocation().getAddress()!= null) {
                     street = apartment.getApartmentLocation().getAddress().getStreet();
                     buildingNumber = apartment.getApartmentLocation().getAddress().getNumber();
+                    floor = apartment.getApartmentLocation().getFloor();
                 }
                 if(apartment.getApartmentLocation().getNeighborhood()!= null)
                     neighborhood = apartment.getApartmentLocation().getNeighborhood();

@@ -109,6 +109,33 @@ public class NLPImpTest {
 
 
     @Test
+    public void extractApartmentTest_Floor(){
+        List<AssertionError> errors = new ArrayList<>();
+        int passFloor = 0;
+        for (TestCase<String, AnalyzedResult> testCase: testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try{
+                assertEquals((int)(analyzedResult.getFloor() - expectedResult.getFloor()) , 0);
+                passFloor ++;
+                System.out.println(getPassMessage_Floor(testCase.getInput(), analyzedResult));}
+            catch (AssertionError e){
+                errors.add(new AssertionError(getAssertionErrorMessage_Floor(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
+
+
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_Floor(passFloor ,  testCases.size()));
+    }
+
+
+    @Test
     public void extractApartmentTest_Animal(){
         List<AssertionError> errors = new ArrayList<>();
         int passAnimal = 0;
@@ -219,6 +246,36 @@ public class NLPImpTest {
     }
 
 
+
+    @Test
+    public void extractApartmentTest_WareHouse(){
+        List<AssertionError> errors = new ArrayList<>();
+        int passWarehouse = 0;
+        for (TestCase<String, AnalyzedResult> testCase: testCases) {
+            Apartment apartment = nlp.extractApartment(testCase.getInput());
+            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
+            AnalyzedResult expectedResult = testCase.getOutput();
+            try{
+                assertEquals((int)(analyzedResult.getWareHouse() - expectedResult.getWareHouse()) , 0);
+                passWarehouse ++;
+                System.out.println(getPassMessage_Warehouse(testCase.getInput(), analyzedResult));}
+            catch (AssertionError e){
+                errors.add(new AssertionError(getAssertionErrorMessage_wareHouse(testCase.getInput(), analyzedResult, testCase.getOutput())));
+            }
+        }
+
+
+        if(errors.size()>0) {
+            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
+            System.out.println(assertionErrorAggregation.getMessage());
+        }
+
+        System.out.println(printSummary_Warehouse(passWarehouse ,  testCases.size()));
+    }
+
+
+
+
     @Test
     public void extractApartmentTest_numberOfRooms(){
         List<AssertionError> errors = new ArrayList<>();
@@ -270,118 +327,6 @@ public class NLPImpTest {
         }
 
         System.out.println(printSummary_roomMates(passRoomMates ,  testCases.size()));
-    }
-
-
-    @Test
-    public void extractApartmentTest_WareHouse(){
-        List<AssertionError> errors = new ArrayList<>();
-        int passWarehouse = 0;
-        for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            Apartment apartment = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
-            AnalyzedResult expectedResult = testCase.getOutput();
-            try{
-                assertEquals((int)(analyzedResult.getWareHouse() - expectedResult.getWareHouse()) , 0);
-                passWarehouse ++;
-                System.out.println(getPassMessage_Warehouse(testCase.getInput(), analyzedResult));}
-            catch (AssertionError e){
-                errors.add(new AssertionError(getAssertionErrorMessage_wareHouse(testCase.getInput(), analyzedResult, testCase.getOutput())));
-            }
-        }
-
-
-        if(errors.size()>0) {
-            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
-            System.out.println(assertionErrorAggregation.getMessage());
-        }
-
-        System.out.println(printSummary_Warehouse(passWarehouse ,  testCases.size()));
-    }
-
-
-
-
-
-
-    @Test
-    public void extractApartmentTest_Garden() {
-        List<AssertionError> errors = new ArrayList<>();
-        int passGarden = 0;
-        for (TestCase<String, AnalyzedResult> testCase : testCases) {
-            Apartment apartment = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
-            AnalyzedResult expectedResult = testCase.getOutput();
-            try {
-                assertEquals((int) (analyzedResult.getGarden() - expectedResult.getGarden()), 0);
-                passGarden++;
-                System.out.println(getPassMessage_Garden(testCase.getInput(), analyzedResult));
-            } catch (AssertionError e) {
-                errors.add(new AssertionError(getAssertionErrorMessage_Garden(testCase.getInput(), analyzedResult, testCase.getOutput())));
-            }
-        }
-
-        if(errors.size()>0) {
-            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
-            System.out.println(assertionErrorAggregation.getMessage());
-        }
-
-        System.out.println(printSummary_Size(passGarden ,  testCases.size()));
-    }
-
-
-    @Test
-    public void extractApartmentTest_Size(){
-        List<AssertionError> errors = new ArrayList<>();
-        int passSize = 0;
-        for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            Apartment apartment = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
-            AnalyzedResult expectedResult = testCase.getOutput();
-            try{
-            assertEquals((int)(analyzedResult.getSize()- expectedResult.getSize()) , 0);
-            passSize++;
-            System.out.println(getPassMessage_Size(testCase.getInput(), analyzedResult));
-            }
-            catch(AssertionError e){
-                errors.add(new AssertionError(getAssertionErrorMessage_Size(testCase.getInput(), analyzedResult, testCase.getOutput())));
-            }
-        }
-
-        if(errors.size()>0) {
-            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
-            System.out.println(assertionErrorAggregation.getMessage());
-        }
-
-        System.out.println(printSummary_Size(passSize ,  testCases.size()));
-    }
-
-
-
-    @Test
-    public void extractApartmentTest_Phones(){
-        List<AssertionError> errors = new ArrayList<>();
-        int passPhones = 0;
-        for (TestCase<String, AnalyzedResult> testCase: testCases) {
-            Apartment apartment = nlp.extractApartment(testCase.getInput());
-            AnalyzedResult analyzedResult = new AnalyzedResult(apartment);
-            AnalyzedResult expectedResult = testCase.getOutput();
-            try{
-            assertEquals(analyzedResult.getPhones() , expectedResult.getPhones());
-            passPhones ++ ;
-            System.out.println(getPassMessage_Phones(testCase.getInput(), analyzedResult));}
-            catch(AssertionError e){
-                errors.add(new AssertionError(getAssertionErrorMessage_Phones(testCase.getInput(), analyzedResult, testCase.getOutput())));
-            }
-        }
-
-
-        if(errors.size()>0) {
-            AssertionErrorAggregation assertionErrorAggregation = new AssertionErrorAggregation(errors);
-            System.out.println(assertionErrorAggregation.getMessage());
-        }
-
-        System.out.println(printSummary_Phones(passPhones ,  testCases.size()));
     }
 
 
@@ -501,6 +446,29 @@ public class NLPImpTest {
     }
 
 
+    private String getAssertionErrorMessage_Floor(String input, AnalyzedResult output, AnalyzedResult expected) {
+        String isPassColor ;
+
+        String message = "";
+        message = message +  "\n\n\n--------------------------------------------------------------------------------------------------------------------------\n";
+        message = message + input + "\n";
+
+
+        if(output.getFloor() == expected.getFloor()) {
+            isPassColor = ANSI_GREEN;
+        }
+        else{
+            isPassColor = ANSI_RED;
+        }
+
+        message = message + isPassColor+ "\nfloor => ";
+        message = message + "expected: ";
+        message = message + expected.getFloor();
+        message = message + " , but was: ";
+        message = message + output.getFloor()+  ANSI_RED;
+        return message;
+    }
+
     private String getAssertionErrorMessage_Animal(String input, AnalyzedResult output, AnalyzedResult expected) {
         String isPassColor ;
 
@@ -586,7 +554,7 @@ public class NLPImpTest {
             isPassColor = ANSI_RED;
         }
 
-        message = message + isPassColor+ "\nFurnitureDTO => ";
+        message = message + isPassColor+ "\nFurniture => ";
         message = message + "expected: ";
         message = message + expected.getFurniture();
         message = message + " , but was: ";
@@ -690,7 +658,7 @@ public class NLPImpTest {
 
     private String getPassMessage_Furniture(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
-                "pass test-case: \n\n"+input+"\n\n" + "FurnitureDTO: "+output.getFurniture() + ANSI_RESET ;
+                "pass test-case: \n\n"+input+"\n\n" + "Furniture: "+output.getFurniture() + ANSI_RESET ;
     }
 
     private String getPassMessage_ProtectedSpace(String input, AnalyzedResult output) {
@@ -701,6 +669,12 @@ public class NLPImpTest {
     private String getPassMessage_Cost(String input, AnalyzedResult output) {
         return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
                 "pass test-case: \n\n"+input+"\n\n" + "cost: "+output.getCost() + ANSI_RESET ;
+    }
+
+
+    private String getPassMessage_Floor(String input, AnalyzedResult output) {
+        return ANSI_GREEN +"\n\n\n--------------------------------------------------------------------------------------------------------------------------\n"+
+                "pass test-case: \n\n"+input+"\n\n" + "floor: "+output.getFloor() + ANSI_RESET ;
     }
 
     private String getPassMessage_Animal(String input, AnalyzedResult output) {
@@ -717,6 +691,13 @@ public class NLPImpTest {
     private static String printSummary_Animal(int passAnimal, int totalPostsNum) {
         String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
         message = message + passAnimal +"/"+totalPostsNum+" Animal correctly analyzed\n";
+        message = message +  ANSI_RESET;
+        return message;
+    }
+
+    private static String printSummary_Floor(int passFloor, int totalPostsNum) {
+        String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
+        message = message + passFloor+"/"+totalPostsNum+" floor correctly analyzed\n";
         message = message +  ANSI_RESET;
         return message;
     }
@@ -746,7 +727,7 @@ public class NLPImpTest {
 
     private static String printSummary_Furniture(int passFurniture, int totalPostsNum) {
         String message = ANSI_BLUE + "\n\n\nSUMMARY:\n";
-        message = message + passFurniture + "/" + totalPostsNum +" FurnitureDTO correctly analyzed\n";
+        message = message + passFurniture + "/" + totalPostsNum +" Furniture correctly analyzed\n";
         message = message +  ANSI_RESET;
         return message;
     }

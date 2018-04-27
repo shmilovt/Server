@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,6 +25,7 @@ public class  Analyzer {
     private static List<String> wordNegativeList ;
     private static List<String> streetList ;
     private static List<String> floorList ;
+    private static List<String> floorQuantityList ;
     private static List<String> neighborhoodList ;
     private static List<String> wordStreetList ;
     private static List<String> locationsList;
@@ -39,6 +41,7 @@ public class  Analyzer {
     private static List<String> rommateQuantityList;
     private static List<String> roomList;
     private static List<String> roommateExistList;
+    private static List<String> roomS_desList;
 
     public List<String> loadFile(String fileName){
         String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
@@ -88,6 +91,8 @@ public class  Analyzer {
         rommateQuantityList = loadFile("rommate_quantity.txt");
         roomList = loadFile("roomDes.txt");
         roommateExistList = loadFile("rommateExist.txt");
+        roomS_desList = loadFile("roomS_des.txt");
+        floorQuantityList = loadFile("floorQuantity.txt");
         // we will load the Dictionaries
     }
 
@@ -143,14 +148,15 @@ public class  Analyzer {
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             String[] splited = str.split(" ");
+            int j=0;
             for (String s : splited) {
                 s = s.replaceAll(notToInclude,"");
                 if(!s.equals("") && firstNameDictionary.contains(s.substring(1)) && s.substring(0,1).equals("ל"))
-                    aDS.Insert(Classify.NAME, i, s.substring(1));
-                else if (!s.equals("") && (firstNameDictionary.contains(s) || firstNameDictionary.contains(s + "ל")))
-                    aDS.Insert(Classify.NAME, i, s);
+                    aDS.Insert(Classify.NAME, i, new Word(s,s.substring(1),j));
+                else if (!s.equals("") && (firstNameDictionary.contains(s))) //HELP!!! || firstNameDictionary.contains(s + "ל")))
+                    aDS.Insert(Classify.NAME, i, new Word(s,s,j));
                 else{}
-            }
+            j++;}
         }
     }
 
@@ -190,6 +196,7 @@ public class  Analyzer {
             return true;
         return  false;
     }
+
     public static boolean isNumeric(String s) {
         return s != null && s.matches("[-+]?\\d*\\.?\\d+");
     }
@@ -199,46 +206,79 @@ public class  Analyzer {
         boolean found = false;
         String[] strSplited = str.split(" ");
         for (int i = 0; i < strSplited.length; i++){
-             for(String street :streets)
-             {
-                 String[] splitedStreet = street.split(" ");
-                 int length = splitedStreet.length;
-                 if (length == 1) {
+            for(String street :streets)
+            {
+                String[] splitedStreet = street.split(" ");
+                int length = splitedStreet.length;
+                if (length == 1) {
                     if (isWordExist(strSplited[i], splitedStreet[0])) {
                         if(classify.equals(Classify.NEIGHBORHOOD))
                             if(i-1>=0 && !strSplited[i-1].equals("קומה") && !strSplited[i-1].equals("בקומה"))
-                                streetLst.add(fullName(street, streets));
+                                streetLst.add(street);
                             else
                                 break;
                         else
-                            streetLst.add(fullName(street, streets));
+                            streetLst.add(street);
                         if(strSplited.length>i+1 && isNumeric(strSplited[i+1]) && Integer.parseInt(strSplited[i+1])<500)
-                            aDS.Insert(Classify.APARTMENT_NUMBER,index,strSplited[i+1]);
-                    break;
+                            aDS.Insert(Classify.APARTMENT_NUMBER,index,new Word(strSplited[i+1],strSplited[i+1],i+1));
+                        break;
                     }
                 } else if (length == 2  && strSplited.length - i > 1) {
                     if ((isWordExist(strSplited[i], splitedStreet[0]) && isWordExist(strSplited[i + 1], splitedStreet[1]))
                             || (isWordExist(strSplited[i], splitedStreet[1]) && isWordExist(strSplited[i + 1], splitedStreet[0]))
                             ) {
-                        streetLst.add(fullName(street, streets));
+                        streetLst.add(street);
                         if(strSplited.length>i+2 && isNumeric(strSplited[i+2]) && Integer.parseInt(strSplited[i+2])<500)
-                            aDS.Insert(Classify.APARTMENT_NUMBER,index,strSplited[i+2]);
+                            aDS.Insert(Classify.APARTMENT_NUMBER,index,new Word(strSplited[i+2],strSplited[i+2],i+2));
                         i=i+2;
                         break;
                     }
                 } else if (length == 3 && strSplited.length - i > 2) {
                     if (isWordExist(strSplited[i], splitedStreet[0]) && isWordExist(strSplited[i + 1], splitedStreet[1]) && isWordExist(strSplited[i + 2], splitedStreet[2]))
                     {
-                        streetLst.add(fullName(street, streets));
+                        streetLst.add(street);
                         if(strSplited.length>i+3 && isNumeric(strSplited[i+3]) && Integer.parseInt(strSplited[i+3])<500 )
-                            aDS.Insert(Classify.APARTMENT_NUMBER,index,strSplited[i+3]);
+                            aDS.Insert(Classify.APARTMENT_NUMBER,index,new Word(strSplited[i+3],strSplited[i+3],i+3));
                         i=i+3;
                         break;
                     }
                 }
-        }
+            }
         }
         return streetLst;
+    }
+
+    private int isContain(String[]array,String toCheck)
+    {
+        int index = -1;
+        for (int i=0;i<array.length;i++) {
+            if (array[i].equals(toCheck)) {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
+    public void extractFloorQuantity(Classify classify, List<String> dictionary, String notToInclude) {
+
+        int size = aDS.getEnvLst().size();
+        int count=0;
+        for (int i = 0; i < size; i++) {
+            count=0;
+            String str = aDS.getEnvLst().get(i).getEnvString();
+            str=str.replaceAll("[\\\\/]"," / ");
+            String[] strSplited = str.split(" ");
+            for (int j = 0; j < strSplited.length; j++) {
+                if(strSplited[j].contains("/"))
+                    count=count-2;
+                for (String dicWord : dictionary) {
+                    if (isWordExist(strSplited[j], dicWord))
+                        aDS.Insert(classify, i, new Word(strSplited[j], fullName(dicWord, dictionary), count));
+                }
+                count++;
+            }
+        }
     }
 
 
@@ -248,10 +288,19 @@ public class  Analyzer {
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
             str = str.replaceAll("[(]"," ").replaceAll(notToInclude,"");
-            List<String> streetList = extractAddressField(str.replaceAll("[(-]"," "),dictionary,i,classify);
-                if(!streetList.isEmpty())
-                    for(String street:streetList)//System.out.println(streetList);
-                        aDS.Insert(classify,i,street);
+            List<String> streetList = new LinkedList<>();
+          //  if(classify.equals(Classify.FLOOR_QUANTITY))
+          //      streetList = extractAddressField(str.replaceAll("[(/-\\\\]"," "),dictionary,i,classify);
+          //  else
+                streetList = extractAddressField(str.replaceAll("[(-]"," "),dictionary,i,classify);
+            if(!streetList.isEmpty())
+                for(String street:streetList)//System.out.println(streetList);
+                {
+                    String s = fullName(street, dictionary);      //fullName(street, dictionary)
+                    if(street.charAt(0) == '*')
+                        street=street.substring(1);
+                    aDS.Insert(classify, i, new Word(street, s, isContain(aDS.getEnvLst().get(i).getEnvString().split(" "), street)));
+                }
         }
     }
 
@@ -267,12 +316,18 @@ public class  Analyzer {
             String str = aDS.getEnvLst().get(i).getEnvString();
             str=cleanEmojis(str.replaceAll(notToInclude,"").replaceAll("[+-]"," "));
             String[] splited = str.split(" ");
+            int j=0;
             for (String s : splited) {
                // s = s.replaceAll(notToInclude,"");//.replaceAll("״","");
                 if(!s.isEmpty()) {
-                    if (dictionary.contains(s) || (dictionary.contains(s.substring(1)) && (classify.equals(Classify.BALCONY) || classify.equals(Classify.REQUIREMENT))) || (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
-                        aDS.Insert(classify, i, s);
+                    if (dictionary.contains(s))
+                        aDS.Insert(classify, i, new Word(s,s,j));
+                    else if((dictionary.contains(s.substring(1)) && classify.equals(Classify.ROMMATE_EXIST)) ||
+                            (dictionary.contains(s.substring(1)) && (classify.equals(Classify.BALCONY) || classify.equals(Classify.REQUIREMENT))) ||
+                            (dictionary.contains(s.substring(1)) && ("כ" + s.substring(1)).equals(s) && classify.equals(Classify.WORD_SIZE)))
+                            aDS.Insert(classify, i, new Word(s,s.substring(1),j));
                 }
+                j++;
             }
         }
     }
@@ -287,7 +342,7 @@ public class  Analyzer {
             String temp;
             while(m.find()) {
                 temp=str.substring(m.start(),m.end());
-                aDS.Insert(Classify.PHONE,i,temp.replaceAll("\\D",""));
+                aDS.Insert(Classify.PHONE,i,new Word(temp,temp.replaceAll("\\D",""),isContain(str.split(" "),temp)));
             }
         }
     }
@@ -306,19 +361,22 @@ public class  Analyzer {
         int size = aDS.getEnvLst().size();
         for (int i = 0; i < size; i++) {
             String str = aDS.getEnvLst().get(i).getEnvString();
+            int j=0;
             for (String s : str.split(" ")) {
+                String tmp=s;
                 if(classify.equals(Classify.SIZE_APARTMENT))
                 {
-                    if (!s.contains("/"))
-                        s = s.replaceAll("\\D", "");
+                    if (!tmp.contains("/"))
+                        tmp = tmp.replaceAll("\\D", "");
                 }
                 else
-                    s = s.replaceAll("\\D", "");
-                if (NumberUtils.isCreatable(s)) {
-                    int x = Integer.parseInt(s);
+                    tmp = tmp.replaceAll("\\D", "");
+                if (NumberUtils.isCreatable(tmp)) {
+                    int x = Integer.parseInt(tmp);
                     if (x >= min && x <= max)
-                        aDS.Insert(classify, i, s);
+                        aDS.Insert(classify, i, new Word(s,tmp,j));
                 }
+                j++;
             }
         }
     }
@@ -370,7 +428,7 @@ public class  Analyzer {
             String[] splitedStr = str.split(" ");
             for (int j = 0; j < splitedStr.length; j++)
                 if (rootAndWord("אבזר", splitedStr[j]) || rootAndWord("רהט", splitedStr[j]))
-                    aDS.Insert(Classify.FURNITURE_EXIST, i, splitedStr[j].replaceAll(":",""));
+                    aDS.Insert(Classify.FURNITURE_EXIST, i, new Word(splitedStr[j],splitedStr[j].replaceAll(":",""),j));
         }
     }
 
@@ -381,10 +439,23 @@ public class  Analyzer {
             String[] splitedStr = str.split(" ");
             for (int j = 0; j < splitedStr.length; j++)
                 if (rootAndWord("שתפ", splitedStr[j]) || rootAndWord("שתף", splitedStr[j]) )
-                    aDS.Insert(Classify.ROMMATE, i, splitedStr[j]);
+                    aDS.Insert(Classify.ROMMATE, i, new Word(splitedStr[j],splitedStr[j],j));
         }
     }
 
+
+    private void extractFloor(){
+        int size = aDS.getEnvLst().size();
+        for (int i = 0; i < size; i++) {
+            String str = aDS.getEnvLst().get(i).getEnvString();
+            String[] splitedStr = str.split(" ");
+            for (int j = 0; j < splitedStr.length; j++)
+                if (!splitedStr[j].equals("") &&
+                        (splitedStr[j].equals("קומה") || splitedStr[j].substring(1).equals("קומות") || (splitedStr[j].equals("קרקע") ||
+                                (splitedStr[j].length()>0 &&  (splitedStr[j].substring(1).equals("קומה") || splitedStr[j].substring(1).equals("קרקע") || splitedStr[j].equals("קומות"))))))
+                    aDS.Insert(Classify.FLOOR, i, new Word(splitedStr[j],splitedStr[j],j));
+        }
+    }
 
     public void analyze()
     {
@@ -400,8 +471,13 @@ public class  Analyzer {
         extractRommate();
         extractAddress(Classify.ROMMATE_QUANTITY,rommateQuantityList,notToIncludeStreetRegex);
         extractWord(Classify.ROOM_DES,roomList,notToIncludeRegex);
+        extractWord(Classify.ROOMS_DES,roomS_desList,notToIncludeRegex);
         extractWord(Classify.ROMMATE,rommateList,notToIncludeRegex);
         extractWord(Classify.ROMMATE_EXIST,roommateExistList,notToIncludeRegex);
+
+
+        extractFloor();
+        extractFloorQuantity(Classify.FLOOR_QUANTITY,floorQuantityList,notToIncludeStreetRegex);
 
 
         extractWord(Classify.ANIMELNAME,animalNameList,notToIncludeRegex);
@@ -417,12 +493,12 @@ public class  Analyzer {
         extractFirstName(firstNamesList,notToIncludeRegex);
         extractWord(Classify.WORD_PRICE,wordPriceList,notToIncludeRegex);
         extractGapNumber(Classify.PRICE,500,5000);
+        //extractGapNumber(Classify.FLOOR,-1,25);
         extractWord(Classify.WORD_SIZE,wordSizeList,notToIncludeRegex);
         extractGapNumber(Classify.SIZE_APARTMENT,30,270);
         extractGapNumber(Classify.SIZE_GARDEN,10,270);
         extractWord(Classify.NEGATIVE,wordNegativeList,notToIncludeRegex);
         extractAddress(Classify.STREET,streetList,notToIncludeStreetRegex);
-        extractWord(Classify.FLOOR,floorList,notToIncludeStreetRegex);
         extractAddress(Classify.NEIGHBORHOOD,neighborhoodList,notToIncludeStreetRegex);
         extractAddress(Classify.WORD_STREET,wordStreetList,notToIncludeRegex);
         extractAddress(Classify.LOCATION,locationsList,notToIncludeStreetRegex);
