@@ -20,8 +20,8 @@ public class SearchResultsDTO {
         this.resultRecordDTOS = resultRecordDTOS;
     }
 
-    public String toJson(){
+    public static String toJSON(SearchResultsDTO searchResultsDTO){
         Gson gson = new Gson();
-        return gson.toJson(this);
+        return gson.toJson(searchResultsDTO);
     }
 }

@@ -19,20 +19,10 @@ public class UserSearchDTO {
     private Boolean yard;
     private Boolean warehouse;
 
-    public UserSearchDTO(String userSearchDTOString){
-        Gson gson = new Gson();
-        UserSearchDTO userSearchDTO = gson.fromJson(userSearchDTOString, UserSearchDTO.class);
-        /*
 
-
-
-
-
-
-         */
-
-
+    public UserSearchDTO(){
     }
+
 
 
     public CategoryTypeDTO[] getPriorities() {
@@ -143,10 +133,6 @@ public class UserSearchDTO {
         this.warehouse = warehouse;
     }
 
-    public String toJson() {
-        Gson gson = new Gson();
-        return gson.toJson(this);
-    }
 
     public ApartmentSizeDTO getApartmentSizeDTO() {
         return apartmentSizeDTO;
@@ -154,5 +140,17 @@ public class UserSearchDTO {
 
     public void setApartmentSizeDTO(ApartmentSizeDTO apartmentSizeDTO) {
         this.apartmentSizeDTO = apartmentSizeDTO;
+    }
+
+    public static String toJSON(UserSearchDTO userSearchDTO) {
+        Gson gson = new Gson();
+        return gson.toJson(userSearchDTO);
+    }
+
+    public static UserSearchDTO fromJSON(String userSearchDTOString){
+        Gson gson = new Gson();
+        UserSearchDTO userSearchDTO = gson.fromJson(userSearchDTOString, UserSearchDTO.class);
+        return userSearchDTO;
+
     }
 }

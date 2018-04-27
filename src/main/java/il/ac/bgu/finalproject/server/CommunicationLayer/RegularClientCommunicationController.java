@@ -27,11 +27,11 @@ public class RegularClientCommunicationController {
 
     @RequestMapping(value = "/searchApartments" , method = {RequestMethod.POST, RequestMethod.GET})
     public String searchApartments(@RequestParam String userSearchDTOString){
-       UserSearchDTO userSearchDTO = new UserSearchDTO(userSearchDTOString);
+       UserSearchDTO userSearchDTO = UserSearchDTO.fromJSON(userSearchDTOString);
         List<CategoryQuery> categoryQueryList = converter.convertFromDTO(userSearchDTO);
        SearchResults searchResult =   service.searchApartments(categoryQueryList);
         SearchResultsDTO searchResultsDTO = converter.convertToDTO(searchResult);
-        String jsonString = searchResultsDTO.toJson();
+        String jsonString = SearchResultsDTO.toJSON(searchResultsDTO);
         return  jsonString;
     }
 
