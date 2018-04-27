@@ -19,8 +19,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private  int addressDetailsID =-1;
     private  int cApartmentID =-1;
 
-    public void connect()
-    {
+    public void connect() {
         String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
         try {
             conn = DriverManager.getConnection(url);
@@ -29,7 +28,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         //System.out.println("Connection to SQLite has been established.");
     }
-
     public void disConnect() {
         try {
             if (conn != null) {
@@ -39,6 +37,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             //System.out.println(ex.getMessage());
         }
     }
+
 
     private int addressDetailsIdCreator(){
         addressDetailsID = addressDetailsID +1;
@@ -270,6 +269,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public List<String> GetAllPostsId() {
+        connect();
         String sql = "SELECT postID FROM posts";
         List<String> posts = new LinkedList<String>();
         //Post tempPost= new Post("");
@@ -278,9 +278,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             ResultSet rs    = stmt.executeQuery(sql);
             while (rs.next())
                 posts.add(rs.getString(1));
+            disConnect();
             return posts;
         }
         catch(SQLException e){
+            disConnect();
             return null;
         }
     }
@@ -377,6 +379,39 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
     ///===========APARTMENT TABLE==============///
 
+    public String addApartmentRecord(Apartment apartment) {
+        try {
+            String sql = "INSERT INTO Apartment(apartmentID, numOfRooms, floor, size, cost, addressDetailsID, " +
+                    "garden, gardenSize, protectedSpace, warehouse, animal, " +
+                    "balcony, furniture, numberOfMates)"+
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            int t = cApartmentID+1;
+            pstmt.setInt(1, t);
+            pstmt.setInt(2, apartment.getNumberOfRooms());
+            pstmt.setInt(3, apartment.getApartmentLocation().getFloor());
+            pstmt.setDouble(4, apartment.getSize());
+            pstmt.setInt(5, apartment.getCost());
+            pstmt.setInt(6, addressDetailsID);
+
+            pstmt.setInt(7, apartment.getGarden());
+            pstmt.setInt(8, apartment.getGardenSize());
+            pstmt.setInt(9, apartment.getProtectedSpace());
+            pstmt.setInt(10, apartment.getWarehouse());
+            pstmt.setInt(11, apartment.getAnimal());
+            pstmt.setInt(12, apartment.getBalcony());
+            pstmt.setInt(13, apartment.getFurniture());
+            pstmt.setInt(14, apartment.getNumberOfMates());
+
+            pstmt.executeUpdate();
+            //System.out.println("Added");
+        } catch (SQLException e) {
+            return e.toString();
+            //System.out.println(e.getMessage());
+        }
+        return ""+apartmentIdCreator();
+    }
     public String addApartmentRecord(String apartmentID, int numOfRooms, int floor,
                                      int size, int cost, int addressDetailsID,
                                      int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
@@ -499,30 +534,28 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public List<Apartment> allApartmentFromDB (){
+    public List<Apartment> allApartmentFromDB () {
+        connect();
         List<Apartment> apartments = new LinkedList<Apartment>();
-        Apartment temp= new Apartment();
+        Apartment temp;
         try {
-            String sql = "SELECT apartmentID, addressDetailsID, floor, cost"
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, size"
                     + " FROM Apartment";
-
             Statement stmt = conn.createStatement();
-            ResultSet rs= stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Set <Contact> contacts= getApartmentContacts(rs.getString(1));
-                System.out.println(contacts.toString());
-                ApartmentLocation location= getAddressDetils(rs.getInt(2));
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                //System.out.println(contacts.toString());
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
                 location.setFloor(rs.getInt(3));
-                System.out.println(location.toString());
-//                temp= new Apartment(location,rs.getInt(4),rs.getInt(5), contacts);
-                temp= new Apartment(location,rs.getInt(4),-1, contacts);
-
-                System.out.println(temp.toString());
+                //System.out.println(location.toString());
+                temp = new Apartment(location, rs.getInt(4), rs.getInt(5), contacts);
+                //System.out.println(temp.toString());
                 apartments.add(temp);
             }
 
         } catch (SQLException e) { }
-        //    disConnect();
+        disConnect();
         return apartments;
     }
 
@@ -577,7 +610,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch (SQLException e) { }
         return false;
     }
-
 
     public void deleteAllRecords(String tablaName){
         String sql = "DELETE FROM ?;";
@@ -648,7 +680,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     + " JOIN AddressDetails Detail ON Apartment.addressDetailsID = Detail.addressDetailsNum"
                     + " JOIN ApartmentContacts C2 ON Apartment.apartmentID = C2.apartmentID"
                     + " JOIN Contacts C3 ON C2.phoneNumber = C3.phone "
-                    + "WHERE phoneNumber= '"+eachcotact.getPhone()
+                    + " WHERE phoneNumber= '"+eachcotact.getPhone()
                     +"' AND street= '"+apartment.getApartmentLocation().getAddress().getStreet()
                     +"' AND numOfBuilding= "+ apartment.getApartmentLocation().getAddress().getNumber();
             try {
@@ -720,7 +752,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 + "WHERE postID= ?";
         try{
             PreparedStatement pstmt = conn.prepareStatement(sql);
-
             pstmt.setString(1, apartmentID);
             pstmt.setString(2, postID);
             pstmt.executeUpdate();

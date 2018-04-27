@@ -16,8 +16,9 @@ public class SearchAlgorithm {
         for (Apartment element: apartments) {
             tempBool = true;
             for (CategoryQuery category : categories) {
-                if (!category.mainQuery(element))
+                if (!category.mainQuery(element)){
                     tempBool=false;
+                }
             }
             if (tempBool)
                 result.add(element);
