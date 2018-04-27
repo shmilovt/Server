@@ -6,6 +6,8 @@ import java.util.List;
 public class SearchResults {
     private List<ResultRecord> resultRecordList;
 
+
+
     public SearchResults() {
     }
     public SearchResults(List<ResultRecord> resultRecordList)

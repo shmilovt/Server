@@ -57,6 +57,8 @@ public class UserSearchDTO {
 
 
 
+
+
     public void setDistanceFromUniversityDTO(DistanceFromUniversityDTO distanceFromUniversityDTO) {
         this.distanceFromUniversityDTO = distanceFromUniversityDTO;
     }
