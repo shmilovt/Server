@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.PersistenceLayer;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 
 import java.util.List;
 import java.util.Set;
@@ -66,6 +67,8 @@ public interface DataBaseConnectionInterface {
     int isApartmentExist(Apartment apartment);
     void addApartmentDerivatives(Apartment apartment, String post);
     void updateApartmentDerivatives(Apartment apartment,String postID);
+    SearchResults allResultsFromDB ();
+
     }
 
 

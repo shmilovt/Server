@@ -22,7 +22,6 @@ public class ServerController {
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
         dbController.manageApartment(apartment, ourPost.getID());
-
     }
 
     public void updatePost(Post ourPost){

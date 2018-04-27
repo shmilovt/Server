@@ -1,6 +1,8 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -532,6 +534,58 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             //System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    public SearchResults allResultsFromDB () {
+        connect();
+        List<ResultRecord> results = new LinkedList<ResultRecord>();
+        ResultRecord temp;
+        try {
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, /*size,*/ balcony, " +
+                    "garden, animal, warehouse, protectedSpace, furniture, numOfRooms, numberOfMates, "
+                    + "dateOfPublish, postText"
+                    + " FROM Apartment"
+                    + " JOIN Posts P ON Apartment.apartmentID = P.apartmentID";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+
+                temp = new ResultRecord();
+                temp.setStreet(location.getAddress().getStreet());
+                temp.setNumber(location.getAddress().getNumber());
+                temp.setNeighborhood(location.getNeighborhood());
+                temp.setFloor(rs.getInt(3));
+                temp.setDistanceFromUniversity(location.getDistanceFromUniversity());
+                temp.setCost(rs.getInt(4));
+                temp.setSize(rs.getInt(5));
+                temp.setBalcony(rs.getBoolean(6));
+                temp.setYard(rs.getBoolean(7));
+                temp.setAnimals(rs.getBoolean(8));
+                temp.setWarehouse(rs.getBoolean(9));
+                temp.setProtectedSpace(rs.getBoolean(10));
+                temp.setFurniture(rs.getInt(11));
+                temp.setNumberOfRooms(rs.getDouble(12));
+                temp.setNumberOfRoomates(rs.getInt(13));
+                temp.setDateOfPublish(rs.getDate(14).toString());
+                temp.setText(rs.getString(rs.getInt(15)));
+                Contact [] contactsArray= new Contact [contacts.size()] ;
+                int i=0;
+                for (Contact con: contacts){
+                    contactsArray[i]=con;
+                    i++;
+                }
+                temp.setContacts(contactsArray);
+                temp.setLat(location.getLatitude());
+                temp.setLon(location.getLongitude());
+                results.add(temp);
+            }
+
+        } catch (SQLException e) { }
+        disConnect();
+        SearchResults searchResults= new SearchResults(results);
+        return searchResults;
     }
 
     public List<Apartment> allApartmentFromDB () {

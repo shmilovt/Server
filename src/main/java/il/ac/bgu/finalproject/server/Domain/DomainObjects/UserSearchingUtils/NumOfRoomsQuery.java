@@ -1,7 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class NumOfRoomsQuery extends CategoryQuery{
     private double numOfRooms;
 
@@ -9,8 +7,8 @@ public class NumOfRoomsQuery extends CategoryQuery{
         this.numOfRooms=numOfRooms;
     }
 
-    public boolean mainQuery(Apartment apartment){
-        int rooms= (int)apartment.getNumberOfRooms();
+    public boolean mainQuery(ResultRecord apartment){
+        double rooms= apartment.getNumberOfRooms();
         if (numOfRooms==6){
             if (rooms>=numOfRooms)
                 return true;

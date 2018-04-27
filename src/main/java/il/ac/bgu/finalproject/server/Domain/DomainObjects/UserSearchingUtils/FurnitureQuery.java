@@ -1,7 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class FurnitureQuery extends CategoryQuery {
     private int furniture;
 
@@ -9,7 +7,7 @@ public class FurnitureQuery extends CategoryQuery {
         this.furniture= furniture;
     }
 
-    public boolean MainQuery(Apartment apartment){
+    public boolean MainQuery(ResultRecord apartment){
         int furn= apartment.getFurniture();
         return (furn==this.furniture);
     }

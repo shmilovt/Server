@@ -1,7 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class SizeQuery extends CategoryQuery {
     private int min;
     private int max;
@@ -11,7 +9,7 @@ public class SizeQuery extends CategoryQuery {
         this.max=max;
     }
 
-    public boolean mainQuery(Apartment apartment){
+    public boolean mainQuery(ResultRecord apartment){
         int size= apartment.getSize();
         if(min==-1)
             return size<=max;

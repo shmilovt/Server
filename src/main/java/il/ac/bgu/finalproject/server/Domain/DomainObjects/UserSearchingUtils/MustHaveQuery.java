@@ -1,7 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class MustHaveQuery extends CategoryQuery{
     MustHaveThing thing;
     public MustHaveQuery(MustHaveThing thing){
@@ -15,21 +13,21 @@ public class MustHaveQuery extends CategoryQuery{
         warehouse
     }
 
-    public boolean MainQuery(Apartment apartment) {
+    public boolean MainQuery(ResultRecord apartment) {
         if (thing == MustHaveThing.balcony) {
-            if (apartment.getBalcony() == 1)
+            if (apartment.isBalcony())
                 return true;
         } else if (thing == MustHaveThing.garden) {
-            if (apartment.getGarden() == 1)
+            if (apartment.isYard())
                 return true;
         } else if (thing == MustHaveThing.pets) {
-            if (apartment.getAnimal() == 1)
+            if (apartment.isAnimals())
                 return true;
         } else if (thing == MustHaveThing.protectedSpace) {
-            if (apartment.getProtectedSpace() == 1)
+            if (apartment.isProtectedSpace())
                 return true;
         } else if (thing == MustHaveThing.warehouse) {
-            if (apartment.getWarehouse() == 1)
+            if (apartment.isWarehouse())
                 return true;
         }
         return false;
