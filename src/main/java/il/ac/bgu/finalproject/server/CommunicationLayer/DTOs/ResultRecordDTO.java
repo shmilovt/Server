@@ -19,6 +19,8 @@ public class ResultRecordDTO {
     private String dateOfPublish; //just date without time
     private String text;
     private ContactDTO [] contacts;
+    private double lat; // קווי אורך
+    private double lon; // קווי רוחב
 
     public ResultRecordDTO(){}
 
@@ -130,7 +132,7 @@ public class ResultRecordDTO {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(int numberOfRooms) {
+    public void setNumberOfRooms(double numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 
@@ -150,8 +152,6 @@ public class ResultRecordDTO {
         this.dateOfPublish = dateOfPublish;
     }
 
-
-
     public String getText() {
         return text;
     }
@@ -166,5 +166,21 @@ public class ResultRecordDTO {
 
     public void setContacts(ContactDTO[] contacts) {
         this.contacts = contacts;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 }
