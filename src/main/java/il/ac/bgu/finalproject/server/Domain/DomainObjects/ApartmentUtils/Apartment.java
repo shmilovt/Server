@@ -7,8 +7,6 @@ import java.util.Set;
 
 public class Apartment {
 
-
-    private List<String> postIDs;
     private ApartmentLocation apartmentLocation;
     private int cost;
     private int size;
@@ -24,7 +22,6 @@ public class Apartment {
     private int numberOfRooms;
 
     public Apartment() {
-        postIDs = new ArrayList<>();
         apartmentLocation = new ApartmentLocation();
         cost = -1;
         size = -1;
@@ -208,13 +205,6 @@ public class Apartment {
         this.size = size;
     }
 
-    public List<String> getPostIDs() {
-        return postIDs;
-    }
-
-    public void setPostIDs(List<String> postID) {
-        this.postIDs = postID;
-    }
 
     public String toString()
     {
