@@ -21,7 +21,7 @@ public class DataBaseConnectionTest {
     @BeforeClass
     public static void setup() {
         dbc.connect();
-//        dbc.resetAllTables();
+        dbc.resetAllTables();
     }
 
     @AfterClass
@@ -56,62 +56,10 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void getPost() {
-    }
-
-    @Test
     public void deletePost() {
         dbc.addPost("4", null, "nof3", "דירה מהממת", "4");
         dbc.deletePost("4");
         assertTrue(dbc.getPost("4") == null);
-    }
-
-    @Test
-    public void getAllPostsId() {
-    }
-
-    @Test
-    public void addAddressDetailsRecord() {
-    }
-
-    @Test
-    public void updateAddressDetailsRecordaaaa() {
-    }
-
-    @Test
-    public void getPostaaaa() {
-    }
-
-    @Test
-    public void deletePostaaa() {
-    }
-
-    @Test
-    public void addContactsRecord() {
-    }
-
-    @Test
-    public void addApartmentContactsRecord() {
-    }
-
-    @Test
-    public void addApartmentRecord() {
-        dbc.addApartmentRecord("3", 4, 4, 90, 1000, 1, 1, 0, 0, 0, 0, 0, 0, 3);
-    }
-
-    @Test
-    public void getApartmentRecordTBD() {
-        System.out.println(dbc.getApartmentRecordTBD("3").toString());
-
-    }
-
-    @Test
-    public void getApartmentContacts() {
-        Set <Contact> contacts= dbc.getApartmentContacts("2");
-        for (Contact contact: contacts) {
-            System.out.println(contact.toString());
-        }
-
     }
 
     @Test
@@ -125,16 +73,27 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void deleteApartmentRecord() {
-    }
-
-    @Test
     public void morePostsWithApartmentID() {
     }
 
 
     @Test
     public void isApartmentExist() {
+        Address address = new Address("וינגייט", 61);
+        ApartmentLocation location = new ApartmentLocation(address, 4, 16);
+        Contact c1 = new Contact("Tal", "0535555555");
+        Contact c2 = new Contact("Sahar", "0536666666");
+        Set<Contact> contacts = new HashSet<Contact>();
+        contacts.add(c1);
+        contacts.add(c2);
+        Apartment apartment = new Apartment(location, 1000, contacts);
+
+        dbc.addApartmentDerivatives(apartment,"");
+        assertTrue(dbc.isApartmentExist(apartment)!=-1);
+    }
+
+    @Test
+    public void addApartmentDerivatives() {
         Address address = new Address("יצחק רגר", 16);
         ApartmentLocation location = new ApartmentLocation(address, 3, 33);
         Contact c1 = new Contact("lior", "0533333333");
@@ -143,12 +102,8 @@ public class DataBaseConnectionTest {
         contacts.add(c1);
         contacts.add(c2);
         Apartment apartment = new Apartment(location, 1000, contacts);
-        //dbc.addApartmentDerivatives(apartment,"2");
+
+        dbc.addApartmentDerivatives(apartment,"2");
         assertTrue(dbc.isApartmentExist(apartment)!=-1);
-
-    }
-
-    @Test
-    public void addApartmentDerivatives() {
     }
 }
