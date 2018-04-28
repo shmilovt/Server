@@ -7,7 +7,7 @@ public class ResultRecord {
     private int number;
     private String neighborhood;
     private int floor;
-    private int distanceFromUniversity;
+    private double distanceFromUniversity;
     private int cost;
     private int size;
     private boolean balcony;
@@ -25,7 +25,32 @@ public class ResultRecord {
     private double lon; // קווי רוחב
 
     public ResultRecord(){
-
+    }
+    public ResultRecord(String street, int number, String neighborhood, int floor, double distanceFromUniversity,
+             int cost, int size, boolean balcony, boolean yard, boolean animals, boolean warehouse ,
+             boolean protectedSpace, int furniture, double numberOfRooms, int numberOfRoomates, String dateOfPublish, //just date without time
+             String text, Contact[] contacts, double lat, // קווי אורך
+             double lon){
+        this.street= street;
+        this.number= number;
+        this.neighborhood= neighborhood;
+        this.floor= floor;
+        this.distanceFromUniversity= distanceFromUniversity;
+        this.cost= cost;
+        this.size= size;
+        this.balcony= balcony;
+        this.yard= yard;
+        this.animals= animals;
+        this.warehouse= warehouse;
+        this.protectedSpace= protectedSpace;
+        this.furniture= furniture;
+        this.numberOfRooms= numberOfRooms;
+        this.numberOfRoomates= numberOfRoomates;
+        this.dateOfPublish= dateOfPublish;
+        this.text=text;
+        this.contacts=contacts;
+        this.lat= lat;
+        this.lon= lon;
     }
 
     public String getStreet() {
@@ -60,11 +85,11 @@ public class ResultRecord {
         this.floor = floor;
     }
 
-    public int getDistanceFromUniversity() {
+    public double getDistanceFromUniversity() {
         return distanceFromUniversity;
     }
 
-    public void setDistanceFromUniversity(int distanceFromUniversity) {
+    public void setDistanceFromUniversity(double distanceFromUniversity) {
         this.distanceFromUniversity = distanceFromUniversity;
     }
 

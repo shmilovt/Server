@@ -2,6 +2,7 @@ package il.ac.bgu.finalproject.server.Domain.Controllers;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnectionInterface;
 
@@ -59,7 +60,7 @@ public class DataBaseRequestController {
         return dataBaseConnectionInterface.GetAllPostsId();
     }
 
-    public List<Apartment> allApartments() {
-        return dataBaseConnectionInterface.allApartmentFromDB();
+    public SearchResults allResultsRecordsFromDB() {
+        return dataBaseConnectionInterface.allResultsFromDB();
     }
 }

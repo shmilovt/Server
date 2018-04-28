@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.PersistenceLayer;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 
 import java.util.List;
 import java.util.Set;
@@ -38,20 +39,20 @@ public interface DataBaseConnectionInterface {
 
     List<String> GetAllPostsId();
 
-    int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude);
+    int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude);
 
     List<Apartment> allApartmentFromDB();
 
     Set<Contact> getApartmentContacts(String apartmentid);
 
 // I dont think this function is neccessary:
-    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude);
+    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude);
 
     void addContactsRecord(String phone, String name);
 
     void addApartmentContactsRecord(String apartmentID, String phoneNumber);
 
-    String addApartmentRecord(String apartmentID, int numOfRooms, int floor,
+    String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                               int size, int cost, int addressDetailsID,
                               int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                               int balcony, int furniture, int numberOfMates
@@ -66,6 +67,8 @@ public interface DataBaseConnectionInterface {
     int isApartmentExist(Apartment apartment);
     void addApartmentDerivatives(Apartment apartment, String post);
     void updateApartmentDerivatives(Apartment apartment,String postID);
+    SearchResults allResultsFromDB ();
+
     }
 
 

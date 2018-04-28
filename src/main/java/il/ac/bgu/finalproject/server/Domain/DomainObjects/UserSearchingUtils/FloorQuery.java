@@ -1,7 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class FloorQuery extends CategoryQuery{
     private int min;
     private int max;
@@ -11,8 +9,8 @@ public class FloorQuery extends CategoryQuery{
         max=max;
     }
 
-    public boolean mainQuery(Apartment apartment){
-        int floor= apartment.getApartmentLocation().getFloor();
+    public boolean mainQuery(ResultRecord apartment){
+        int floor= apartment.getFloor();
         if(floor>max && floor<min)
             return false;
         return true;

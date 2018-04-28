@@ -1,6 +1,4 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class CostQuery extends CategoryQuery{
     private int min;
     private int max;
@@ -10,7 +8,7 @@ public class CostQuery extends CategoryQuery{
         this.max=max;
     }
 
-    public boolean mainQuery(Apartment apartment){
+    public boolean mainQuery(ResultRecord apartment){
         int cost= apartment.getCost();
         if(min==-1)
             return cost<=max;

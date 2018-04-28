@@ -1,7 +1,5 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-
 public class TimeFromUniQuery extends CategoryQuery {
     private int max;
 
@@ -9,8 +7,8 @@ public class TimeFromUniQuery extends CategoryQuery {
         max=max;
     }
 
-    public boolean mainQuery(Apartment apartment){
-        double time= apartment.getApartmentLocation().getDistanceFromUniversity();
+    public boolean mainQuery(ResultRecord apartment){
+        double time= apartment.getDistanceFromUniversity();
         return(time<=max);
     }
 }
