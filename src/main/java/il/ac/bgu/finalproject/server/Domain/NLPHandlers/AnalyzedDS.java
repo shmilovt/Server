@@ -42,7 +42,14 @@ public class AnalyzedDS {
 
     public void Remove(Classify classify,int envNum,String value)
     {
-        g.get(classify).get(envNum).remove(value);
+        List<Word> l = g.get(classify).get(envNum);
+        //int x=2;
+        if(!l.isEmpty())
+            for(Word w:l)
+                if(w.getDictionaryValue().equals(value)) {
+                    l.remove(w);
+                    break;
+                }
     }
 
     public String toString(Classify classify , int envNum)

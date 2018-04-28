@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -48,6 +49,9 @@ public class DataBaseConnectionTest {
 
     @Test
     public void getPost() {
+        dbc.addPost("4",null, "nof3", "דירה מהממת", "4");
+        Post post = dbc.getPost("99");
+        assertEquals(post.getText(),"דירה מהממת");
     }
 
     @Test
