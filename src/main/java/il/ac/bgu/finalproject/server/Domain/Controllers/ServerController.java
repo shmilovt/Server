@@ -14,21 +14,23 @@ public class ServerController {
         dbController = new DataBaseRequestController();
     }
 
-    public Post getPost(String id){
+    public Post getPost(String id)
+    {
         return dbController.getPost(id);
     }
 
-    public void newPost(Post ourPost){
+    public void newPost(Post ourPost)
+    {
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
-        dbController.manageApartment(apartment, ourPost.getID());
-
+        if(!apartment.getApartmentLocation().getAddress().getStreet().isEmpty())
+            dbController.manageApartment(apartment, ourPost.getID());
     }
 
-    public void updatePost(Post ourPost){
+    public void updatePost(Post ourPost)
+    {
         dbController.updatePost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
-
         dbController.manageApartment(apartment, ourPost.getID());
     }
 

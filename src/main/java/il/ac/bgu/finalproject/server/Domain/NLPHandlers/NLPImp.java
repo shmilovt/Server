@@ -467,13 +467,18 @@ public class NLPImp implements NLPInterface {
         if(!streetList.isEmpty()) {
             List<String> streetSet = ads.GetResultsByClassifyAndIndex(Classify.STREET, streetList.get(0));
             List<String> locationSet = ads.GetResultsByClassifyAndIndex(Classify.LOCATION, streetList.get(0));
-            if(!locationSet.isEmpty())
+            if (!locationSet.isEmpty())
                 if (locationSet.contains("מרכז אורן") || locationSet.contains("אוניברסיטת בן גוריון"))
-                    if(streetSet.contains("אורן"))
+                    if (streetSet.contains("אורן")) {
                         streetSet.remove("אורן");
-                    else
+                        ads.Remove(Classify.STREET,streetList.get(0),"אורן");
+                    }
+                        else {
                         streetSet.remove("שדרות בן גרויון");
-            if(!streetSet.isEmpty())
+                        ads.Remove(Classify.STREET,streetList.get(0),"שדרות בן גוריון");
+
+                    }
+                        if(!streetSet.isEmpty())
                 return streetSet.iterator().next();
         }
         List<Integer> locationWord = ads.GetEnvsIndex(Classify.WORD_LOCATION);

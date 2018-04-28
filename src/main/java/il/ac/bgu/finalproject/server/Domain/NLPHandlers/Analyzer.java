@@ -160,13 +160,13 @@ public class  Analyzer {
         }
     }
 
-    private static String cleanLocationPrefix(String str)
+    private static String cleanLocationPrefix(String str,Classify classify)
     {
         String s="";
         if(str.length()>1) {
-            if ((("ב" + str.substring(1)).equals(str) && !( "ב" + str.substring(1)).equals("בו")) || ("מ" + str.substring(1)).equals(str) || (("ל" + str.substring(1)).equals(str) && !("ל" + str.substring(1)).equals("לא") && !("ל" + str.substring(1)).equals("לד")))
+            if ((("ב" + str.substring(1)).equals(str) && !( "ב" + str.substring(1)).equals("בו")) || (("מ" + str.substring(1)).equals(str) && !classify.equals(Classify.STREET)) || (("ל" + str.substring(1)).equals(str) && !("ל" + str.substring(1)).equals("לא") && !("ל" + str.substring(1)).equals("לד") && !classify.equals(Classify.STREET)))
                 s = str.substring(1);
-            else if ((("*ב" + str.substring(2)).equals(str) && !( "*ב" + str.substring(2)).equals("בו")) || ("*מ" + str.substring(2)).equals(str) || (("*ל" + str.substring(2)).equals(str) && !("*ל" + str.substring(2)).equals("*לא") && !("*ל" + str.substring(2)).equals("*לד")))
+            else if ((("*ב" + str.substring(2)).equals(str) && !( "*ב" + str.substring(2)).equals("בו")) || (("*מ" + str.substring(2)).equals(str) && !classify.equals(Classify.STREET)) || (("*ל" + str.substring(2)).equals(str)  && !classify.equals(Classify.STREET) && !("*ל" + str.substring(2)).equals("*לא") && !("*ל" + str.substring(2)).equals("*לד")))
                 s = "*" + str.substring(2);
             else
                 s = str;
@@ -189,10 +189,10 @@ public class  Analyzer {
     }
 
 
-    private static boolean isWordExist(String envWord,String dicWord)
+    private static boolean isWordExist(String envWord,String dicWord,Classify classify)
     {
-        if(cleanLocationPrefix(envWord).equals(dicWord) || envWord.equals(dicWord)
-                || cleanLocationPrefix("*" + envWord).equals(dicWord) || ("*" + envWord).equals(dicWord))
+        if(cleanLocationPrefix(envWord,classify).equals(dicWord) || envWord.equals(dicWord)
+                || cleanLocationPrefix("*" + envWord,classify).equals(dicWord) || ("*" + envWord).equals(dicWord))
             return true;
         return  false;
     }
@@ -211,7 +211,7 @@ public class  Analyzer {
                 String[] splitedStreet = street.split(" ");
                 int length = splitedStreet.length;
                 if (length == 1) {
-                    if (isWordExist(strSplited[i], splitedStreet[0])) {
+                    if (isWordExist(strSplited[i], splitedStreet[0],classify)) {
                         if(classify.equals(Classify.NEIGHBORHOOD))
                             if(i-1>=0 && !strSplited[i-1].equals("קומה") && !strSplited[i-1].equals("בקומה"))
                                 streetLst.add(street);
@@ -224,8 +224,8 @@ public class  Analyzer {
                         break;
                     }
                 } else if (length == 2  && strSplited.length - i > 1) {
-                    if ((isWordExist(strSplited[i], splitedStreet[0]) && isWordExist(strSplited[i + 1], splitedStreet[1]))
-                            || (isWordExist(strSplited[i], splitedStreet[1]) && isWordExist(strSplited[i + 1], splitedStreet[0]))
+                    if ((isWordExist(strSplited[i], splitedStreet[0],classify) && isWordExist(strSplited[i + 1], splitedStreet[1],classify))
+                            || (isWordExist(strSplited[i], splitedStreet[1],classify) && isWordExist(strSplited[i + 1], splitedStreet[0],classify))
                             ) {
                         streetLst.add(street);
                         if(strSplited.length>i+2 && isNumeric(strSplited[i+2]) && Integer.parseInt(strSplited[i+2])<500)
@@ -234,7 +234,7 @@ public class  Analyzer {
                         break;
                     }
                 } else if (length == 3 && strSplited.length - i > 2) {
-                    if (isWordExist(strSplited[i], splitedStreet[0]) && isWordExist(strSplited[i + 1], splitedStreet[1]) && isWordExist(strSplited[i + 2], splitedStreet[2]))
+                    if (isWordExist(strSplited[i], splitedStreet[0],classify) && isWordExist(strSplited[i + 1], splitedStreet[1],classify) && isWordExist(strSplited[i + 2], splitedStreet[2],classify))
                     {
                         streetLst.add(street);
                         if(strSplited.length>i+3 && isNumeric(strSplited[i+3]) && Integer.parseInt(strSplited[i+3])<500 )
@@ -273,7 +273,7 @@ public class  Analyzer {
                 if(strSplited[j].contains("/"))
                     count=count-2;
                 for (String dicWord : dictionary) {
-                    if (isWordExist(strSplited[j], dicWord))
+                    if (isWordExist(strSplited[j], dicWord,classify))
                         aDS.Insert(classify, i, new Word(strSplited[j], fullName(dicWord, dictionary), count));
                 }
                 count++;
