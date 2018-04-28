@@ -50,6 +50,65 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return cApartmentID;
     }
 
+    public void resetConstValueTable(){
+        String sql= "DROP TABLE ConstValues";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
+
+        sql= "CREATE TABLE ConstValues(\n" +
+                "  Const text PRIMARY KEY,\n" +
+                "  Num INTEGER NOT NULL\n" +
+                ")";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
+
+        sql= "INSERT INTO ConstValues(Const, Num) VALUES (?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,"apartmentID");
+            pstmt.setInt(2,0);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
+
+        sql= "INSERT INTO ConstValues(Const, Num) VALUES (?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,"addressDetailsID");
+            pstmt.setInt(2,0);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
+    }
+    public int getConstValue (String id){
+        int value=-1;
+        try {
+            String sql = "SELECT Num FROM ConstValue where Const=" + id ;
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            value= rs.getInt(1);
+        } catch (SQLException e) {
+            //System.out.println(e.getMessage());
+        }
+        return value;
+    }
+    public void setConstValue (String id, int val){
+        try {
+            String sql = "UPDATE ConstValue SET Num= ? WHERE Const= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1,val);
+            pstmt.setString(2,id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            //System.out.println(e.getMessage());
+        }
+    }
 
     public void resetContactsTable(){
         String sql= "DROP TABLE contacts";
@@ -82,7 +141,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "  street text NOT NULL ,\n" +
                 "  numOfBuilding text NOT NULL,\n" +
                 "  timeFromUni double,\n" +
-                "  neighborhood int,\n" +
+                "  neighborhood text,\n" +
                 "  longitude double,\n" +
                 "  latitude double,\n" +
                 "  addressDetailsNum int,\n" +
@@ -105,7 +164,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
         sql=  "CREATE TABLE Apartment(\n" +
                 "  apartmentID INTEGER PRIMARY KEY,\n" +
-                "  numOfRooms int,\n" +
+                "  numOfRooms DOUBLE ,\n" +
                 "  floor int,\n" +
                 "  size double,\n" +
                 "  cost int NOT NULL ,\n" +
@@ -290,7 +349,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     ///===========ADDRESS DETAILS TABLE==============///
-    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude) {
+    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
         int t;
         try {
             String sql = "INSERT INTO AddressDetails(street, numOfBuilding, timeFromUni, "+
@@ -301,7 +360,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(1, street);
             pstmt.setString(2, numOfBuilding);
             pstmt.setDouble(3, timeFromUni);
-            pstmt.setInt(4, neighborhood);
+            pstmt.setString(4, neighborhood);
             pstmt.setDouble(5, longitude);
             pstmt.setDouble(6, latitude);
             t= addressDetailsID +1;
@@ -313,7 +372,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude) {
+    public void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
         //we need to compare if
         String sql = "UPDATE AddressDetails SET timeFromUni= ? , "
                 + "neighborhood= ? ,  "
@@ -326,7 +385,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             pstmt.setDouble(1, timeFromUni);
-            pstmt.setInt(2, neighborhood);
+            pstmt.setString(2, neighborhood);
             pstmt.setDouble(3, longitude);
             pstmt.setDouble(4, latitude);
             pstmt.setString(5, street);
@@ -391,7 +450,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             int t = cApartmentID+1;
             pstmt.setInt(1, t);
-            pstmt.setInt(2, apartment.getNumberOfRooms());
+            pstmt.setDouble(2, apartment.getNumberOfRooms());
             pstmt.setInt(3, apartment.getApartmentLocation().getFloor());
             pstmt.setDouble(4, apartment.getSize());
             pstmt.setInt(5, apartment.getCost());
@@ -414,7 +473,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         return ""+apartmentIdCreator();
     }
-    public String addApartmentRecord(String apartmentID, int numOfRooms, int floor,
+    public String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                                      int size, int cost, int addressDetailsID,
                                      int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                                      int balcony, int furniture, int numberOfMates
@@ -429,7 +488,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             int t = cApartmentID+1;
             pstmt.setInt(1, t);
-            pstmt.setInt(2, numOfRooms);
+            pstmt.setDouble(2, numOfRooms);
             pstmt.setInt(3, floor);
             pstmt.setDouble(4, size);
             pstmt.setInt(5, cost);
@@ -705,7 +764,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     "WHERE apartmentID=? ";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, apartment.getNumberOfRooms());
+            pstmt.setDouble(1, apartment.getNumberOfRooms());
             pstmt.setInt(2, apartment.getApartmentLocation().getFloor());
             pstmt.setDouble(3, apartment.getSize());
             pstmt.setInt(4, apartment.getCost());
@@ -776,7 +835,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     apartment.getApartmentLocation().getAddress().getStreet(),
                     apartment.getApartmentLocation().getAddress().getNumber() + "",
                     apartment.getApartmentLocation().getDistanceFromUniversity(),
-                    1, 47.0, 47.0);
+                    null, 47.0, 47.0);
         }
         tempForApartment= addApartmentRecord(
                 postID,
