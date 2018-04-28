@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class GoogleMapsController {
     private static GeoApiContext context = null;
-    private static final String YOUR_API_KEY =  "AIzaSyANZzbAFj7R6gYvU26Yl4mzPnME4MOWFxA";
+    private static final String YOUR_API_KEY =  "AIzaSyBzx9AlXuEXIpgoZcK_sLQAz1TYVI3CrGw";
 
     public GoogleMapsController(){
         if(context==null){
@@ -48,38 +48,40 @@ public class GoogleMapsController {
     public int getTimeWalkingFromUniByMin(String streetName,int number)
     {
         String address = streetName + " " + number + " " + "באר שבע";
-        System.out.println(address);
+        //System.out.println(address);
         DistanceMatrix ds = estimateRouteMinuteTime(null,address,"אוניברסיטת בן גוריון באר שבע");
         String str = ds.rows[0].elements[0].duration.humanReadable;
         return  Integer.parseInt(str.substring(0,str.indexOf("m")-1));
 
     }
 
-    public void getCoordinates(String street, int buildingNumber)
+    public double[] getCoordinates(String street, int buildingNumber)
     {
 
-        String address =  buildingNumber+" "+street+" באר שבע ";
-        System.out.println(address);
+        String address = street + " " + buildingNumber + " " + "באר שבע";
+      //  System.out.println(address);
         GeocodingResult[] results = new GeocodingResult[0];
         try {
             results = GeocodingApi.geocode(context,address).await();
         } catch (ApiException e) {
-            //   e.printStackTrace();
+         //   e.printStackTrace();
         } catch (InterruptedException e) {
-            //   e.printStackTrace();
+         //   e.printStackTrace();
         } catch (IOException e) {
-            //   e.printStackTrace();
+         //   e.printStackTrace();
         }
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(results));
-    }
+       // Gson gson = new GsonBuilder().setPrettyPrinting().create();
+       // System.out.println(gson.toJson(results));
+        double[]a ={results[0].geometry.location.lat,results[0].geometry.location.lng};
+        return a;
+
+}
 
 
     public static void main(String [] args){
-        GoogleMapsController googleMapsController = new GoogleMapsController();
-        //googleMapsController.getCoordinates("יצחק רגר", 20);
-        //System.out.println(googleMapsController.getTimeWalkingFromUniByMin("יצחק רגר",20));
+      //  GoogleMapsController googleMapsController = new GoogleMapsController();
+       // double[] a=googleMapsController.getCoordinates("יצחק רגר", 20);
+      //  System.out.println(a[0]);//System.out.println(googleMapsController.getTimeWalkingFromUniByMin("יצחק רגר",20));
+       // System.out.println("*קומה 8\\8\n".replaceAll("[ *\\\\ ]"," "));
     }
-
-
 }

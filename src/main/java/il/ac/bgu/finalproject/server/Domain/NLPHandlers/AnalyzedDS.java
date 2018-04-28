@@ -3,10 +3,10 @@ package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 import java.util.*;
 
 public class AnalyzedDS {
-    private Dictionary<Classify,Dictionary<Integer,List<String>>> g;
+    private Dictionary<Classify,Dictionary<Integer,List<Word>>> g;
     private EnvList envLst;
 
-    public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, List<String>>> g , EnvList env) {
+    public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, List<Word>>> g , EnvList env) {
         this.g = g;
         this.envLst=env;
     }
@@ -16,13 +16,13 @@ public class AnalyzedDS {
     {
         this.envLst=envL;
         int size = envL.size();
-        this.g = new Hashtable<Classify,Dictionary<Integer,List<String>>>();
+        this.g = new Hashtable<Classify,Dictionary<Integer,List<Word>>>();
         Classify[] classifyCategories = Classify.values();
         for(Classify c: classifyCategories)
-            g.put(c, new Hashtable<Integer,List<String>>());
+            g.put(c, new Hashtable<Integer,List<Word>>());
         for(Classify c: classifyCategories)
             for(int i=0;i<size;i++)
-                g.get(c).put(i,new LinkedList<>());
+                g.get(c).put(i,new LinkedList<Word>());
         Analyzer analyzer = new Analyzer(this);
         analyzer.analyze();
     }
@@ -35,14 +35,21 @@ public class AnalyzedDS {
         analyzer.analyze();
     }
 
-    public void Insert(Classify classify,int envNum,String value)
+    public void Insert(Classify classify,int envNum,Word value)
     {
         g.get(classify).get(envNum).add(value);
     }
 
     public void Remove(Classify classify,int envNum,String value)
     {
-        g.get(classify).get(envNum).remove(value);
+        List<Word> l = g.get(classify).get(envNum);
+        //int x=2;
+        if(!l.isEmpty())
+            for(Word w:l)
+                if(w.getDictionaryValue().equals(value)) {
+                    l.remove(w);
+                    break;
+                }
     }
 
     public String toString(Classify classify , int envNum)
@@ -73,19 +80,34 @@ public class AnalyzedDS {
 
     public List<String> GetResultsByClassify(Classify classify)
     {
-        List<String> resList = new LinkedList<>();
+        List<Word> resList = new LinkedList<>();
         int c = g.get(classify).size();
         for(int i=0;i<c;i++)
             if(!g.get(classify).get(i).isEmpty())
                 resList.addAll(g.get(classify).get(i));
-        return resList;
+        List<String> ans = new LinkedList<>();
+        for(Word word:resList)
+            ans.add(word.getDictionaryValue());
+        return ans;
     }
 
     public List<String> GetResultsByClassifyAndIndex(Classify classify,int index)
     {
-        List<String> resList = new LinkedList<>();
+        List<Word> resList = new LinkedList<>();
             if(!g.get(classify).get(index).isEmpty())
                 resList.addAll(g.get(classify).get(index));
+        List<String> ans = new LinkedList<>();
+        for(Word word:resList)
+            ans.add(word.getDictionaryValue());
+        return ans;
+    }
+
+
+    public List<Word> GetWordResultsByClassifyAndIndex(Classify classify,int index)
+    {
+        List<Word> resList = new LinkedList<>();
+        if(!g.get(classify).get(index).isEmpty())
+            resList.addAll(g.get(classify).get(index));
         return resList;
     }
 

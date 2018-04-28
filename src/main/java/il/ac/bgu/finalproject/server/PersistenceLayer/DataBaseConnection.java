@@ -651,7 +651,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     "WHERE apartmentID=? ";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, apartment.getNumberOfRooms());
+            pstmt.setInt(1, (int)apartment.getNumberOfRooms()); // to change to double
             pstmt.setInt(2, apartment.getApartmentLocation().getFloor());
             pstmt.setDouble(3, apartment.getSize());
             pstmt.setInt(4, apartment.getCost());
@@ -726,7 +726,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         tempForApartment= addApartmentRecord(
                 postID,
-                apartment.getNumberOfRooms(),
+                (int)apartment.getNumberOfRooms(),  // to change to double
                 apartment.getApartmentLocation().getFloor(),
                 apartment.getSize(),
                 apartment.getCost(),
