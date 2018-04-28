@@ -1,6 +1,8 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
-import il.ac.bgu.finalproject.server.Domain.Controllers.NLPController;
+import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -16,8 +18,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     private static Connection conn = null;
-    private  int addressDetailsID =-1;
-    private  int cApartmentID =-1;
+    private  String addressDetailsIDString ="addressDetailsID";
+    private  String apartmentIDString ="apartmentID";
 
     public void connect() {
         String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
@@ -38,16 +40,64 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
+    public void resetConstValueTable(){
+        String sql= "DROP TABLE ConstValues";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
 
-    private int addressDetailsIdCreator(){
-        addressDetailsID = addressDetailsID +1;
-        return addressDetailsID;
-    }
-    private int apartmentIdCreator(){
-        cApartmentID = cApartmentID +1;
-        return cApartmentID;
-    }
+        sql= "CREATE TABLE ConstValues(constV text PRIMARY KEY,\n" +
+                "  numV int NOT NULL\n" +
+                ")";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
 
+        sql= "INSERT INTO ConstValues(constV, numV) VALUES (?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,"apartmentID");
+            pstmt.setInt(2,0);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
+
+        sql= "INSERT INTO ConstValues(constV, numV) VALUES (?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,"addressDetailsID");
+            pstmt.setInt(2,0);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e){}
+    }
+    public int getConstValue (String id){
+        int value=-1;
+        try {
+            String sql = "SELECT numV FROM ConstValues WHERE constV= '" + id+"'" ;
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            value= rs.getInt(1);
+        } catch (SQLException e) {
+            //System.out.println(e.getMessage());
+        }
+        return value;
+    }
+    public void setConstValue (String id, int val){
+        try {
+            String sql = "UPDATE ConstValues SET numV= ? WHERE constV= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1,val);
+            pstmt.setString(2,id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            //System.out.println(e.getMessage());
+        }
+    }
 
     public void resetContactsTable(){
         String sql= "DROP TABLE contacts";
@@ -80,7 +130,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "  street text NOT NULL ,\n" +
                 "  numOfBuilding text NOT NULL,\n" +
                 "  timeFromUni double,\n" +
-                "  neighborhood int,\n" +
+                "  neighborhood text,\n" +
                 "  longitude double,\n" +
                 "  latitude double,\n" +
                 "  addressDetailsNum int,\n" +
@@ -103,7 +153,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
         sql=  "CREATE TABLE Apartment(\n" +
                 "  apartmentID INTEGER PRIMARY KEY,\n" +
-                "  numOfRooms int,\n" +
+                "  numOfRooms DOUBLE ,\n" +
                 "  floor int,\n" +
                 "  size double,\n" +
                 "  cost int NOT NULL ,\n" +
@@ -194,6 +244,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public void resetAllTables(){
+        //resetConstValueTable();
         resetContactsTable();
         resetAddressDetailsTable();
         resetApartmentTable();
@@ -269,7 +320,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public List<String> GetAllPostsId() {
-        connect();
+//        connect();
         String sql = "SELECT postID FROM posts";
         List<String> posts = new LinkedList<String>();
         //Post tempPost= new Post("");
@@ -278,17 +329,17 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             ResultSet rs    = stmt.executeQuery(sql);
             while (rs.next())
                 posts.add(rs.getString(1));
-            disConnect();
+//            disConnect();
             return posts;
         }
         catch(SQLException e){
-            disConnect();
+//            disConnect();
             return null;
         }
     }
 
     ///===========ADDRESS DETAILS TABLE==============///
-    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude) {
+    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
         int t;
         try {
             String sql = "INSERT INTO AddressDetails(street, numOfBuilding, timeFromUni, "+
@@ -299,19 +350,20 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(1, street);
             pstmt.setString(2, numOfBuilding);
             pstmt.setDouble(3, timeFromUni);
-            pstmt.setInt(4, neighborhood);
+            pstmt.setString(4, neighborhood);
             pstmt.setDouble(5, longitude);
             pstmt.setDouble(6, latitude);
-            t= addressDetailsID +1;
+            t= getConstValue(addressDetailsIDString);//addressDetailsID +1;
             pstmt.setInt(7, t);
             pstmt.executeUpdate();
-            return addressDetailsIdCreator();
+            setConstValue(addressDetailsIDString,t+1);
+            return t;
         } catch (SQLException e) {
             return -1;
         }
     }
 
-    public void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, int neighborhood, double longitude, double latitude) {
+    public void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
         //we need to compare if
         String sql = "UPDATE AddressDetails SET timeFromUni= ? , "
                 + "neighborhood= ? ,  "
@@ -324,7 +376,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);
 
             pstmt.setDouble(1, timeFromUni);
-            pstmt.setInt(2, neighborhood);
+            pstmt.setString(2, neighborhood);
             pstmt.setDouble(3, longitude);
             pstmt.setDouble(4, latitude);
             pstmt.setString(5, street);
@@ -379,7 +431,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
     ///===========APARTMENT TABLE==============///
 
-    public String addApartmentRecord(Apartment apartment) {
+    public String addApartmentRecord(Apartment apartment,int addressDetails_ID) {
+        int t=-1;
         try {
             String sql = "INSERT INTO Apartment(apartmentID, numOfRooms, floor, size, cost, addressDetailsID, " +
                     "garden, gardenSize, protectedSpace, warehouse, animal, " +
@@ -387,13 +440,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            int t = cApartmentID+1;
+            t = getConstValue(apartmentIDString);//cApartmentID+1;
             pstmt.setInt(1, t);
-            pstmt.setInt(2, apartment.getNumberOfRooms());
+            pstmt.setDouble(2, apartment.getNumberOfRooms());
             pstmt.setInt(3, apartment.getApartmentLocation().getFloor());
             pstmt.setDouble(4, apartment.getSize());
             pstmt.setInt(5, apartment.getCost());
-            pstmt.setInt(6, addressDetailsID);
+            pstmt.setInt(6, addressDetails_ID);
 
             pstmt.setInt(7, apartment.getGarden());
             pstmt.setInt(8, apartment.getGardenSize());
@@ -405,19 +458,20 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setInt(14, apartment.getNumberOfMates());
 
             pstmt.executeUpdate();
+            setConstValue(apartmentIDString,t+1);
             //System.out.println("Added");
         } catch (SQLException e) {
             return e.toString();
             //System.out.println(e.getMessage());
         }
-        return ""+apartmentIdCreator();
+        return ""+t;
     }
-    public String addApartmentRecord(String apartmentID, int numOfRooms, int floor,
+    public String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                                      int size, int cost, int addressDetailsID,
                                      int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                                      int balcony, int furniture, int numberOfMates
     ) {
-
+        int t=-1;
         try {
             String sql = "INSERT INTO Apartment(apartmentID, numOfRooms, floor, size, cost, addressDetailsID, " +
                     "garden, gardenSize, protectedSpace, warehouse, animal, " +
@@ -425,9 +479,9 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            int t = cApartmentID+1;
+            t = getConstValue(apartmentIDString);//cApartmentID+1;
             pstmt.setInt(1, t);
-            pstmt.setInt(2, numOfRooms);
+            pstmt.setDouble(2, numOfRooms);
             pstmt.setInt(3, floor);
             pstmt.setDouble(4, size);
             pstmt.setInt(5, cost);
@@ -443,12 +497,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setInt(14, numberOfMates);
 
             pstmt.executeUpdate();
+            setConstValue(apartmentIDString,t+1);
             //System.out.println("Added");
         } catch (SQLException e) {
             return e.toString();
             //System.out.println(e.getMessage());
         }
-        return ""+apartmentIdCreator();
+        return ""+t;
     }
 
     public void deleteApartmentRecord(String id) {
@@ -534,8 +589,60 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
+    public SearchResults allResultsFromDB () {
+//        connect();
+        List<ResultRecord> results = new LinkedList<ResultRecord>();
+        ResultRecord temp;
+        try {
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, /*size,*/ balcony, " +
+                    "garden, animal, warehouse, protectedSpace, furniture, numOfRooms, numberOfMates, "
+                    + "dateOfPublish, postText"
+                    + " FROM Apartment"
+                    + " JOIN Posts P ON Apartment.apartmentID = P.apartmentID";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+
+                temp = new ResultRecord();
+                temp.setStreet(location.getAddress().getStreet());
+                temp.setNumber(location.getAddress().getNumber());
+                temp.setNeighborhood(location.getNeighborhood());
+                temp.setFloor(rs.getInt(3));
+                temp.setDistanceFromUniversity(location.getDistanceFromUniversity());
+                temp.setCost(rs.getInt(4));
+                temp.setSize(rs.getInt(5));
+                temp.setBalcony(rs.getBoolean(6));
+                temp.setYard(rs.getBoolean(7));
+                temp.setAnimals(rs.getBoolean(8));
+                temp.setWarehouse(rs.getBoolean(9));
+                temp.setProtectedSpace(rs.getBoolean(10));
+                temp.setFurniture(rs.getInt(11));
+                temp.setNumberOfRooms(rs.getDouble(12));
+                temp.setNumberOfRoomates(rs.getInt(13));
+                temp.setDateOfPublish(rs.getDate(14).toString());
+                temp.setText(rs.getString(rs.getInt(15)));
+                Contact [] contactsArray= new Contact [contacts.size()] ;
+                int i=0;
+                for (Contact con: contacts){
+                    contactsArray[i]=con;
+                    i++;
+                }
+                temp.setContacts(contactsArray);
+                temp.setLat(location.getLatitude());
+                temp.setLon(location.getLongitude());
+                results.add(temp);
+            }
+
+        } catch (SQLException e) { }
+//        disConnect();
+        SearchResults searchResults= new SearchResults(results);
+        return searchResults;
+    }
+
     public List<Apartment> allApartmentFromDB () {
-        connect();
+//        connect();
         List<Apartment> apartments = new LinkedList<Apartment>();
         Apartment temp;
         try {
@@ -555,7 +662,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             }
 
         } catch (SQLException e) { }
-        disConnect();
+//        disConnect();
         return apartments;
     }
 
@@ -651,7 +758,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     "WHERE apartmentID=? ";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, (int)apartment.getNumberOfRooms()); // to change to double
+            pstmt.setDouble(1, apartment.getNumberOfRooms());
             pstmt.setInt(2, apartment.getApartmentLocation().getFloor());
             pstmt.setDouble(3, apartment.getSize());
             pstmt.setInt(4, apartment.getCost());
@@ -698,8 +805,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
     public int isAddressDetailsExist(Address address) {
         Statement stmt = null;
-        String sql = "SELECT AddressDetails.addressDetailsNum FROM AddressDetails"
-                + "WHERE street= '"+address.getStreet()
+        String sql = "SELECT addressDetailsNum FROM AddressDetails "
+                +" WHERE street= '"+address.getStreet()
                 +"' AND numOfBuilding= "+ address.getNumber();
         try {
             stmt = conn.createStatement();
@@ -722,11 +829,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     apartment.getApartmentLocation().getAddress().getStreet(),
                     apartment.getApartmentLocation().getAddress().getNumber() + "",
                     apartment.getApartmentLocation().getDistanceFromUniversity(),
-                    1, 47.0, 47.0);
+                    apartment.getApartmentLocation().getNeighborhood(),
+                    apartment.getApartmentLocation().getLongitude(), apartment.getApartmentLocation().getLatitude());
         }
         tempForApartment= addApartmentRecord(
                 postID,
-                (int)apartment.getNumberOfRooms(),  // to change to double
+                apartment.getNumberOfRooms(),
                 apartment.getApartmentLocation().getFloor(),
                 apartment.getSize(),
                 apartment.getCost(),
@@ -772,10 +880,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
     public static void main(String[] args)
     {
-        DataBaseConnection a=new DataBaseConnection();
-        a.connect();
-        a.resetAllTables();
-        Date date= new Date();
+//        DataBaseConnection a=new DataBaseConnection();
+//        a.connect();
+//        a.resetAllTables();
+//        a.resetConstValueTable();;
+//        a.disConnect();
+        Date date = new Date();
         Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
                 "כולל מדיח כלים אינטגרלי, מזגן מיני מרכזי, מזגנים עיליים בכל חדר (אינוורטר). תריסי אור חשמליים בכל הבית. 1200 שח\n" +
                 "לפרטים: \n" +
@@ -837,15 +947,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "תל אביב-יפו\n" +
                 "מעולה לסטודנטים. ו' הישנה. 100 מטר משער הכניסה לאוניברסיטה.מזגנים בחדרים. ריהוט חלקי. כניסה מיידית. השכירות לטווח ארוך.",null);
 
-        NLPController nlpController= new NLPController();
-//        nlpController.generateNLP(p1);
-        nlpController.generateNLP(p2);
-        nlpController.generateNLP(p3);
-        nlpController.generateNLP(p4);
-        nlpController.generateNLP(p5);
-        nlpController.generateNLP(p6);
-        nlpController.generateNLP(p7);
-        nlpController.generateNLP(p8);
+        ServerController serverController= new ServerController();
+//        serverController.newPost(p1);
+        serverController.newPost(p2);
+        serverController.newPost(p3);
+        serverController.newPost(p4);
+        serverController.newPost(p5);
+        serverController.newPost(p6);
+        serverController.newPost(p7);
+        serverController.newPost(p8);
+
 
 //        Date date = new Date();
 //        a.updateO("516188885429510_516287808752951",date.toString(),"succ");
@@ -865,6 +976,5 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         //        "3",
         //       10,
         //      1, 47.0, 47.0);
-        a.disConnect();
     }
 }

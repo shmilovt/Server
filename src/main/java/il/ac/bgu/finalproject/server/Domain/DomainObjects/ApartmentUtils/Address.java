@@ -3,23 +3,23 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils;
 public class Address {
     private String street;
     private int number;
-    private double lat;
-    private double lng;
+//    private double lat;
+//    private double lng;
 
     public Address(){}
     public Address(String street, int number){
         this.number = number;
         this.street = street;
-        this.lat=-1;
-        this.lng=-1;
+//        this.lat=-1;
+//        this.lng=-1;
     }
 
-    public Address(String street, int number,double lat,double lng){
-        this.number = number;
-        this.street = street;
-        this.lat=lat;
-        this.lng=lng;
-    }
+//    public Address(String street, int number,double lat,double lng){
+//        this.number = number;
+//        this.street = street;
+//        this.lat=lat;
+//        this.lng=lng;
+//    }
 
     public String getStreet() {
         return street;
@@ -52,19 +52,19 @@ public class Address {
     }
 
 
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
+//    public double getLat() {
+//        return lat;
+//    }
+//
+//    public void setLat(double lat) {
+//        this.lat = lat;
+//    }
+//
+//    public double getLng() {
+//        return lng;
+//    }
+//
+//    public void setLng(double lng) {
+//        this.lng = lng;
+//    }
 }

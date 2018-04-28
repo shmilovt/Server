@@ -46,7 +46,7 @@ public interface DataBaseConnectionInterface {
     Set<Contact> getApartmentContacts(String apartmentid);
 
 // I dont think this function is neccessary:
-    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude);
+    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) ;
 
     void addContactsRecord(String phone, String name);
 

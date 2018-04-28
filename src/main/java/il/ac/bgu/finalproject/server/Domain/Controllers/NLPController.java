@@ -25,8 +25,8 @@ public class NLPController {
         if(!street.isEmpty() && number>0) {
             int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, number);
             double[] locationPoint = googleMapsController.getCoordinates(street, number);
-            apartment.getApartmentLocation().getAddress().setLat(locationPoint[0]);
-            apartment.getApartmentLocation().getAddress().setLng(locationPoint[1]);
+            apartment.getApartmentLocation().setLatitude(locationPoint[0]);
+            apartment.getApartmentLocation().setLatitude(locationPoint[1]);
             apartment.getApartmentLocation().setUniversity_distance(timeToUni);
         }
         return  apartment;
