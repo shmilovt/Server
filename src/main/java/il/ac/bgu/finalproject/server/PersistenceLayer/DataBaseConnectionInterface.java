@@ -45,30 +45,43 @@ public interface DataBaseConnectionInterface {
 
     Set<Contact> getApartmentContacts(String apartmentid);
 
-// I dont think this function is neccessary:
+    // I dont think this function is neccessary:
     void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude);
 
     void addContactsRecord(String phone, String name);
 
     void addApartmentContactsRecord(String apartmentID, String phoneNumber);
 
+    String addApartmentRecord(Apartment apartment, int addressDetails_ID);
+
     String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                               int size, int cost, int addressDetailsID,
                               int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                               int balcony, int furniture, int numberOfMates
     );
-    void deleteAddressDetailsRecord(String id);
-    Apartment getApartmentRecordTBD(String id);
-    void deleteApartmentRecord(String id);
-    Boolean morePostsWithApartmentID(String id);
-    Boolean moreApartmentsWithAddressDetailsNum(String addressDetailsNum);
-    void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures);
-    void updateApartmentRecord(Apartment apartment, String apartmentid);
-    int isApartmentExist(Apartment apartment);
-    void addApartmentDerivatives(Apartment apartment, String post);
-    void updateApartmentDerivatives(Apartment apartment,String postID);
-    SearchResults allResultsFromDB ();
 
-    }
+    void deleteAddressDetailsRecord(String id);
+
+    Apartment getApartmentRecordTBD(String id);
+
+    void deleteApartmentRecord(String id);
+
+    Boolean morePostsWithApartmentID(String id);
+
+    Boolean moreApartmentsWithAddressDetailsNum(String addressDetailsNum);
+
+    void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures);
+
+    void updateApartmentRecord(Apartment apartment, String apartmentid);
+
+    int isApartmentExist(Apartment apartment);
+
+    void addApartmentDerivatives(Apartment apartment, String post);
+
+    void updateApartmentDerivatives(Apartment apartment, String postID);
+
+    SearchResults allResultsFromDB();
+
+}
 
 

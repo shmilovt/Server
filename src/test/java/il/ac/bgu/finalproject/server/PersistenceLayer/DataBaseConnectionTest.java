@@ -21,11 +21,12 @@ public class DataBaseConnectionTest {
     @BeforeClass
     public static void setup() {
         dbc.connect();
-        dbc.resetAllTables();
+//        dbc.resetAllTables();
     }
 
     @AfterClass
     public static void endup() {
+
         dbc.disConnect();
     }
 
@@ -105,5 +106,18 @@ public class DataBaseConnectionTest {
 
         dbc.addApartmentDerivatives(apartment,"2");
         assertTrue(dbc.isApartmentExist(apartment)!=-1);
+    }
+
+    @Test
+    public void getConstValue() {
+        dbc.resetConstValueTable();
+        assertTrue(dbc.getConstValue("addressDetailsID")==0);
+    }
+
+    @Test
+    public void setConstValue() {
+        int t= dbc.getConstValue("addressDetailsID");
+        dbc.setConstValue("addressDetailsID",t+1);
+        assertEquals(dbc.getConstValue("addressDetailsID"),t+1);
     }
 }

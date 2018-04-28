@@ -15,29 +15,41 @@ public class ServerController {
     }
 
     public Post getPost(String id){
-        return dbController.getPost(id);
+        dbController.connect();
+        Post post= dbController.getPost(id);
+        dbController.disconnect();
+        return post;
     }
 
     public void newPost(Post ourPost){
+        dbController.connect();
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
         dbController.manageApartment(apartment, ourPost.getID());
+        dbController.disconnect();
     }
 
     public void updatePost(Post ourPost){
+        dbController.connect();
         dbController.updatePost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
 
         dbController.manageApartment(apartment, ourPost.getID());
+        dbController.disconnect();
     }
 
     public void deletePost(String id)
     {
+        dbController.connect();
         dbController.deletePost(id);
+        dbController.disconnect();
     }
 
     public List<String> getAllPostsId()
     {
-        return dbController.getAllPostsId();
+        dbController.connect();
+        List<String> postsID= dbController.getAllPostsId();
+        dbController.disconnect();
+        return postsID;
     }
 }
