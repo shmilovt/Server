@@ -4,20 +4,15 @@ import com.google.gson.Gson;
 
 
 public class UserSearchDTO {
-    private CategoryTypeDTO[] priorities;
-    private ApartmentSizeDTO apartmentSizeDTO;
+    private CategoryType[] priorities;
     private String neighborhood;
-    private DistanceFromUniversityDTO distanceFromUniversityDTO;
+    private int distanceFromUniversity;
     private FloorDTO floorDTO;
     private CostDTO costDTO;
-    private FurnitureDTO furnitureDTO;
-    private NumberOfRoomsDTO numberOfRoomsDTO;
-    private NumberOfRoomatesDTO numberOfMates;
-    private Boolean balcony;
-    private Boolean animals;
-    private Boolean protectedSpace;
-    private Boolean yard;
-    private Boolean warehouse;
+    private SizeDTO sizeDTO;
+    private int furniture;
+    private int numberOfRooms;
+    private int numberOfMates;
 
 
     public UserSearchDTO(){
@@ -40,20 +35,12 @@ public class UserSearchDTO {
     }
 
 
-    public CategoryTypeDTO[] getPriorities() {
+    public CategoryType[] getPriorities() {
         return priorities;
     }
 
-    public void setPriorities(CategoryTypeDTO[] priorities) {
+    public void setPriorities(CategoryType[] priorities) {
         this.priorities = priorities;
-    }
-
-    public ApartmentSizeDTO getApartmentSizeDTO() {
-        return apartmentSizeDTO;
-    }
-
-    public void setApartmentSizeDTO(ApartmentSizeDTO apartmentSizeDTO) {
-        this.apartmentSizeDTO = apartmentSizeDTO;
     }
 
     public String getNeighborhood() {
@@ -64,12 +51,12 @@ public class UserSearchDTO {
         this.neighborhood = neighborhood;
     }
 
-    public DistanceFromUniversityDTO getDistanceFromUniversityDTO() {
-        return distanceFromUniversityDTO;
+    public int getDistanceFromUniversity() {
+        return distanceFromUniversity;
     }
 
-    public void setDistanceFromUniversityDTO(DistanceFromUniversityDTO distanceFromUniversityDTO) {
-        this.distanceFromUniversityDTO = distanceFromUniversityDTO;
+    public void setDistanceFromUniversity(int distanceFromUniversity) {
+        this.distanceFromUniversity = distanceFromUniversity;
     }
 
     public FloorDTO getFloorDTO() {
@@ -88,67 +75,35 @@ public class UserSearchDTO {
         this.costDTO = costDTO;
     }
 
-    public FurnitureDTO getFurnitureDTO() {
-        return furnitureDTO;
+    public SizeDTO getSizeDTO() {
+        return sizeDTO;
     }
 
-    public void setFurnitureDTO(FurnitureDTO furnitureDTO) {
-        this.furnitureDTO = furnitureDTO;
+    public void setSizeDTO(SizeDTO sizeDTO) {
+        this.sizeDTO = sizeDTO;
     }
 
-    public NumberOfRoomsDTO getNumberOfRoomsDTO() {
-        return numberOfRoomsDTO;
+    public int getFurniture() {
+        return furniture;
     }
 
-    public void setNumberOfRoomsDTO(NumberOfRoomsDTO numberOfRoomsDTO) {
-        this.numberOfRoomsDTO = numberOfRoomsDTO;
+    public void setFurniture(int furniture) {
+        this.furniture = furniture;
     }
 
-    public NumberOfRoomatesDTO getNumberOfMates() {
+    public int getNumberOfRooms() {
+        return numberOfRooms;
+    }
+
+    public void setNumberOfRooms(int numberOfRooms) {
+        this.numberOfRooms = numberOfRooms;
+    }
+
+    public int getNumberOfMates() {
         return numberOfMates;
     }
 
-    public void setNumberOfMates(NumberOfRoomatesDTO numberOfMates) {
+    public void setNumberOfMates(int numberOfMates) {
         this.numberOfMates = numberOfMates;
-    }
-
-    public Boolean getBalcony() {
-        return balcony;
-    }
-
-    public void setBalcony(Boolean balcony) {
-        this.balcony = balcony;
-    }
-
-    public Boolean getAnimals() {
-        return animals;
-    }
-
-    public void setAnimals(Boolean animals) {
-        this.animals = animals;
-    }
-
-    public Boolean getProtectedSpace() {
-        return protectedSpace;
-    }
-
-    public void setProtectedSpace(Boolean protectedSpace) {
-        this.protectedSpace = protectedSpace;
-    }
-
-    public Boolean getYard() {
-        return yard;
-    }
-
-    public void setYard(Boolean yard) {
-        this.yard = yard;
-    }
-
-    public Boolean getWarehouse() {
-        return warehouse;
-    }
-
-    public void setWarehouse(Boolean warehouse) {
-        this.warehouse = warehouse;
     }
 }

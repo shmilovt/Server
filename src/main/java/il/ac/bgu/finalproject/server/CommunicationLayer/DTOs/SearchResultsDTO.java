@@ -24,4 +24,9 @@ public class SearchResultsDTO {
         Gson gson = new Gson();
         return gson.toJson(searchResultsDTO);
     }
+
+    public static SearchResultsDTO fromJSON(String jsonString){
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString, SearchResultsDTO.class);
+    }
 }
