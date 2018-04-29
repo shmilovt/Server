@@ -4,6 +4,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartme
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.util.List;
 import java.util.Set;
@@ -11,62 +12,62 @@ import java.util.Set;
 public interface DataBaseConnectionInterface {
 
 
-    void connect();
+    void connect() throws DataBaseFailedException;
 
-    void disConnect();
+    void disConnect() throws DataBaseFailedException;
 
-    void resetContactsTable();
+    void resetContactsTable() throws DataBaseFailedException;
 
-    void resetAddressDetailsTable();
+    void resetAddressDetailsTable() throws DataBaseFailedException;
 
-    void resetApartmentTable();
+    void resetApartmentTable() throws DataBaseFailedException;
 
-    void resetApartmentContactsTable();
+    void resetApartmentContactsTable() throws DataBaseFailedException;
 
-    void resetPostsTable();
+    void resetPostsTable() throws DataBaseFailedException;
 
-    void resetSearchRecordsTable();
+    void resetSearchRecordsTable() throws DataBaseFailedException;
 
-    void resetAllTables();
+    void resetAllTables() throws DataBaseFailedException;
 
-    void addPost(String id, String date, String publisherName, String message, String apartmentID);
+    void addPost(String id, String date, String publisherName, String message, String apartmentID) throws DataBaseFailedException;
 
-    void update(String id, String date, String publisherName, String message, String apartmentID);
+    void update(String id, String date, String publisherName, String message, String apartmentID) throws DataBaseFailedException;
 
     Post getPost(String id);
 
-    void deletePost(String id);
+    void deletePost(String id) throws DataBaseFailedException;
 
     List<String> GetAllPostsId();
 
-    int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude);
+    int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) throws DataBaseFailedException;
 
     List<Apartment> allApartmentFromDB();
 
     Set<Contact> getApartmentContacts(String apartmentid);
 
 // I dont think this function is neccessary:
-    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) ;
+    void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) throws DataBaseFailedException;
 
-    void addContactsRecord(String phone, String name);
+    void addContactsRecord(String phone, String name) throws DataBaseFailedException;
 
-    void addApartmentContactsRecord(String apartmentID, String phoneNumber);
+    void addApartmentContactsRecord(String apartmentID, String phoneNumber) throws DataBaseFailedException;
 
     String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                               int size, int cost, int addressDetailsID,
                               int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                               int balcony, int furniture, int numberOfMates
-    );
-    void deleteAddressDetailsRecord(String id);
+    ) throws DataBaseFailedException;
+    void deleteAddressDetailsRecord(String id) throws DataBaseFailedException;
     Apartment getApartmentRecordTBD(String id);
-    void deleteApartmentRecord(String id);
+    void deleteApartmentRecord(String id) throws DataBaseFailedException;
     Boolean morePostsWithApartmentID(String id);
     Boolean moreApartmentsWithAddressDetailsNum(String addressDetailsNum);
-    void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures);
-    void updateApartmentRecord(Apartment apartment, String apartmentid);
-    int isApartmentExist(Apartment apartment);
-    void addApartmentDerivatives(Apartment apartment, String post);
-    void updateApartmentDerivatives(Apartment apartment,String postID);
+    void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures) throws DataBaseFailedException;
+    void updateApartmentRecord(Apartment apartment, String apartmentid) throws DataBaseFailedException;
+    int isApartmentExist(Apartment apartment) throws DataBaseFailedException;
+    void addApartmentDerivatives(Apartment apartment, String post) throws DataBaseFailedException;
+    void updateApartmentDerivatives(Apartment apartment,String postID) throws DataBaseFailedException;
     SearchResults allResultsFromDB ();
 
     }

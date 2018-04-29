@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.Domain.Controllers;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnectionInterface;
 
@@ -15,10 +16,10 @@ public class DataBaseRequestController {
         dataBaseConnectionInterface = new DataBaseConnection();
     }
 
-    public void connect(){dataBaseConnectionInterface.connect();}
-    public void disconnect(){dataBaseConnectionInterface.disConnect();}
+    public void connect() throws DataBaseFailedException {dataBaseConnectionInterface.connect();}
+    public void disconnect() throws DataBaseFailedException {dataBaseConnectionInterface.disConnect();}
 
-    public void manageApartment(Apartment apartment, String postID) {
+    public void manageApartment(Apartment apartment, String postID) throws DataBaseFailedException {
         int apartmentId=dataBaseConnectionInterface.isApartmentExist(apartment);
         if (apartmentId!=-1) {
             dataBaseConnectionInterface.updateApartmentDerivatives(apartment, ""+apartmentId);
@@ -31,17 +32,17 @@ public class DataBaseRequestController {
         return dataBaseConnectionInterface.getPost(id);
     }
 
-    public void updatePost(Post post){
+    public void updatePost(Post post) throws DataBaseFailedException {
         dataBaseConnectionInterface.update(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
     }
 
 
-    public void addPost(Post post){
+    public void addPost(Post post) throws DataBaseFailedException {
         dataBaseConnectionInterface.addPost(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
     }
 
 
-    public void deletePost(String id){
+    public void deletePost(String id) throws DataBaseFailedException {
         String apartmentID = dataBaseConnectionInterface.getPost(id).getApartmentID();
         dataBaseConnectionInterface.deletePost(id);
 

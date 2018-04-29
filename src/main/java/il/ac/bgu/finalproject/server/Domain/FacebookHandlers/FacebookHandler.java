@@ -5,6 +5,7 @@ import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
 import com.restfb.types.Post;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -38,7 +39,7 @@ public class FacebookHandler {
      */
 
 
-    public void GetFeed(int sinceWeeks,String groupId) {
+    public void GetFeed(int sinceWeeks,String groupId) throws DataBaseFailedException {
         long sinceDate = DateToUnixTime(GetDateOfNumOfWeeksBefore(sinceWeeks));
         Connection<Post> postFeed = fbClient.fetchConnection(groupId + "/feed", Post.class, Parameter.with("since", sinceDate), Parameter.with("limit", 100));
         //DataBaseConnection dbConn = new DataBaseConnection();
@@ -87,8 +88,7 @@ public class FacebookHandler {
         return msg[2];
     }
 
-    public  void IsDeleted(List<String> ids)
-    {
+    public  void IsDeleted(List<String> ids) throws DataBaseFailedException {
        // DataBaseConnection dbConn = new DataBaseConnection();
         try {
             JsonObject fetchObjectsResults = fbClient.fetchObjects(ids, JsonObject.class, Parameter.with("fields", "id"));

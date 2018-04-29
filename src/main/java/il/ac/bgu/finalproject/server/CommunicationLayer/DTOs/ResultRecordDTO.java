@@ -5,7 +5,7 @@ public class ResultRecordDTO {
     private int number;
     private String neighborhood;
     private int floor;
-    private int distanceFromUniversity;
+    private double distanceFromUniversity;
     private int cost;
     private int size;
     private boolean balcony;
@@ -56,11 +56,11 @@ public class ResultRecordDTO {
         this.floor = floor;
     }
 
-    public int getDistanceFromUniversity() {
+    public double getDistanceFromUniversity() {
         return distanceFromUniversity;
     }
 
-    public void setDistanceFromUniversity(int distanceFromUniversity) {
+    public void setDistanceFromUniversity(double distanceFromUniversity) {
         this.distanceFromUniversity = distanceFromUniversity;
     }
 

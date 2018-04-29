@@ -1,17 +1,16 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
-import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
+import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.logging.Level;
 
 public class DataBaseConnection implements DataBaseConnectionInterface {
 
@@ -21,32 +20,42 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private  String addressDetailsIDString ="addressDetailsID";
     private  String apartmentIDString ="apartmentID";
 
-    public void connect() {
+    public void connect() throws DataBaseFailedException {
         String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
         try {
             conn = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("disconnect to the DataBase ",1);
         }
         //System.out.println("Connection to SQLite has been established.");
     }
-    public void disConnect() {
+    public void disConnect() throws DataBaseFailedException {
         try {
             if (conn != null) {
                 conn.close();
             }
-        } catch (SQLException ex) {
-            //System.out.println(ex.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException(" disconnect to the DataBase ",1);
         }
     }
 
-    public void resetConstValueTable(){
+    public void resetConstValueTable() throws DataBaseFailedException {
         String sql= "DROP TABLE ConstValues";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop the contacts table",4);
+        }
 
         sql= "CREATE TABLE ConstValues(constV text PRIMARY KEY,\n" +
                 "  numV int NOT NULL\n" +
@@ -55,7 +64,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("create the contacts table",4);
+        }
 
         sql= "INSERT INTO ConstValues(constV, numV) VALUES (?,?)";
         try {
@@ -64,8 +77,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setInt(2,0);
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("insert into the ConstValues table",4);
+        }
         sql= "INSERT INTO ConstValues(constV, numV) VALUES (?,?)";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -73,39 +89,55 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setInt(2,0);
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-    }
-    public int getConstValue (String id){
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("insert into the ConstValues table",4);
+        }    }
+    public int getConstValue (String id) throws DataBaseFailedException {
         int value=-1;
         try {
             String sql = "SELECT numV FROM ConstValues WHERE constV= '" + id+"'" ;
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
             value= rs.getInt(1);
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("insert into ConstValues table",4);
         }
         return value;
     }
-    public void setConstValue (String id, int val){
+    public void setConstValue (String id, int val) throws DataBaseFailedException {
         try {
             String sql = "UPDATE ConstValues SET numV= ? WHERE constV= ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1,val);
             pstmt.setString(2,id);
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
-    public void resetContactsTable(){
+    public void resetContactsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE contacts";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
 
         sql= "CREATE TABLE Contacts(\n" +
                 "  phone text PRIMARY KEY,\n" +
@@ -115,17 +147,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("create the contacts table",4);}
     }
 
-    public void resetAddressDetailsTable(){
+    public void resetAddressDetailsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE addressDetails";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
 
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         sql= "CREATE TABLE AddressDetails(\n" +
                 "  street text NOT NULL ,\n" +
                 "  numOfBuilding text NOT NULL,\n" +
@@ -140,17 +179,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-    }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }    }
 
-    public void resetApartmentTable(){
+    public void resetApartmentTable() throws DataBaseFailedException {
         String sql= "DROP TABLE apartment";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
 
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         sql=  "CREATE TABLE Apartment(\n" +
                 "  apartmentID INTEGER PRIMARY KEY,\n" +
                 "  numOfRooms DOUBLE ,\n" +
@@ -172,17 +218,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-    }
+        catch(SQLException e){}
+        catch (Exception e){
 
-    public void resetApartmentContactsTable(){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }    }
+
+    public void resetApartmentContactsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE apartmentContacts";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         sql=  "CREATE TABLE ApartmentContacts(\n" +
                 "  apartmentID text NOT NULL,\n" +
                 "  phoneNumber text NOT NULL,\n" +
@@ -193,17 +246,25 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-    }
+        catch(SQLException e){}
+        catch (Exception e){
 
-    public void resetPostsTable(){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }    }
+
+    public void resetPostsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE posts";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
+        catch(SQLException e){}
+        catch (Exception e){
 
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         sql=  "CREATE TABLE Posts(\n" +
                 "  postID int PRIMARY KEY,\n" +
                 "  dateOfPublish Date,\n" +
@@ -216,17 +277,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-    }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }    }
 
-    public void resetSearchRecordsTable(){
+    public void resetSearchRecordsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE searchRecord";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-        sql=  "CREATE TABLE SearchRecord(\n" +
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }        sql=  "CREATE TABLE SearchRecord(\n" +
                 "  searchDate text ,\n" +
                 "  neighborhood text,\n" +
                 "  timeFromUni text,\n" +
@@ -240,10 +308,14 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
         }
-        catch (SQLException e){}
-    }
+        catch(SQLException e){}
+        catch (Exception e){
 
-    public void resetAllTables(){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }    }
+
+    public void resetAllTables() throws DataBaseFailedException {
         //resetConstValueTable();
         resetContactsTable();
         resetAddressDetailsTable();
@@ -255,7 +327,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
 
     ///===========POSTS TABLE==============///
-    public void addPost(String id, String date, String publisherName, String message, String apartmentID) {
+    public void addPost(String id, String date, String publisherName, String message, String apartmentID) throws DataBaseFailedException {
         try {
             String sql = "INSERT INTO posts(postID, dateOfPublish, publisherName, " +
                     "postText, apartmentID) VALUES(?,?,?,?,?)";
@@ -267,12 +339,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(4, message);
             pstmt.setString(5, apartmentID);
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
-    public void update(String id, String date, String publisherName, String message, String apartmentID) {
+    public void update(String id, String date, String publisherName, String message, String apartmentID) throws DataBaseFailedException {
         String sql= "UPDATE Posts SET dateOfPublish= ?, publisherName= ?, postText= ?, apartmentID= ? "
                 + "WHERE postID= ?";
         try{
@@ -285,27 +360,32 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(5, id);
             pstmt.executeUpdate();
             // System.out.println("update done");
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage())
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
     public Post getPost(String id) {
         try {
             String sql = "SELECT * FROM posts where postID =" + "'" + id + "'";
-            Statement stmt  = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-            Post post= new Post(rs.getString(1),rs.getDate(2),
-                    rs.getString(3),rs.getString(4),
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            Post post = new Post(rs.getString(1), rs.getDate(2),
+                    rs.getString(3), rs.getString(4),
                     rs.getString(5));
             return post;
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch (SQLException e) {return null;}
+        catch (Exception e) {
+            MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
             return null;
         }
     }
 
-    public void deletePost(String id) {
+    public void deletePost(String id) throws DataBaseFailedException {
         //  System.out.println("Hello deletePost");
         String sql = "DELETE FROM posts WHERE postID = ?";
         try {
@@ -313,9 +393,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(1, id);
             pstmt.executeUpdate();
         }
-        catch(SQLException e){
-            // System.out.println("Hello deletePost failed");
-
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
@@ -332,14 +413,17 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //            disConnect();
             return posts;
         }
-        catch(SQLException e){
-//            disConnect();
+        catch(SQLException e){return null;}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
+
             return null;
         }
     }
 
     ///===========ADDRESS DETAILS TABLE==============///
-    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
+    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) throws DataBaseFailedException {
         int t;
         try {
             String sql = "INSERT INTO AddressDetails(street, numOfBuilding, timeFromUni, "+
@@ -358,12 +442,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.executeUpdate();
             setConstValue(addressDetailsIDString,t+1);
             return t;
-        } catch (SQLException e) {
+        }
+        catch(SQLException e){return -1;}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
             return -1;
         }
     }
 
-    public void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
+    public void updateAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) throws DataBaseFailedException {
         //we need to compare if
         String sql = "UPDATE AddressDetails SET timeFromUni= ? , "
                 + "neighborhood= ? ,  "
@@ -385,21 +473,29 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             // update
             pstmt.executeUpdate();
             // System.out.println("update done");
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
-    public void deleteAddressDetailsRecord(String id) {
+    public void deleteAddressDetailsRecord(String id) throws DataBaseFailedException {
         String sql = "DELETE FROM AddressDetails WHERE addressDetailsNum= id";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
-        } catch (SQLException e) {}
+        }
+        catch(SQLException e){}
+        catch (Exception e) {
+            MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
+            throw new DataBaseFailedException("drop th contacts table", 4);
+        }
     }
     ///===========CONTACTS TABLE==============///
 
-    public void addContactsRecord(String phone, String name) {
+    public void addContactsRecord(String phone, String name) throws DataBaseFailedException {
         try {
             String sql = "INSERT INTO Contacts(phone, name)"+
                     " VALUES(?,?)";
@@ -409,13 +505,17 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(2, name);
             pstmt.executeUpdate();
             //System.out.println("Added");
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
     ///===========APARTMENT_CONTACTS TABLE==============///
 
-    public void addApartmentContactsRecord(String apartmentID , String phoneNumber) {
+    public void addApartmentContactsRecord(String apartmentID , String phoneNumber) throws DataBaseFailedException {
         try {
             String sql = "INSERT INTO ApartmentContacts(apartmentID, phoneNumber)"+
                     " VALUES(?,?)";
@@ -425,13 +525,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(2, phoneNumber);
             pstmt.executeUpdate();
             //System.out.println("Added");
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
     ///===========APARTMENT TABLE==============///
 
-    public String addApartmentRecord(Apartment apartment,int addressDetails_ID) {
+    public String addApartmentRecord(Apartment apartment,int addressDetails_ID) throws DataBaseFailedException {
         int t=-1;
         try {
             String sql = "INSERT INTO Apartment(apartmentID, numOfRooms, floor, size, cost, addressDetailsID, " +
@@ -460,9 +563,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.executeUpdate();
             setConstValue(apartmentIDString,t+1);
             //System.out.println("Added");
-        } catch (SQLException e) {
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
             return e.toString();
-            //System.out.println(e.getMessage());
         }
         return ""+t;
     }
@@ -470,7 +576,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                                      int size, int cost, int addressDetailsID,
                                      int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                                      int balcony, int furniture, int numberOfMates
-    ) {
+    ) throws DataBaseFailedException {
         int t=-1;
         try {
             String sql = "INSERT INTO Apartment(apartmentID, numOfRooms, floor, size, cost, addressDetailsID, " +
@@ -499,14 +605,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.executeUpdate();
             setConstValue(apartmentIDString,t+1);
             //System.out.println("Added");
-        } catch (SQLException e) {
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             return e.toString();
-            //System.out.println(e.getMessage());
         }
         return ""+t;
     }
 
-    public void deleteApartmentRecord(String id) {
+    public void deleteApartmentRecord(String id) throws DataBaseFailedException {
         String sql = "SELECT addressDetailsID FROM Apartment WHERE apartmentID= "+id;
         int t=-1;
         try {
@@ -514,7 +622,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             ResultSet rs= pstmt.executeQuery(sql);
             t= rs.getInt(1);
         }
-        catch(SQLException e){ }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         if(!moreApartmentsWithAddressDetailsNum(""+t))
             deleteAddressDetailsRecord(""+t);
 
@@ -523,15 +635,22 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
         }
-        catch(SQLException e){ }
-
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         //apartmentContacts
         sql = "DELETE FROM ApartmentContacts WHERE apartmentID= "+id;
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
         }
-        catch(SQLException e){ }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
     }
 
     ///===========GET OBJECTS FROM DB==============///
@@ -549,8 +668,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             location.setAddress(address);
             location.setUniversity_distance(rs.getInt(3));
             location.setNeighborhood(rs.getString(4));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            return null;
         }
         return location;
     }
@@ -583,8 +705,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             apartment.setNumberOfMates(rs.getInt(14));
             apartment.setApartmentLocation(location);
             return apartment;
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){return null;}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             return null;
         }
     }
@@ -635,8 +759,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 results.add(temp);
             }
 
-        } catch (SQLException e) { }
-//        disConnect();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
+        }
         SearchResults searchResults= new SearchResults(results);
         return searchResults;
     }
@@ -661,7 +789,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 apartments.add(temp);
             }
 
-        } catch (SQLException e) { }
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
 //        disConnect();
         return apartments;
     }
@@ -680,8 +812,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 tempContact= new Contact(rs.getString(2),rs.getString(1));
                 contacts.add(tempContact);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
         }
         return  contacts;
     }
@@ -698,8 +832,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             } else {
                 return false;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
         }
         return false;
     }
@@ -714,23 +850,28 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             if (rs.next()) { return true; }
             else { return false; }
         }
-        catch (SQLException e) { }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
         return false;
     }
 
-    public void deleteAllRecords(String tablaName){
+    public void deleteAllRecords(String tablaName) throws DataBaseFailedException {
         String sql = "DELETE FROM ?;";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, tablaName);
             pstmt.executeUpdate();
         }
-        catch(SQLException e){
-            // System.out.println("Hello deletePost failed");
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
-    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures){ //func that will be used by the client (Android App)
+    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures) throws DataBaseFailedException { //func that will be used by the client (Android App)
         LocalDateTime now = LocalDateTime.now();
         try {
             String sql = "INSERT INTO SearchRecord(searchDate, neighborhood,"+
@@ -747,10 +888,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(7, furnitures);
 
             pstmt.executeUpdate();
-        } catch (SQLException e) { }
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
     }
 
-    public void updateApartmentRecord(Apartment apartment, String apartmentid) {
+    public void updateApartmentRecord(Apartment apartment, String apartmentid) throws DataBaseFailedException {
         try {
             String sql = "UPDATE Apartment SET numOfRooms=? , floor=? , size=? , cost=? ,  " +
                     "garden=? , gardenSize=? , protectedSpace=? , warehouse=? , animal=? , " +
@@ -774,12 +920,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(13, apartmentid);
             pstmt.executeUpdate();
             //System.out.println("Added");
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage());
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
-    public int isApartmentExist(Apartment apartment) {
+    public int isApartmentExist(Apartment apartment) throws DataBaseFailedException {
         Set<Contact> contacts = apartment.getContacts();
         for (Contact eachcotact : contacts) {
             Statement stmt = null;
@@ -796,8 +945,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }
+            catch(SQLException e){}
+            catch (Exception e){
+                MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+                throw new DataBaseFailedException("drop th contacts table",4);
             }
         }
         return -1;
@@ -814,13 +966,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             if (rs.next()) {
                 return rs.getInt(1);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+
         return -1;
     }
 
-    public void addApartmentDerivatives(Apartment apartment, String postID){
+    public void addApartmentDerivatives(Apartment apartment, String postID) throws DataBaseFailedException {
         int tempForAddressDetaileNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress());
         String tempForApartment;
         if (tempForAddressDetaileNum==-1) {
@@ -855,7 +1010,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         updateApartmentIDInPostRecord(postID,""+tempForApartment);
     }
 
-    public void updateApartmentIDInPostRecord(String postID, String apartmentID){
+    public void updateApartmentIDInPostRecord(String postID, String apartmentID) throws DataBaseFailedException {
         String sql= "UPDATE Posts SET apartmentID= ? "
                 + "WHERE postID= ?";
         try{
@@ -863,12 +1018,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(1, apartmentID);
             pstmt.setString(2, postID);
             pstmt.executeUpdate();
-        } catch (SQLException e) {
-            //System.out.println(e.getMessage())
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
-    public void updateApartmentDerivatives(Apartment apartment,String apartmentID){
+    public void updateApartmentDerivatives(Apartment apartment,String apartmentID) throws DataBaseFailedException {
         //AddressDetailsRecord will not change
         updateApartmentRecord(apartment, apartmentID);
         Set<Contact> contacts= apartment.getContacts();
@@ -878,12 +1036,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
-//        DataBaseConnection a=new DataBaseConnection();
+        DataBaseConnection a=new DataBaseConnection();
 //        a.connect();
-//        a.resetAllTables();
-//        a.resetConstValueTable();;
+        a.resetContactsTable();//       a.resetAllTables();
+//        a.resetC.onstValueTable();
 //        a.disConnect();
         Date date = new Date();
         Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
@@ -947,15 +1105,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "תל אביב-יפו\n" +
                 "מעולה לסטודנטים. ו' הישנה. 100 מטר משער הכניסה לאוניברסיטה.מזגנים בחדרים. ריהוט חלקי. כניסה מיידית. השכירות לטווח ארוך.",null);
 
-        ServerController serverController= new ServerController();
-//        serverController.newPost(p1);
-        serverController.newPost(p2);
-        serverController.newPost(p3);
-        serverController.newPost(p4);
-        serverController.newPost(p5);
-        serverController.newPost(p6);
-        serverController.newPost(p7);
-        serverController.newPost(p8);
+//        ServerController serverController= new ServerController();
+////        serverController.newPost(p1);
+//        serverController.newPost(p2);
+//        serverController.newPost(p3);
+//        serverController.newPost(p4);
+//        serverController.newPost(p5);
+//        serverController.newPost(p6);
+//        serverController.newPost(p7);
+//        serverController.newPost(p8);
 
 
 //        Date date = new Date();

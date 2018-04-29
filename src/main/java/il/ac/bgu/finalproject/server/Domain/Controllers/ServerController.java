@@ -2,6 +2,7 @@ package il.ac.bgu.finalproject.server.Domain.Controllers;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.util.List;
 
@@ -14,14 +15,14 @@ public class ServerController {
         dbController = new DataBaseRequestController();
     }
 
-    public Post getPost(String id){
+    public Post getPost(String id) throws DataBaseFailedException {
         dbController.connect();
         Post post= dbController.getPost(id);
         dbController.disconnect();
         return post;
     }
 
-    public void newPost(Post ourPost){
+    public void newPost(Post ourPost) throws DataBaseFailedException {
         dbController.connect();
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
@@ -29,7 +30,7 @@ public class ServerController {
         dbController.disconnect();
     }
 
-    public void updatePost(Post ourPost){
+    public void updatePost(Post ourPost) throws DataBaseFailedException {
         dbController.connect();
         dbController.updatePost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
@@ -38,15 +39,13 @@ public class ServerController {
         dbController.disconnect();
     }
 
-    public void deletePost(String id)
-    {
+    public void deletePost(String id) throws DataBaseFailedException {
         dbController.connect();
         dbController.deletePost(id);
         dbController.disconnect();
     }
 
-    public List<String> getAllPostsId()
-    {
+    public List<String> getAllPostsId() throws DataBaseFailedException {
         dbController.connect();
         List<String> postsID= dbController.getAllPostsId();
         dbController.disconnect();
