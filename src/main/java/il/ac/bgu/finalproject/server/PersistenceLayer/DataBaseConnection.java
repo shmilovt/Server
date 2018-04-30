@@ -22,6 +22,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private  String apartmentIDString ="apartmentID";
 
     public void connect() throws DataBaseFailedException {
+//        String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
         String url = "jdbc:sqlite:ApartmentBS.db";
         try {
             conn = DriverManager.getConnection(url);
@@ -1044,16 +1045,80 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
+    public void resetUserSuggestionsTable() throws DataBaseFailedException {
+        String sql= "DROP TABLE userSuggestions";
+//        try {
+//            PreparedStatement pstmt = conn.prepareStatement(sql);;
+//            pstmt.executeUpdate();
+//        }
+//        catch(SQLException e){}
+//        catch (Exception e){
+//            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
+//        }
+
+        sql= "CREATE TABLE UserSuggestions(\n" +
+                "  apartmentID text NOT NULL,\n" +
+                "  field text NOT NULL,\n" +
+                "  suggestion text NOT NULL,\n" +
+                "  counter int NOT NULL,\n" +
+                "  FOREIGN KEY(apartmentID) REFERENCES apartment(apartmentID),\n" +
+                "  PRIMARY KEY(apartmentID, field, suggestion)" +
+                ")";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("create the contacts table",4);}
+    }
+    public int getUserSuggestionsNum (String id, String field, String suggestion) {
+        int value=-1;
+        try {
+            String sql = "SELECT counter FROM UserSuggestions " +
+                    " WHERE apartmentID= " + id+" AND field= "+field+
+                    " AND suggestion= " + suggestion;
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            value= rs.getInt(1);
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return -1;
+        }
+        return value;
+    }
+    public void setUserSuggestions (String id, String field, String suggestion, int count) throws DataBaseFailedException {
+        try {
+            String sql = "UPDATE UserSuggestions SET counter= ? " +
+                    " WHERE apartmentID= ? AND field= ? AND suggestion= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1,count);
+            pstmt.setString(2,id);
+            pstmt.setString(3,field);
+            pstmt.setString(4,suggestion);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+
     public static void main(String[] args) throws Exception
     {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
 //        a.resetContactsTable();//
-//
+        a.resetUserSuggestionsTable();
         a.resetAllTables();
         a.resetConstValueTable();
-//        a.resetC.onstValueTable();
         a.disConnect();
+
         Date date = new Date();
         Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
                 "כולל מדיח כלים אינטגרלי, מזגן מיני מרכזי, מזגנים עיליים בכל חדר (אינוורטר). תריסי אור חשמליים בכל הבית. 1200 שח\n" +

@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.sql.Connection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,8 @@ import static org.junit.Assert.assertTrue;
 
 public class DataBaseConnectionTest {
     private static DataBaseConnection dbc = new DataBaseConnection();
+    private static Connection testConn = null;
+
 
     @BeforeClass
     public static void setup() throws DataBaseFailedException {
@@ -28,7 +31,7 @@ public class DataBaseConnectionTest {
     @AfterClass
     public static void endup() throws DataBaseFailedException {
 
-        dbc.disConnect();
+//        dbc.disConnect();
     }
 
 
