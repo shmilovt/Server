@@ -59,4 +59,10 @@ public class DataBaseRequestController {
     public SearchResults allResultsRecordsFromDB() {
         return dataBaseConnectionInterface.allResultsFromDB();
     }
+
+
+
+
+
+
 }

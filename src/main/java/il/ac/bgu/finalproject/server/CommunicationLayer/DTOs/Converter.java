@@ -79,7 +79,7 @@ public class Converter {
                    MustHaveQuery mustHaveQuery4 = new MustHaveQuery(MustHaveQuery.MustHaveThing.warehouse);
                    categoryQueries.add(mustHaveQuery4);
                    break;
-               default:/*  throw exception  */
+               default:
                    break;
            }
         }
@@ -115,6 +115,7 @@ public class Converter {
             tempResultRecordDTO.setContacts(contactDTOS);
 
             resultRecordDTOS[i] = tempResultRecordDTO;
+            i++;
         }
         SearchResultsDTO searchResultsDTO= new SearchResultsDTO(resultRecordDTOS);
         return searchResultsDTO;

@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
+import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
@@ -21,7 +22,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private  String apartmentIDString ="apartmentID";
 
     public void connect() throws DataBaseFailedException {
-        String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
+        String url = "jdbc:sqlite:ApartmentBS.db";
         try {
             conn = DriverManager.getConnection(url);
         }
@@ -267,7 +268,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         sql=  "CREATE TABLE Posts(\n" +
                 "  postID int PRIMARY KEY,\n" +
-                "  dateOfPublish Date,\n" +
+                "  dateOfPublish text,\n" +
                 "  publisherName text,\n" +
                 "  postText text,\n" +
                 "  apartmentID int,\n" +
@@ -718,12 +719,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         List<ResultRecord> results = new LinkedList<ResultRecord>();
         ResultRecord temp;
         try {
-            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, /*size,*/ balcony, " +
+            String sql = "SELECT Apartment.apartmentID , Apartment.addressDetailsID, floor, cost, Apartment.size, balcony, " +
                     "garden, animal, warehouse, protectedSpace, furniture, numOfRooms, numberOfMates, "
                     + "dateOfPublish, postText"
                     + " FROM Apartment"
                     + " JOIN Posts P ON Apartment.apartmentID = P.apartmentID";
             Statement stmt = conn.createStatement();
+            System.out.println("fdfdf");
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 Set<Contact> contacts = getApartmentContacts(rs.getString(1));
@@ -745,8 +747,14 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 temp.setFurniture(rs.getInt(11));
                 temp.setNumberOfRooms(rs.getDouble(12));
                 temp.setNumberOfRoomates(rs.getInt(13));
-                temp.setDateOfPublish(rs.getDate(14).toString());
-                temp.setText(rs.getString(rs.getInt(15)));
+//                java.sql.Date date = rs.getDate(14);
+//                if(date!=null)
+                rs.getString(14);
+                 temp.setDateOfPublish(rs.getString(14));
+//                else{
+//                    temp.setDateOfPublish("");
+//                }
+                temp.setText(rs.getString(15));
                 Contact [] contactsArray= new Contact [contacts.size()] ;
                 int i=0;
                 for (Contact con: contacts){
@@ -760,7 +768,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             }
 
         }
-        catch(SQLException e){}
+        catch(SQLException e){System.out.println(e);}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
 //            throw new DataBaseFailedException("drop th contacts table",4);
@@ -1039,10 +1047,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     public static void main(String[] args) throws Exception
     {
         DataBaseConnection a=new DataBaseConnection();
-//        a.connect();
-        a.resetContactsTable();//       a.resetAllTables();
+        a.connect();
+//        a.resetContactsTable();//
+//
+        a.resetAllTables();
+        a.resetConstValueTable();
 //        a.resetC.onstValueTable();
-//        a.disConnect();
+        a.disConnect();
         Date date = new Date();
         Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
                 "כולל מדיח כלים אינטגרלי, מזגן מיני מרכזי, מזגנים עיליים בכל חדר (אינוורטר). תריסי אור חשמליים בכל הבית. 1200 שח\n" +
@@ -1105,15 +1116,15 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "תל אביב-יפו\n" +
                 "מעולה לסטודנטים. ו' הישנה. 100 מטר משער הכניסה לאוניברסיטה.מזגנים בחדרים. ריהוט חלקי. כניסה מיידית. השכירות לטווח ארוך.",null);
 
-//        ServerController serverController= new ServerController();
-////        serverController.newPost(p1);
-//        serverController.newPost(p2);
-//        serverController.newPost(p3);
-//        serverController.newPost(p4);
-//        serverController.newPost(p5);
-//        serverController.newPost(p6);
-//        serverController.newPost(p7);
-//        serverController.newPost(p8);
+        ServerController serverController= new ServerController();
+//        serverController.newPost(p1);
+        serverController.newPost(p2);
+        serverController.newPost(p3);
+        serverController.newPost(p4);
+        serverController.newPost(p5);
+        serverController.newPost(p6);
+        serverController.newPost(p7);
+        serverController.newPost(p8);
 
 
 //        Date date = new Date();

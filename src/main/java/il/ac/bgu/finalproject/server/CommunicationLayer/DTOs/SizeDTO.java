@@ -4,7 +4,7 @@ public class SizeDTO {
     private int minSize;
     private int maxSize;
 
-    public SizeDTO(){};
+    public SizeDTO(){}
 
     public SizeDTO(int minSize, int maxSize) {
         this.minSize = minSize;

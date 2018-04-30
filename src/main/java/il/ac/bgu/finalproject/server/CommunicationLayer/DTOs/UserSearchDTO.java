@@ -16,6 +16,15 @@ public class UserSearchDTO {
 
 
     public UserSearchDTO(){
+        priorities = new CategoryType[0];
+        neighborhood="";
+        distanceFromUniversity=-1;
+        floorDTO = new FloorDTO(-1, -1);
+        costDTO = new CostDTO(-1, -1);
+        sizeDTO = new SizeDTO(-1, -1);
+        furniture =  -1;
+        numberOfRooms = -1;
+        numberOfMates = -1;
     }
 
 

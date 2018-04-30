@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.Domain.Controllers;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchAlgorithm;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.util.List;
 
@@ -29,9 +30,18 @@ public class RegularClientController {
 
     public SearchResults searchApartments(List<CategoryQuery> categoryQueryList) {
         SearchAlgorithm searchAlgorithm = new SearchAlgorithm();
+        try {
+            dataBaseRequestController.connect();
+        } catch (DataBaseFailedException e) {
+            e.printStackTrace();
+        }
         SearchResults apartmentList = dataBaseRequestController.allResultsRecordsFromDB();
+        try {
+            dataBaseRequestController.disconnect();
+        } catch (DataBaseFailedException e) {
+            e.printStackTrace();
+        }
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
-
     }
 
 
