@@ -1,9 +1,8 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -31,6 +30,14 @@ public class DataBaseConnectionTest {
         dbc.disConnect();
     }
 
+    @Test
+    public void getPostByApartmentID() {
+        Post post= dbc.getPostByApartmentID("22");
+        if(post==null)
+            System.out.println("i want to die");
+        post.getPublisherName().toString();
+
+    }
 
     @Test
     public void addPost() throws DataBaseFailedException {
@@ -39,6 +46,17 @@ public class DataBaseConnectionTest {
         dbc.addPost("134", null, "nof2", "דירה מהממת", "2");
         dbc.addPost("144", null, "nof3", "דירה מהממת", "4");
         dbc.addPost("144", null, "mani", "דירה מדהימה", "5");
+        assertTrue(dbc.getPost("1") != null);
+        assertTrue(dbc.getPost("2") != null);
+        assertTrue(dbc.getPost("3") != null);
+        assertTrue(dbc.getPost("4") != null);
+        assertTrue(dbc.getPost("5") == null);
+        assertEquals("4", dbc.getPost("4").getApartmentID());
+        System.out.println(dbc.GetAllPostsId().toString());
+    }
+
+    @Test
+    public void getPost() throws DataBaseFailedException {
         assertTrue(dbc.getPost("1") != null);
         assertTrue(dbc.getPost("2") != null);
         assertTrue(dbc.getPost("3") != null);
@@ -71,6 +89,16 @@ public class DataBaseConnectionTest {
             System.out.println("emptyyyyy");
         for(Apartment item: apartmentsCollection){
             System.out.println(item.toString());
+        }
+    }
+    @Test
+    public void allResultsFromDB(){
+        SearchResults searchResults= dbc.allResultsFromDB();
+        List<ResultRecord> resultRecords= searchResults.getResultRecordList();
+        if (resultRecords.isEmpty())
+            System.out.println("empty");
+        for(ResultRecord item: resultRecords){
+            System.out.println(item.getStreet().toString());
         }
     }
 

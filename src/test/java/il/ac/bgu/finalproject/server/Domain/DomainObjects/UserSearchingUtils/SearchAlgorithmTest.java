@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
 import il.ac.bgu.finalproject.server.Domain.Controllers.DataBaseRequestController;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -10,11 +11,14 @@ public class SearchAlgorithmTest {
 
 
     @Test
-    public void filterIntersection() {
+    public void filterIntersection() throws DataBaseFailedException {
         DataBaseRequestController dbc=new DataBaseRequestController();
+        dbc.connect();
         SearchAlgorithm search= new SearchAlgorithm();
         SearchResults ResultRecordList= dbc.allResultsRecordsFromDB();
-
+//        for(ResultRecord item: ResultRecordList){
+//            System.out.println(item.getStreet().toString());
+//        }
         List<CategoryQuery> categories = new LinkedList<CategoryQuery>();
         CostQuery cost= new CostQuery(400,2000);
         SizeQuery size= new SizeQuery(60,100);
@@ -23,9 +27,10 @@ public class SearchAlgorithmTest {
 //        categories.add(must);
         SearchResults res= search.filterIntersection(ResultRecordList, categories);
         List<ResultRecord> list = res.getResultRecordList();
-         for(ResultRecord item: list){
-            System.out.println(item.toString());
+        for(ResultRecord item: list){
+            System.out.println(item.getStreet().toString());
         }
+        dbc.disconnect();
     }
 
     @Test

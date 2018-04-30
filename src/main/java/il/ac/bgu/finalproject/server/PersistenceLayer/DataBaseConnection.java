@@ -9,7 +9,10 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 
 public class DataBaseConnection implements DataBaseConnectionInterface {
@@ -122,6 +125,70 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){}
         catch (Exception e){
 
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+
+    public void resetUserSuggestionsTable() throws DataBaseFailedException {
+        String sql= "DROP TABLE contacts";
+//        try {
+//            PreparedStatement pstmt = conn.prepareStatement(sql);;
+//            pstmt.executeUpdate();
+//        }
+//        catch(SQLException e){}
+//        catch (Exception e){
+//            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
+//        }
+
+        sql= "CREATE TABLE UserSuggestions(\n" +
+                "  apartmentID text NOT NULL,\n" +
+                "  field text NOT NULL,\n" +
+                "  suggestion text NOT NULL,\n" +
+                "  counter int NOT NULL,\n" +
+                "  FOREIGN KEY(apartmentID) REFERENCES apartment(apartmentID),\n" +
+                "  PRIMARY KEY(apartmentID, field, suggestion)" +
+                ")";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("create the contacts table",4);}
+    }
+    public int getUserSuggestionsNum (String id, String field, String suggestion) {
+        int value=-1;
+        try {
+            String sql = "SELECT counter FROM UserSuggestions " +
+                    " WHERE apartmentID= " + id+" AND field= "+field+
+                    " AND suggestion= " + suggestion;
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            value= rs.getInt(1);
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return -1;
+        }
+        return value;
+    }
+    public void setUserSuggestions (String id, String field, String suggestion, int count) throws DataBaseFailedException {
+        try {
+            String sql = "UPDATE UserSuggestions SET counter= ? " +
+                    " WHERE apartmentID= ? AND field= ? AND suggestion= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1,count);
+            pstmt.setString(2,id);
+            pstmt.setString(3,field);
+            pstmt.setString(4,suggestion);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("drop th contacts table",4);
         }
@@ -369,20 +436,35 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public Post getPost(String id) {
-        try {
-            String sql = "SELECT * FROM posts where postID =" + "'" + id + "'";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            Post post = new Post(rs.getString(1), rs.getDate(2),
-                    rs.getString(3), rs.getString(4),
-                    rs.getString(5));
-            return post;
-        }
-        catch (SQLException e) {return null;}
-        catch (Exception e) {
-            MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
-            return null;
-        }
+            try {
+                String sql = "SELECT * FROM posts where postID =" + "'" + id + "'";
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+                Post post = new Post(rs.getString(1), rs.getDate(2),
+                        rs.getString(3), rs.getString(4),
+                        rs.getString(5));
+                return post;
+            }
+            catch (SQLException e) {return null;}
+            catch (Exception e) {
+                MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
+                return null;
+            }
+//        try {
+//            String sql = "SELECT postID, dateOfPublish, publisherName, postText, apartmentID " +
+//                    "FROM posts WHERE postID =" + "'" + id + "'";
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql);
+//            Post post = new Post(rs.getString(1), rs.getDate(2),
+//                    rs.getString(3), rs.getString(4),
+//                    rs.getString(5));
+//            return post;
+//        }
+//        catch (SQLException e) {return  null;}
+//        catch (Exception e) {
+//            MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
+//            return null;
+//        }
     }
 
     public void deletePost(String id) throws DataBaseFailedException {
@@ -413,7 +495,9 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //            disConnect();
             return posts;
         }
-        catch(SQLException e){return null;}
+        catch(SQLException e){
+            return null;
+        }
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
 //            throw new DataBaseFailedException("drop th contacts table",4);
@@ -718,16 +802,19 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         List<ResultRecord> results = new LinkedList<ResultRecord>();
         ResultRecord temp;
         try {
-            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, /*size,*/ balcony, " +
-                    "garden, animal, warehouse, protectedSpace, furniture, numOfRooms, numberOfMates, "
-                    + "dateOfPublish, postText"
-                    + " FROM Apartment"
-                    + " JOIN Posts P ON Apartment.apartmentID = P.apartmentID";
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, Apartment.size, balcony, " +
+                    "garden, animal, warehouse, protectedSpace, furniture, numOfRooms, numberOfMates "+
+                    " FROM Apartment";
+// JOIN Posts P ON Apartment.apartmentID = P.apartmentID";
             Statement stmt = conn.createStatement();
+            System.out.println("1");
             ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("1");
             while (rs.next()) {
+                System.out.println("1");
                 Set<Contact> contacts = getApartmentContacts(rs.getString(1));
                 ApartmentLocation location = getAddressDetils(rs.getInt(2));
+                Post post= getPostByApartmentID(rs.getString(1));
 
                 temp = new ResultRecord();
                 temp.setStreet(location.getAddress().getStreet());
@@ -745,8 +832,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 temp.setFurniture(rs.getInt(11));
                 temp.setNumberOfRooms(rs.getDouble(12));
                 temp.setNumberOfRoomates(rs.getInt(13));
-                temp.setDateOfPublish(rs.getDate(14).toString());
-                temp.setText(rs.getString(rs.getInt(15)));
+                if(post==null){
+                    Date date=new Date();
+                    temp.setDateOfPublish(date.toString());
+                }
+                else
+                    temp.setDateOfPublish(post.getDateOfPublish().toString());
+                temp.setText(rs.getString(post.getText()));
                 Contact [] contactsArray= new Contact [contacts.size()] ;
                 int i=0;
                 for (Contact con: contacts){
@@ -767,6 +859,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         SearchResults searchResults= new SearchResults(results);
         return searchResults;
+    }
+
+    public Post getPostByApartmentID(String id) {
+        try {
+            String sql = "SELECT postID, dateOfPublish, publisherName, postText, apartmentID" +
+                    " FROM Posts WHERE apartmentID = '" + id +"'" ;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            Post post = new Post(rs.getString(1), rs.getDate(2),
+                    rs.getString(3), rs.getString(4),
+                    rs.getString(5));
+            return post;
+        }
+        catch (SQLException e) {return null;}
+        catch (Exception e) {
+            MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
+            return null;
+        }
     }
 
     public List<Apartment> allApartmentFromDB () {
@@ -1036,75 +1146,77 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
+
+
     public static void main(String[] args) throws Exception
     {
         DataBaseConnection a=new DataBaseConnection();
-//        a.connect();
-        a.resetContactsTable();//       a.resetAllTables();
-//        a.resetC.onstValueTable();
-//        a.disConnect();
-        Date date = new Date();
-        Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
-                "כולל מדיח כלים אינטגרלי, מזגן מיני מרכזי, מזגנים עיליים בכל חדר (אינוורטר). תריסי אור חשמליים בכל הבית. 1200 שח\n" +
-                "לפרטים: \n" +
-                "ניר - 054-9449978 חן- 054-5802333",null);
-        Post p2=new Post("121213",date,"mikey1","יחידת דיור להשכרה בהר בוקר 26, זוהי יחידת דיור קרקע הכוללת : סלון, חדר שינה, חדר ממד וגינה .\n" +
-                "בדירה ישנו מיזוג גם בסלון וגם בחדר שינה , והדירה נכללת עם מיטה , ארון , פינת אוכל,סלון, מיקרוגל, תנור אובן, ועוד.\n" +
-                "הדירה מעולה לזוגות , לשותפים , סטודנטים ..\n" +
-                "(החדר מדד הוא מעבר דרך החדר שינה- יתאים לשותפים שהם חברים טובים או פתוחים אחד עם השני בלי קשר וכו׳)\n" +
-                "20 דק הליכה מהאוניברסיטה ו7 דק בתחבורה הציבורית.\n" +
-                "העלות של הדירה היא 2800 כולל מים ארנונה חשמל וכבלים!!!\n" +
-                "*ישנה אפשרות לבעלי חיים\n" +
-                "לפרטים :\n" +
-                "שירה 0546559992",null);
-        Post p3=new Post("121214",date,"mikey2","שאול המלך דירת 2 חדרים קומה קרקע כניסה מידית רק 1800\n" +
-                "₪ 1,800\n" +
-                "Беэр-Шева\n" +
-                "0546329669 דודי נכסים",null);
-        Post p4=new Post("121215",date,"mikey3","דירה 2 חדרים כ50 מ\"ר\n" +
-                "מתאימה לזוג או ליחיד \n" +
-                "נשאר בדירה מקרר ארון ומיטה\n" +
-                "הדירה נמצאת 2 דקות מכל המסעדות ברינגנבלום ו5 דקות מהאוניברסיטה\n" +
-                "(דירה לכל דבר לא יחידת דיור)\n" +
-                "רחוב שמעון ברנפלד 26\n" +
-                "אפשר ליצור קשר איתי ב 0524188278 \n" +
-                "או קיריל 0527021623",null);
-        Post p5=new Post("121216",date,"mikey4","למהירי החלטה דירת 4 חדרים להשכרה בשכונה ה המבוקשת ברחוב הצבי במיקום מרכזי במרחק הליכה מגרנד קניון, בית כנסת הכיפה, מוסדות חינוך, תחבורה ציבורית ומרכזי קניות\n" +
-                "דירה מרווחת ומתוכננת היטב בבניין בן 8 קומות כולל מעלית, ללא ריהוט.\n" +
-                "כניסה מיידית!!! ללא תיווך\n" +
-                "שכ\"ד: 2900ש\"ח בחודש\n" +
-                "וועד: 170ש\"ח בחודש\n" +
-                "ארנונה:650 ש\"ח לחודשיים.\n" +
-                "לפרטים נוספים ניתן ליצור קשר\n" +
-                "0549902222/0537476855",null);
-        Post p6=new Post("121217",date,"mikey5","***לסטודנטים ללא תיווך! ***\n" +
-                "להשכרה בשכונה ג,ברחוב יד ושם 24 מגדל בית שיאים, קומה 8 עם מעלית .\n" +
-                "דירת חדר שינה וסלון מרוהטת, שכונה שקטה במיקום מעולה.\n" +
-                "רבע שעה הליכה לקניון הנגב והרכבת, חמש דקות הליכה למכללה למנהל, חמש דקות נסיעה לבן גוריון\n" +
-                "מחיר 1850.\n" +
-                "יש עלות ועד בנין על סך 250 ש\"ח\n" +
-                "לפרטים וסיור בנכס:\n" +
-                "בן0524446286\n" +
-                "דוד 0544293989",null);
-        Post p7=new Post("121218",date,"mikey5","השכרה !! מגוון דירות סביב האוניברסיטה ללא דמי תיווך, לסטודנטים ולמורים בלבד!\n" +
-                "דירות ל2 3 ו4 שותפים\n" +
-                "-דירות עם שירותים ומקלחת פרטיים משופצות ומאובזרות\n" +
-                "-כניסות החל מ1.9 \n" +
-                "-דירות שמנוהלות עי חברת\n" +
-                "לדוגמא דירת 3 חדרים קרקע בשכונה ד' - 10 דק' מהאוניברסיטה\n" +
-                "מתאימה לזוג שותפים\n" +
-                "-בכל חדר שירותים ומקלחת לכל דייר\n" +
-                "-מאובזרת קומפלט\n" +
-                "מחיר - 2500 שח ללא חשבונות\n" +
-                "\n" +
-                "-מוזמנים לשלוח מספר טלפון בפוסט זה או לשלוח הודעה למספר 0525447662\n" +
-                "כל מי שמשאיר טלפון נכנס לרשימת תפוצה שבה ישלחו מגוון דירות להשכרה לשנת הלימודים הקרובה בהתאם לצרכים שלכם.\n" +
-                "נדאג למצוא לכל אחד את הדירה שתתאים לו! וכמובן סטודנטים ללא דמי תיווך!",null);
-        Post p8=new Post("121219",date,"mikey","להשכרה דירת 4.5 חדרים ללא דמי תיווך\n" +
-                "₪ 2,800\n" +
-                "תל אביב-יפו\n" +
-                "מעולה לסטודנטים. ו' הישנה. 100 מטר משער הכניסה לאוניברסיטה.מזגנים בחדרים. ריהוט חלקי. כניסה מיידית. השכירות לטווח ארוך.",null);
-
+        a.connect();
+        a.resetUserSuggestionsTable();
+//        a.resetAllTables();
+        a.disConnect();
+//        Date date = new Date();
+//        Post p1=new Post("121212",date,"mikey","וילה להשכרה ברח' אברהם יפה, רמות, באר שבע. מפלס אחד, חדשה מקבלן(קבלת מפתח לפני פחות מחודש). 5 חדרים ובנוסף יחידת דיור נוספת של 60 מטר (אופציונאלית). הכל חדש, ריצוף מטר על מטר, מטבח אינטגרלי לבן זכוכית של מטבחי זיו, חדרים ענקיים.\n" +
+//                "כולל מדיח כלים אינטגרלי, מזגן מיני מרכזי, מזגנים עיליים בכל חדר (אינוורטר). תריסי אור חשמליים בכל הבית. 1200 שח\n" +
+//                "לפרטים: \n" +
+//                "ניר - 054-9449978 חן- 054-5802333",null);
+//        Post p2=new Post("121213",date,"mikey1","יחידת דיור להשכרה בהר בוקר 26, זוהי יחידת דיור קרקע הכוללת : סלון, חדר שינה, חדר ממד וגינה .\n" +
+//                "בדירה ישנו מיזוג גם בסלון וגם בחדר שינה , והדירה נכללת עם מיטה , ארון , פינת אוכל,סלון, מיקרוגל, תנור אובן, ועוד.\n" +
+//                "הדירה מעולה לזוגות , לשותפים , סטודנטים ..\n" +
+//                "(החדר מדד הוא מעבר דרך החדר שינה- יתאים לשותפים שהם חברים טובים או פתוחים אחד עם השני בלי קשר וכו׳)\n" +
+//                "20 דק הליכה מהאוניברסיטה ו7 דק בתחבורה הציבורית.\n" +
+//                "העלות של הדירה היא 2800 כולל מים ארנונה חשמל וכבלים!!!\n" +
+//                "*ישנה אפשרות לבעלי חיים\n" +
+//                "לפרטים :\n" +
+//                "שירה 0546559992",null);
+//        Post p3=new Post("121214",date,"mikey2","שאול המלך דירת 2 חדרים קומה קרקע כניסה מידית רק 1800\n" +
+//                "₪ 1,800\n" +
+//                "Беэр-Шева\n" +
+//                "0546329669 דודי נכסים",null);
+//        Post p4=new Post("121215",date,"mikey3","דירה 2 חדרים כ50 מ\"ר\n" +
+//                "מתאימה לזוג או ליחיד \n" +
+//                "נשאר בדירה מקרר ארון ומיטה\n" +
+//                "הדירה נמצאת 2 דקות מכל המסעדות ברינגנבלום ו5 דקות מהאוניברסיטה\n" +
+//                "(דירה לכל דבר לא יחידת דיור)\n" +
+//                "רחוב שמעון ברנפלד 26\n" +
+//                "אפשר ליצור קשר איתי ב 0524188278 \n" +
+//                "או קיריל 0527021623",null);
+//        Post p5=new Post("121216",date,"mikey4","למהירי החלטה דירת 4 חדרים להשכרה בשכונה ה המבוקשת ברחוב הצבי במיקום מרכזי במרחק הליכה מגרנד קניון, בית כנסת הכיפה, מוסדות חינוך, תחבורה ציבורית ומרכזי קניות\n" +
+//                "דירה מרווחת ומתוכננת היטב בבניין בן 8 קומות כולל מעלית, ללא ריהוט.\n" +
+//                "כניסה מיידית!!! ללא תיווך\n" +
+//                "שכ\"ד: 2900ש\"ח בחודש\n" +
+//                "וועד: 170ש\"ח בחודש\n" +
+//                "ארנונה:650 ש\"ח לחודשיים.\n" +
+//                "לפרטים נוספים ניתן ליצור קשר\n" +
+//                "0549902222/0537476855",null);
+//        Post p6=new Post("121217",date,"mikey5","***לסטודנטים ללא תיווך! ***\n" +
+//                "להשכרה בשכונה ג,ברחוב יד ושם 24 מגדל בית שיאים, קומה 8 עם מעלית .\n" +
+//                "דירת חדר שינה וסלון מרוהטת, שכונה שקטה במיקום מעולה.\n" +
+//                "רבע שעה הליכה לקניון הנגב והרכבת, חמש דקות הליכה למכללה למנהל, חמש דקות נסיעה לבן גוריון\n" +
+//                "מחיר 1850.\n" +
+//                "יש עלות ועד בנין על סך 250 ש\"ח\n" +
+//                "לפרטים וסיור בנכס:\n" +
+//                "בן0524446286\n" +
+//                "דוד 0544293989",null);
+//        Post p7=new Post("121218",date,"mikey5","השכרה !! מגוון דירות סביב האוניברסיטה ללא דמי תיווך, לסטודנטים ולמורים בלבד!\n" +
+//                "דירות ל2 3 ו4 שותפים\n" +
+//                "-דירות עם שירותים ומקלחת פרטיים משופצות ומאובזרות\n" +
+//                "-כניסות החל מ1.9 \n" +
+//                "-דירות שמנוהלות עי חברת\n" +
+//                "לדוגמא דירת 3 חדרים קרקע בשכונה ד' - 10 דק' מהאוניברסיטה\n" +
+//                "מתאימה לזוג שותפים\n" +
+//                "-בכל חדר שירותים ומקלחת לכל דייר\n" +
+//                "-מאובזרת קומפלט\n" +
+//                "מחיר - 2500 שח ללא חשבונות\n" +
+//                "\n" +
+//                "-מוזמנים לשלוח מספר טלפון בפוסט זה או לשלוח הודעה למספר 0525447662\n" +
+//                "כל מי שמשאיר טלפון נכנס לרשימת תפוצה שבה ישלחו מגוון דירות להשכרה לשנת הלימודים הקרובה בהתאם לצרכים שלכם.\n" +
+//                "נדאג למצוא לכל אחד את הדירה שתתאים לו! וכמובן סטודנטים ללא דמי תיווך!",null);
+//        Post p8=new Post("121219",date,"mikey","להשכרה דירת 4.5 חדרים ללא דמי תיווך\n" +
+//                "₪ 2,800\n" +
+//                "תל אביב-יפו\n" +
+//                "מעולה לסטודנטים. ו' הישנה. 100 מטר משער הכניסה לאוניברסיטה.מזגנים בחדרים. ריהוט חלקי. כניסה מיידית. השכירות לטווח ארוך.",null);
+//
 //        ServerController serverController= new ServerController();
 ////        serverController.newPost(p1);
 //        serverController.newPost(p2);

@@ -1,13 +1,8 @@
-אפר 29, 2018 3:39:56 PM il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection addPost
-SEVERE: [SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Posts.postID)
-org.sqlite.SQLiteException: [SQLITE_CONSTRAINT_PRIMARYKEY]  A PRIMARY KEY constraint failed (UNIQUE constraint failed: Posts.postID)
-	at org.sqlite.core.DB.newSQLException(DB.java:909)
-	at org.sqlite.core.DB.newSQLException(DB.java:921)
-	at org.sqlite.core.DB.execute(DB.java:825)
-	at org.sqlite.core.DB.executeUpdate(DB.java:863)
-	at org.sqlite.jdbc3.JDBC3PreparedStatement.executeUpdate(JDBC3PreparedStatement.java:99)
-	at il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection.addPost(DataBaseConnection.java:325)
-	at il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnectionTest.addPost(DataBaseConnectionTest.java:37)
+אפר 30, 2018 10:31:50 PM il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection allResultsFromDB
+SEVERE: null
+java.lang.NullPointerException
+	at il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection.allResultsFromDB(DataBaseConnection.java:827)
+	at il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnectionTest.allResultsFromDB(DataBaseConnectionTest.java:83)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)

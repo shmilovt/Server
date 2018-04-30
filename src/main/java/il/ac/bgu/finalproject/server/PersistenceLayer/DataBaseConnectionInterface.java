@@ -69,6 +69,8 @@ public interface DataBaseConnectionInterface {
     void addApartmentDerivatives(Apartment apartment, String post) throws DataBaseFailedException;
     void updateApartmentDerivatives(Apartment apartment,String postID) throws DataBaseFailedException;
     SearchResults allResultsFromDB ();
+    Post getPostByApartmentID(String string);
+
 
     }
 
