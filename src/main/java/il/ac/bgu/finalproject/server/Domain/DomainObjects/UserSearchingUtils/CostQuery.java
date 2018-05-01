@@ -8,12 +8,13 @@ public class CostQuery extends CategoryQuery{
         this.max=max;
     }
 
+    @Override
     public boolean mainQuery(ResultRecord apartment){
         int cost= apartment.getCost();
         if(min==-1)
             return cost<=max;
         else if (max==-1)
-            return cost<=min;
+            return cost>=min;
         else return (cost<=max && cost>=min);
     }
 }

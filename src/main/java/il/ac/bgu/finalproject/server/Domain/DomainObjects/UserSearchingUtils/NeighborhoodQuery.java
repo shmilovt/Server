@@ -7,6 +7,7 @@ public class NeighborhoodQuery extends CategoryQuery {
         this.neighborhood= neighborhood;
     }
 
+    @Override
     public boolean mainQuery(ResultRecord apartment){
         String neighborhood= apartment.getNeighborhood();
         return neighborhood.equals(this.neighborhood);

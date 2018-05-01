@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class RelevantQuery extends CategoryQuery{
     public RelevantQuery(){};
-    private static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
+    public static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
 
 
     private Boolean timeBetweenDates(String givenDate){

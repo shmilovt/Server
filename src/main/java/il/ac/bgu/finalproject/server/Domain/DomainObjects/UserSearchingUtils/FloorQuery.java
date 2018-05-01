@@ -9,10 +9,13 @@ public class FloorQuery extends CategoryQuery{
         max=max;
     }
 
+    @Override
     public boolean mainQuery(ResultRecord apartment){
         int floor= apartment.getFloor();
-        if(floor>max && floor<min)
-            return false;
-        return true;
+        if(min==-1)
+            return floor<=max;
+        else if (max==-1)
+            return floor>=min;
+        else return (floor<=max && floor>=min);
     }
 }

@@ -25,16 +25,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private  String addressDetailsIDString ="addressDetailsID";
     private  String apartmentIDString ="apartmentID";
 
-    public void connect() throws DataBaseFailedException {
+    public void connect() {
 //        String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
         String url = "jdbc:sqlite:ApartmentBS.db";
         try {
-            conn = DriverManager.getConnection(url);
+            if (conn == null)
+                conn = DriverManager.getConnection(url);
         }
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            throw new DataBaseFailedException("disconnect to the DataBase ",1);
         }
         //System.out.println("Connection to SQLite has been established.");
     }

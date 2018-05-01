@@ -16,7 +16,10 @@ public class DataBaseRequestController {
     public DataBaseConnectionInterface dataBaseConnectionInterface;
 
     public DataBaseRequestController() {
+
         dataBaseConnectionInterface = new DataBaseConnection();
+        dataBaseConnectionInterface.connect();
+
     }
 
     public void connect() throws DataBaseFailedException {dataBaseConnectionInterface.connect();}

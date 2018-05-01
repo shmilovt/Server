@@ -7,6 +7,7 @@ public class NumOfRoomsQuery extends CategoryQuery{
         this.numOfRooms=numOfRooms;
     }
 
+    @Override
     public boolean mainQuery(ResultRecord apartment){
         double rooms= apartment.getNumberOfRooms();
         if (numOfRooms==6){

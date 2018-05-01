@@ -12,7 +12,7 @@ import java.util.Set;
 public interface DataBaseConnectionInterface {
 
 
-    void connect() throws DataBaseFailedException;
+    void connect();
 
     void disConnect() throws DataBaseFailedException;
 
