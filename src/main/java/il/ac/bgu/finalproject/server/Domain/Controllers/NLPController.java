@@ -29,6 +29,11 @@ public class NLPController {
             apartment.getApartmentLocation().setLongitude(locationPoint[1]);
             apartment.getApartmentLocation().setUniversity_distance(timeToUni);
         }
+        else{
+            apartment.getApartmentLocation().setLatitude(-1);
+            apartment.getApartmentLocation().setLongitude(-1);
+            apartment.getApartmentLocation().setUniversity_distance(-1);
+        }
         return  apartment;
     }
 }
