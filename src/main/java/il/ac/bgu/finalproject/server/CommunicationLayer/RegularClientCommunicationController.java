@@ -1,19 +1,18 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer;
 
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.*;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
+import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;
-import il.ac.bgu.finalproject.server.ServiceLayer.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.naming.directory.SearchResult;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -64,4 +63,11 @@ public class RegularClientCommunicationController {
         return "hello " + name + " !";
     }
 
+    public static void main(String [] args){
+        RegularClientController rg = new RegularClientController();
+        SearchResults sr = rg.searchApartments(new LinkedList<CategoryQuery>());
+        int x=2;
+        int z=2;
+        int y=2;
+    }
 }

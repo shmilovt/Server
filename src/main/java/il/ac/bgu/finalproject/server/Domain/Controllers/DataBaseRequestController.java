@@ -7,9 +7,12 @@ import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnectionInterface;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DataBaseRequestController {
+    private static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
     public DataBaseConnectionInterface dataBaseConnectionInterface;
 
     public DataBaseRequestController() {
@@ -38,7 +41,11 @@ public class DataBaseRequestController {
 
 
     public void addPost(Post post) throws DataBaseFailedException {
-        dataBaseConnectionInterface.addPost(post.getID(),post.getDateOfPublish().toString(),post.getPublisherName(),post.getText(),post.getApartmentID());
+        Date dd = new Date(post.getDateOfPublish().getTime());
+        SimpleDateFormat sdf= new SimpleDateFormat();
+        sdf.applyPattern(dateFormat);
+        String newDateString = sdf.format(dd);
+        dataBaseConnectionInterface.addPost(post.getID(),newDateString,post.getPublisherName(),post.getText(),post.getApartmentID());
     }
 
 

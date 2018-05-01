@@ -1,0 +1,9 @@
+מאי 01, 2018 2:21:30 PM il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection addPost
+SEVERE: Unparseable date: "Tue May 01 14:21:29 IDT 2018"
+java.text.ParseException: Unparseable date: "Tue May 01 14:21:29 IDT 2018"
+	at java.text.DateFormat.parse(DateFormat.java:366)
+	at il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection.addPost(DataBaseConnection.java:345)
+	at il.ac.bgu.finalproject.server.Domain.Controllers.DataBaseRequestController.addPost(DataBaseRequestController.java:43)
+	at il.ac.bgu.finalproject.server.Domain.Controllers.ServerController.newPost(ServerController.java:27)
+	at il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection.main(DataBaseConnection.java:1131)
+

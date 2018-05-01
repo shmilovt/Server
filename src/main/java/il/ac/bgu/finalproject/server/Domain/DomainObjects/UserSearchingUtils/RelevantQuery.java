@@ -6,14 +6,14 @@ import java.util.Date;
 
 public class RelevantQuery extends CategoryQuery{
     public RelevantQuery(){};
+    private static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
+
 
     private Boolean timeBetweenDates(String givenDate){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
         Date now= new Date();
         try {
             Date gdate = formatter.parse(givenDate);
-            System.out.println(gdate);
-            System.out.println(formatter.format(gdate));
             long gap=now.getTime()- gdate.getTime();
             //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
             if (gap<2592000000.0)
@@ -28,7 +28,7 @@ public class RelevantQuery extends CategoryQuery{
 
     @Override
     public boolean mainQuery(ResultRecord apartment) {
-        if((apartment.getLat()!=0)&&(apartment.getLat()!=0)) {
+        if((apartment.getLat()!=-1)&&(apartment.getLat()!=-1)) {
             if (timeBetweenDates(apartment.getDateOfPublish()))
                 return true;
         }
