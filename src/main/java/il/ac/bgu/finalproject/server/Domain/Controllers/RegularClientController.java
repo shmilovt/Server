@@ -5,6 +5,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.Sea
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class RegularClientController {
@@ -43,6 +44,12 @@ public class RegularClientController {
         }
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
     }
-
-
-}
+/*
+    public static void main(String[] args) throws Exception {
+        List<CategoryQuery> categoryQueryList = new LinkedList<CategoryQuery>();
+        RegularClientController rg = new RegularClientController();
+        SearchResults sr =  rg.searchApartments(categoryQueryList);
+        int x=2;
+    }
+*/
+    }

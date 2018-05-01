@@ -660,7 +660,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     public ApartmentLocation getAddressDetils (int addressDetilsID ){
         ApartmentLocation location= new ApartmentLocation();
         Address address;
-        String sql = "SELECT street, numOfBuilding, timeFromUni, neighborhood " +
+        String sql = "SELECT street, numOfBuilding, timeFromUni, neighborhood, longitude, latitude " +
                 "FROM AddressDetails where addressDetailsNum= "  + addressDetilsID  ;
         Statement stmt  = null;
         try {
@@ -670,6 +670,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             location.setAddress(address);
             location.setUniversity_distance(rs.getInt(3));
             location.setNeighborhood(rs.getString(4));
+            location.setLongitude(rs.getDouble(5));
+            location.setLatitude(rs.getDouble(6));
         }
         catch(SQLException e){}
         catch (Exception e){
@@ -736,6 +738,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 temp.setStreet(location.getAddress().getStreet());
                 temp.setNumber(location.getAddress().getNumber());
                 temp.setNeighborhood(location.getNeighborhood());
+                temp.setLat(location.getLatitude());
+                temp.setLon(location.getLongitude());
                 temp.setFloor(rs.getInt(3));
                 temp.setDistanceFromUniversity(location.getDistanceFromUniversity());
                 temp.setCost(rs.getInt(4));
