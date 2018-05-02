@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchAlgorithm;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
@@ -44,6 +45,9 @@ public class RegularClientController {
         }
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
     }
+
+//    public void addUserSuggestion()
+
 /*
     public static void main(String[] args) throws Exception {
         List<CategoryQuery> categoryQueryList = new LinkedList<CategoryQuery>();

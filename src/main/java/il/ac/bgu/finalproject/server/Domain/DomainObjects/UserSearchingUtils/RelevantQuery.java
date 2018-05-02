@@ -4,19 +4,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class RelevantQuery extends CategoryQuery{
-    public RelevantQuery(){};
+public class RelevantQuery extends CategoryQuery {
+    public RelevantQuery() {
+    }
+
+    ;
     public static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
 
 
-    private Boolean timeBetweenDates(String givenDate){
+    private Boolean timeBetweenDates(String givenDate) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-        Date now= new Date();
+        Date now = new Date();
         try {
             Date gdate = formatter.parse(givenDate);
-            long gap=now.getTime()- gdate.getTime();
+            long gap = now.getTime() - gdate.getTime();
             //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
-            if (gap<2592000000.0)
+            if (gap < 2592000000.0)
                 return true;
 
         } catch (ParseException e) {
@@ -28,9 +31,11 @@ public class RelevantQuery extends CategoryQuery{
 
     @Override
     public boolean mainQuery(ResultRecord apartment) {
-        if((apartment.getLat()!=-1)&&(apartment.getLat()!=-1)) {
-            if (timeBetweenDates(apartment.getDateOfPublish()))
-                return true;
+        if ((apartment.getLat() != -1) && (apartment.getLat() != -1)) {
+            if (timeBetweenDates(apartment.getDateOfPublish())) {
+                if (apartment.getContacts().length > 0)
+                    return true;
+            }
         }
         return false;
     }

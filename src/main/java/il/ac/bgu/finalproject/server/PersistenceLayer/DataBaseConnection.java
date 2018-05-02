@@ -29,12 +29,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //        String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
         String url = "jdbc:sqlite:ApartmentBS.db";
         try {
-            if (conn == null)
-                conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(url);
         }
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("disconnect to the DataBase ",1);
         }
         //System.out.println("Connection to SQLite has been established.");
     }
@@ -1082,7 +1082,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("create the contacts table",4);}
     }
-    public int getUserSuggestionsNum (String id, String field, String suggestion) {
+    private int getUserSuggestionsNum (String id, String field, String suggestion) {
         int value=-1;
         try {
             String sql = "SELECT counter FROM UserSuggestions " +
@@ -1099,7 +1099,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         return value;
     }
-    public void setUserSuggestions (String id, String field, String suggestion, int count) throws DataBaseFailedException {
+    private void setUserSuggestionsCounter (String id, String field, String suggestion, int count) throws DataBaseFailedException {
         try {
             String sql = "UPDATE UserSuggestions SET counter= ? " +
                     " WHERE apartmentID= ? AND field= ? AND suggestion= ?";
@@ -1116,15 +1116,57 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
+    private void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException {
+        try {
+            String sql = "INSERT INTO UserSuggestions(apartmentID, field, suggestion, counter)" +
+                    " VALUES (?,?,?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.setString(2, field);
+            pstmt.setString(3, suggestion);
+            pstmt.setInt(4, 1);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+    public int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException {
+        int counter=getUserSuggestionsNum(id,field,suggestion);
+        if (counter==-1) {
+            insertUserSuggestionsNum(id, field, suggestion);
+            return 1;
+        }
+        else {
+            setUserSuggestionsCounter(id,field,suggestion,counter+1);
+            return counter+1;
+        }
+    }
+
+    public void suggestionChangesApartmentReacord (String apartmentID, String field){
+        try {
+            String sql = "UPDATE Apartment SET Apartment.? WHERE apartmentID= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, field);
+            pstmt.setString(2, apartmentID);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+    }
 
     public static void main(String[] args) throws Exception
     {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
         a.resetConstValueTable();
-//        a.resetUserSuggestionsTable();
+        a.resetUserSuggestionsTable();
         a.resetAllTables();
-//        a.disConnect();
+        a.disConnect();
 
         ServerController servercontroller=new ServerController();
         //servercontroller

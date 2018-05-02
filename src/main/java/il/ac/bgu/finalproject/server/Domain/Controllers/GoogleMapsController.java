@@ -59,9 +59,8 @@ public class GoogleMapsController {
         if(buildingNumber==-1)
             return new double[]{-1,-1};
         String address = street + " " + buildingNumber + " " + "באר שבע";
-        //  System.out.println(address);
-        GeocodingResult[] results = new GeocodingResult[0];
         try {
+            GeocodingResult[] results = new GeocodingResult[0];
             results = GeocodingApi.geocode(context, address).await();
             double[] a = {results[0].geometry.location.lat, results[0].geometry.location.lng};
             return a;
@@ -71,13 +70,5 @@ public class GoogleMapsController {
         }
         // Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // System.out.println(gson.toJson(results));
-    }
-
-
-    public static void main(String [] args){
-        //  GoogleMapsController googleMapsController = new GoogleMapsController();
-        // double[] a=googleMapsController.getCoordinates("יצחק רגר", 20);
-        //  System.out.println(a[0]);//System.out.println(googleMapsController.getTimeWalkingFromUniByMin("יצחק רגר",20));
-        // System.out.println("*קומה 8\\8\n".replaceAll("[ *\\\\ ]"," "));
     }
 }

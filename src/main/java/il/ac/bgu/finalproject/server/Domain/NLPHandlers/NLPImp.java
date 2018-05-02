@@ -1,33 +1,29 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
+import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class NLPImp implements NLPInterface {
 
-    Map<String, String> street_neighborhood_dic;
+    private static Map<String, String> street_neighborhood_dic;
 
     private void load_street_neighborhood_dic()
     {
-        String csvFile = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\neigh_street.csv";
-        String line = "";
-        String cvsSplitBy = ",";
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            br.readLine();
-            while ((line = br.readLine()) != null) {
-                // use comma as separator
-                String[] row = line.split(cvsSplitBy);
-                street_neighborhood_dic.put(row[0],row[1]);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        DataBaseNlp db = new DataBaseNlp();
+        if(street_neighborhood_dic.isEmpty())
+        {
+            db.connect();
+            street_neighborhood_dic = db.getValuesNeigh_Street();
+            db.disConnect();
         }
     }
 
-    public NLPImp(){
+    public NLPImp() {
         street_neighborhood_dic = new HashMap<String, String>();
         load_street_neighborhood_dic();
     }
@@ -816,61 +812,63 @@ public class NLPImp implements NLPInterface {
 
         @Override
     public Apartment extractApartment(String str) {
+        try {
 
-        EnvList l = new EnvList(str);
-        AnalyzedDS ads= new AnalyzedDS(l);
+            EnvList l = new EnvList(str);
+            AnalyzedDS ads = new AnalyzedDS(l);
+            Apartment ap = new Apartment();
 
-        Apartment ap = new Apartment();
-
-        int numMates = rommateDecision(ads);
-        double numRooms=numRoomsDecision(ads);
-        if(numMates !=-1 && numRooms == -1.0) {
+            int numMates = rommateDecision(ads);
+            double numRooms = numRoomsDecision(ads);
+            if (numMates != -1 && numRooms == -1.0) {
                 ap.setNumberOfMates(numMates);
-            if(numMates==0)
-                ap.setNumberOfRooms(2);
-            else
-                ap.setNumberOfRooms(numMates+1);
-        }
-        else if(numMates == -1 && numRooms != -1.0){
-            ap.setNumberOfRooms(numRooms);
-            int rooms = (int) numRooms;
-            if(rooms==-1)
-                ap.setNumberOfMates(numMates);//-1
-            else {
-                if (rooms == 1)
-                    ap.setNumberOfMates(1);
-                else if (rooms == 2)
-                    ap.setNumberOfMates(0);
+                if (numMates == 0)
+                    ap.setNumberOfRooms(2);
                 else
-                    ap.setNumberOfMates(rooms - 1);
+                    ap.setNumberOfRooms(numMates + 1);
+            } else if (numMates == -1 && numRooms != -1.0) {
+                ap.setNumberOfRooms(numRooms);
+                int rooms = (int) numRooms;
+                if (rooms == -1)
+                    ap.setNumberOfMates(numMates);//-1
+                else {
+                    if (rooms == 1)
+                        ap.setNumberOfMates(1);
+                    else if (rooms == 2)
+                        ap.setNumberOfMates(0);
+                    else
+                        ap.setNumberOfMates(rooms - 1);
+                }
+            } else {
+                ap.setNumberOfMates(numMates);//-1
+                ap.setNumberOfRooms(numRooms);
             }
+            ap.setFurniture(furnitureDecision(ads));
+            ap.setBalcony(balconyDecision(ads));
+            ap.setAnimal(animalDecision(ads));
+            ap.setProtectedSpace(protectedSpaceDecision(ads));
+            List<Integer> gardenDic = gardenDecision(ads);
+            ap.setGarden(gardenDic.get(0));
+            ap.setGardenSize(gardenDic.get(1));
+            ap.setWarehouse(warehouseDecision(ads));
+            ap.setSize(sizeDecision(ads));
+            ap.setContacts(phoneDecision(ads));
+            ap.setCost(priceDecision(ads));
+            ApartmentLocation apl = new ApartmentLocation();
+            Address ad = new Address();
+            apl.setFloor(floorDecision(ads));
+            ad.setStreet(streetDecision(ads));
+            ad.setNumber(apartmentNumberDecision(ads));
+            apl.setAddress(ad);
+            String neighborhood = neighborhoodDecision(ads);
+            if (neighborhood == "" && ad.getStreet() != "")
+                neighborhood = getNeighborhoodByStreetName(ad.getStreet());
+            apl.setNeighborhood(neighborhood);
+            ap.setApartmentLocation(apl);
+            return ap;
+        }catch(Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return null;
         }
-        else {
-            ap.setNumberOfMates(numMates);//-1
-            ap.setNumberOfRooms(numRooms);
-        }
-        ap.setFurniture(furnitureDecision(ads));
-        ap.setBalcony(balconyDecision(ads));
-        ap.setAnimal(animalDecision(ads));
-        ap.setProtectedSpace(protectedSpaceDecision(ads));
-        List<Integer> gardenDic = gardenDecision(ads);
-        ap.setGarden(gardenDic.get(0));
-        ap.setGardenSize(gardenDic.get(1));
-        ap.setWarehouse(warehouseDecision(ads));
-        ap.setSize(sizeDecision(ads));
-        ap.setContacts(phoneDecision(ads));
-        ap.setCost(priceDecision(ads));
-        ApartmentLocation apl = new ApartmentLocation();
-        Address ad= new Address();
-        apl.setFloor(floorDecision(ads));
-        ad.setStreet(streetDecision(ads));
-        ad.setNumber(apartmentNumberDecision(ads));
-        apl.setAddress(ad);
-        String neighborhood = neighborhoodDecision(ads);
-        if(neighborhood == "" && ad.getStreet() != "")
-            neighborhood = getNeighborhoodByStreetName(ad.getStreet());
-        apl.setNeighborhood(neighborhood);
-        ap.setApartmentLocation(apl);
-        return ap;
     }
 }

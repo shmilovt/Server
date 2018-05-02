@@ -70,6 +70,8 @@ public interface DataBaseConnectionInterface {
     void updateApartmentDerivatives(Apartment apartment,String postID) throws DataBaseFailedException;
     SearchResults allResultsFromDB ();
 
-    }
+    int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException;
+
+}
 
 
