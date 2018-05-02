@@ -1119,13 +1119,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
     public static void main(String[] args) throws Exception
     {
-        DataBaseConnection a=new DataBaseConnection();
+/*        DataBaseConnection a=new DataBaseConnection();
         a.connect();
         a.resetConstValueTable();
         a.resetUserSuggestionsTable();
         a.resetAllTables();
         a.disConnect();
-
+*/
         ServerController servercontroller=new ServerController();
         //servercontroller
         servercontroller.newPost(new Post("1231C_2476", new Date(new Date().getTime()-1000), "shlomi arzi","השותפה המקסימה שלנו Yarden Peretz עוזבת את הדירה. אני וGal Ben Maman מחפשים מישהי שתחליף את מקומה בחדר. דירת 4 חדרים חדשה משופצת לחלוטין עם חצר ענקית. הדירה באלעזר בן יאיר 16 כרבע שעה מאוניברסיטה. הדירה מרוהטת ויש בה הכל, רק להביא בגדים ולהכנס. עלות 1150 ש\\\"ח. כניסה מיידית :)\\nלפרטים:\\n0526516656\\n", ""));

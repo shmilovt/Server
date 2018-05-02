@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,58 +41,45 @@ public class  Analyzer {
     private static List<String> roomList;
     private static List<String> roommateExistList;
     private static List<String> roomS_desList;
+    private static boolean isLoaded = false;
 
-    public List<String> loadFile(String fileName){
-        String pathPref = "src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\NLPHandlers\\Dictionaries\\";
-        String  path= pathPref + fileName;
-        List<String> streets = new ArrayList<String>();
-        String line = null;
-        try {
-            FileReader fileReader = new FileReader(path);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while((line = bufferedReader.readLine()) != null)
-                streets.add(line);
-            bufferedReader.close();
-        }
-        catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");
-        }
-        catch(IOException ex) {
-            System.out.println("Error reading file '" + fileName + "'");
-        }
-        return streets;
-    }
 
-    public Analyzer(AnalyzedDS aDS) {
+
+    public Analyzer(AnalyzedDS aDS,DataBaseNlp db) {
         this.aDS = aDS;
-        gardenList = loadFile("garden.txt");
-        rommateList = loadFile("rommate.txt");
-        blackList = loadFile("blackList.txt");
-        wordLocationList = loadFile("wordLocation.txt");
-        firstNamesList = loadFile("firstNames.txt");
-        wordPriceList = loadFile("price.txt");
-        wordSizeList = loadFile("size.txt");
-        wordNegativeList = loadFile("negative.txt");
-        streetList = loadFile("streets1.txt");
-        floorList = loadFile("floor.txt");
-        neighborhoodList = loadFile("neighborhood.txt");
-        wordStreetList = loadFile("streetWord.txt");
-        locationsList = loadFile("locations.txt");
-        protectedSpace = loadFile("protectedSpace.txt");
-        warehouseList = loadFile("warehouse.txt");
-        animalExistList = loadFile("animalExist.txt");
-        animalNameList = loadFile("animalName.txt");
-        balconyList = loadFile("balcony.txt");
-        decisivenessList = loadFile("decisiveness.txt");
-        requirementList = loadFile("requirement.txt");
-        furnitureList = loadFile("furniture.txt");
-        almostDescList = loadFile("almostDescription.txt");
-        rommateQuantityList = loadFile("rommate_quantity.txt");
-        roomList = loadFile("roomDes.txt");
-        roommateExistList = loadFile("rommateExist.txt");
-        roomS_desList = loadFile("roomS_des.txt");
-        floorQuantityList = loadFile("floorQuantity.txt");
-        // we will load the Dictionaries
+        if(!isLoaded) {
+            db.connect();
+            gardenList = db.getValuesOneCol("garden");
+            rommateList = db.getValuesOneCol("roommate");
+            blackList = db.getValuesOneCol("blackList");
+            wordLocationList = db.getValuesOneCol("wordLocation");
+            firstNamesList = db.getValuesOneCol("firstNames");
+            wordPriceList = db.getValuesOneCol("price");
+            wordSizeList = db.getValuesOneCol("size");
+            wordNegativeList = db.getValuesOneCol("negative");
+            streetList = db.getValuesOneCol("streets");
+            floorList = db.getValuesOneCol("floor");
+            neighborhoodList = db.getValuesOneCol("neighborhood");
+            wordStreetList = db.getValuesOneCol("streetWord");
+            locationsList = db.getValuesOneCol("locations");
+            protectedSpace = db.getValuesOneCol("protectedSpace");
+            warehouseList = db.getValuesOneCol("warehouse");
+            animalExistList = db.getValuesOneCol("animalExist");
+            animalNameList = db.getValuesOneCol("animalName");
+            balconyList = db.getValuesOneCol("balcony");
+            decisivenessList = db.getValuesOneCol("decisiveness");
+            requirementList = db.getValuesOneCol("requirement");
+            furnitureList = db.getValuesOneCol("furniture");
+            almostDescList = db.getValuesOneCol("almostDescription");
+            rommateQuantityList = db.getValuesOneCol("roommate_quantity");
+            roomList = db.getValuesOneCol("roomDes");
+            roommateExistList = db.getValuesOneCol("roommateExist");
+            roomS_desList = db.getValuesOneCol("roomS_des");
+            floorQuantityList = db.getValuesOneCol("floorQuantity");
+            isLoaded=true;
+            db.disConnect();
+            // we will load the Dictionaries
+        }
     }
 
     /***

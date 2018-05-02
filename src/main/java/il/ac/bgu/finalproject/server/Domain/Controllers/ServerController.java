@@ -26,7 +26,8 @@ public class ServerController {
         dbController.connect();
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
-        dbController.manageApartment(apartment, ourPost.getID());
+        if(apartment!=null)
+            dbController.manageApartment(apartment, ourPost.getID());
         dbController.disconnect();
     }
 

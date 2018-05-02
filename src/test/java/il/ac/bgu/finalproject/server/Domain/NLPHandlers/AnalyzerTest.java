@@ -31,11 +31,12 @@ public class AnalyzerTest {
         env2 = new EnvList("להשכרה דירה מהממת ברחוב ברנפלד 13, בעל דירה מדהים! הדירה מרוהטת קומפלט, 4 חדרים, כולל מטבח מאובזר, רק 900 שח בחודש! כדאי מאוד! לפרטים, נופר- 053-3391800, לתיאום לראות את הדירה: נועה- 053-3311010, אגב דירה ממש שווה- 10 דקות מהאוניברסיטה ו100 מ\"ר שכונה ג");
         ds2 = new AnalyzedDS(env2);
 
-        ana = new Analyzer(ds);
-        firstNamesList=ana.loadFile("firstNames.txt");
-        streetsList= ana.loadFile("streets1.txt");
-        neighborhoodList = ana.loadFile("neighborhood.txt");
-        wordPriceList= ana.loadFile("price.txt");
+        DataBaseNlp db = new DataBaseNlp();
+        ana = new Analyzer(ds,db);
+        firstNamesList=db.getValuesOneCol("firstNames");
+        streetsList= db.getValuesOneCol("streets.txt");
+        neighborhoodList = db.getValuesOneCol("neighborhood");
+        wordPriceList= db.getValuesOneCol("price");
     }
 
     @Test
