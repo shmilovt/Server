@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.Domain.Controllers.GoogleMapsController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
@@ -972,11 +973,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return -1;
     }
 
-    public int isAddressDetailsExist(Address address) {
+    public int isAddressDetailsExist(String street, int number) {
         Statement stmt = null;
         String sql = "SELECT addressDetailsNum FROM AddressDetails "
-                +" WHERE street= '"+address.getStreet()
-                +"' AND numOfBuilding= "+ address.getNumber();
+                +" WHERE street= '"+street
+                +"' AND numOfBuilding= "+ number;
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -993,7 +994,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public void addApartmentDerivatives(Apartment apartment, String postID) throws DataBaseFailedException {
-        int tempForAddressDetaileNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress());
+        int tempForAddressDetaileNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress().getStreet(),
+                apartment.getApartmentLocation().getAddress().getNumber());
         String tempForApartment;
         if (tempForAddressDetaileNum==-1) {
             //TODO: calc longitude, latitude, neighborhood
@@ -1159,6 +1161,21 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
+//    public void suggetionChangesAddress (String apartmentID, String street, int num ) throws DataBaseFailedException {
+//        GoogleMapsController googleMapsController= new GoogleMapsController();
+//        Apartment apartment= getApartmentRecordTBD(apartmentID);
+//        int tempForAddressDetaileNum = isAddressDetailsExist(street,num);
+//        String tempForApartment;
+//        if (tempForAddressDetaileNum == -1) {
+//            if (!street.isEmpty() && num > 0) {
+//                int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, num);
+//                double[] locationPoint = googleMapsController.getCoordinates(street, num);
+//                tempForAddressDetaileNum = addAddressDetailsRecord(
+//                        street, num + "",
+//                        timeToUni, "", locationPoint[0], locationPoint[1]);
+//            }
+//        }
+//    }
     public static void main(String[] args) throws Exception
     {
         DataBaseConnection a=new DataBaseConnection();

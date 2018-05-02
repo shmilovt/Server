@@ -71,7 +71,7 @@ public interface DataBaseConnectionInterface {
     SearchResults allResultsFromDB ();
 
     int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException;
-
+    int isAddressDetailsExist(String street, int number);
 }
 
 
