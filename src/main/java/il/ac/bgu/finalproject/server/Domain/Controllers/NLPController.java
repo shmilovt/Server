@@ -19,21 +19,22 @@ public class NLPController {
 
     public Apartment generateNLP(Post post) {
         Apartment apartment = nlp.extractApartment(post.getText());
-        //googleMapsController ==> get Latitude, Longitude and TimeFromUNI
-        String street = apartment.getApartmentLocation().getAddress().getStreet();
-        int number = apartment.getApartmentLocation().getAddress().getNumber();
-        if(!street.isEmpty() && number>0) {
-            int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, number);
-            double[] locationPoint = googleMapsController.getCoordinates(street, number);
-            apartment.getApartmentLocation().setLatitude(locationPoint[0]);
-            apartment.getApartmentLocation().setLongitude(locationPoint[1]);
-            apartment.getApartmentLocation().setUniversity_distance(timeToUni);
+        if(apartment!=null) {
+            String street = apartment.getApartmentLocation().getAddress().getStreet();
+            int number = apartment.getApartmentLocation().getAddress().getNumber();
+            if (!street.isEmpty() && number > 0) {
+                int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, number);
+                double[] locationPoint = googleMapsController.getCoordinates(street, number);
+                apartment.getApartmentLocation().setLatitude(locationPoint[0]);
+                apartment.getApartmentLocation().setLongitude(locationPoint[1]);
+                apartment.getApartmentLocation().setUniversity_distance(timeToUni);
+            } else {
+                apartment.getApartmentLocation().setLatitude(-1);
+                apartment.getApartmentLocation().setLongitude(-1);
+                apartment.getApartmentLocation().setUniversity_distance(-1);
+            }
+            return apartment;
         }
-        else{
-            apartment.getApartmentLocation().setLatitude(-1);
-            apartment.getApartmentLocation().setLongitude(-1);
-            apartment.getApartmentLocation().setUniversity_distance(-1);
-        }
-        return  apartment;
+        return null;
     }
 }

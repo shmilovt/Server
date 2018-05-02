@@ -5,10 +5,11 @@ import java.util.*;
 public class AnalyzedDS {
     private Dictionary<Classify,Dictionary<Integer,List<Word>>> g;
     private EnvList envLst;
-
+    private  DataBaseNlp db;
     public AnalyzedDS(Dictionary<Classify, Dictionary<Integer, List<Word>>> g , EnvList env) {
         this.g = g;
         this.envLst=env;
+        db = new DataBaseNlp();
     }
 
 
@@ -23,15 +24,17 @@ public class AnalyzedDS {
         for(Classify c: classifyCategories)
             for(int i=0;i<size;i++)
                 g.get(c).put(i,new LinkedList<Word>());
-        Analyzer analyzer = new Analyzer(this);
+        db = new DataBaseNlp();
+        Analyzer analyzer = new Analyzer(this,db);
         analyzer.analyze();
     }
+
 
 
     public AnalyzedDS(Environment env)
     {
         EnvList e = new EnvList(env);
-        Analyzer analyzer = new Analyzer(this);
+        Analyzer analyzer = new Analyzer(this,db);
         analyzer.analyze();
     }
 
@@ -114,7 +117,7 @@ public class AnalyzedDS {
 
     public int getNumberOfGapAccourences(int min,int max)
     {
-        Analyzer analyzer = new Analyzer(this);
+        Analyzer analyzer = new Analyzer(this,db);
         return analyzer.NumberOfGapAccourence(min,max);
     }
 
