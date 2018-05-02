@@ -1122,9 +1122,9 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
         a.resetConstValueTable();
-        a.resetUserSuggestionsTable();
+//        a.resetUserSuggestionsTable();
         a.resetAllTables();
-        a.disConnect();
+//        a.disConnect();
 
         ServerController servercontroller=new ServerController();
         //servercontroller
