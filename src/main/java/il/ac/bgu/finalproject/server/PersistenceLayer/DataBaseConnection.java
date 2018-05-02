@@ -665,22 +665,28 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     ///===========GET OBJECTS FROM DB==============///
 
     public ApartmentLocation getAddressDetils (int addressDetilsID ){
+
         ApartmentLocation location= new ApartmentLocation();
-        Address address;
-        String sql = "SELECT street, numOfBuilding, timeFromUni, neighborhood, longitude, latitude " +
-                "FROM AddressDetails where addressDetailsNum= "  + addressDetilsID  ;
-        Statement stmt  = null;
+        Address address= new Address();
+        String sql = "SELECT AddressDetails.street, AddressDetails.numOfBuilding, AddressDetails.timeFromUni, " +
+                " AddressDetails.neighborhood, AddressDetails.longitude, AddressDetails.latitude " +
+                " FROM AddressDetails WHERE addressDetailsNum= '"  + addressDetilsID +"'" ;
         try {
-            stmt = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-            address=new Address(rs.getString(1),rs.getInt(2));
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            address= new Address(rs.getString(1),rs.getInt(2));
+            address.setStreet(rs.getString(1));
+            address.setNumber(rs.getInt(2));
+//            System.out.println("3) "+address.toString()+  "  4) "+address.getNumber());
             location.setAddress(address);
             location.setUniversity_distance(rs.getInt(3));
             location.setNeighborhood(rs.getString(4));
             location.setLongitude(rs.getDouble(5));
             location.setLatitude(rs.getDouble(6));
+
         }
-        catch(SQLException e){}
+        catch(SQLException e){
+        }
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
 //            return null;
@@ -689,14 +695,52 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public Apartment getApartmentRecordTBD(String id) {
+        List<Apartment> apartments = new LinkedList<Apartment>();
+        Apartment temp;
         try {
-            String sql = "SELECT * " +
-                    "FROM apartment where apartmentID =" + "'" + id + "'";
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, Apartment.size, " +
+                    " garden, gardenSize, protectedSpace, warehouse, animal, balcony, furniture," +
+                    " numberOfMates, numOfRooms  "
+                    + " FROM Apartment"
+                    + " WHERE apartmentID= " +id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                //System.out.println(contacts.toString());
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+                location.setFloor(rs.getInt(3));
+                //System.out.println(location.toString());
+                temp = new Apartment(location, rs.getInt(4), rs.getInt(5), contacts);
+                //System.out.println(temp.toString());
+                temp.setGarden(rs.getInt(6));
+                temp.setGardenSize(rs.getInt(7));
+                temp.setProtectedSpace(rs.getInt(8));
+                temp.setWarehouse(rs.getInt(9));
+                temp.setAnimal(rs.getInt(10));
+                temp.setBalcony(rs.getInt(11));
+                temp.setFurniture(rs.getInt(12));
+                temp.setNumberOfMates(rs.getInt(13));
+                temp.setNumberOfRooms(rs.getDouble(14));
+                return temp;
+            }
+
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+//        disConnect();
+        return null;
+        /*try {
+            String sql = "SELECT addressDetailsID, numOfRooms, floor, Apartment.size, cost, garden, " +
+                    "gardenSize, protectedSpace, warehouse, animal, balcony, furniture, numberOfMates " +
+                    "FROM Apartment where apartmentID =" + "" + id + "";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
 
-            ApartmentLocation location= new ApartmentLocation();
-            location = getAddressDetils(rs.getInt(1));
+            ApartmentLocation location= getAddressDetils(rs.getInt(1));
+            System.out.println(location.toString());
             location.setFloor(rs.getInt(3));
 
             Set<Contact> contacts= getApartmentContacts(id);
@@ -721,7 +765,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             return null;
-        }
+        }*/
     }
 
     public SearchResults allResultsFromDB () {
@@ -814,6 +858,36 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
 //        disConnect();
         return apartments;
+    }
+
+    public Apartment getApartmentByID(String apartmentID) {
+//        connect();
+        List<Apartment> apartments = new LinkedList<Apartment>();
+        Apartment temp;
+        try {
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, size"
+                    + " FROM Apartment"
+                    + " WHERE apartmentID= " +apartmentID;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                //System.out.println(contacts.toString());
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+                location.setFloor(rs.getInt(3));
+                //System.out.println(location.toString());
+                temp = new Apartment(location, rs.getInt(4), rs.getInt(5), contacts);
+                //System.out.println(temp.toString());
+                return temp;
+            }
+
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+//        disConnect();
+        return null;
     }
 
     public Set<Contact> getApartmentContacts(String id) {
