@@ -35,6 +35,17 @@ public class SearchAlgorithmTest {
             assertTrue(item.getCost()>=400&&item.getCost()<=2000);
         }
 
+        MustHaveQuery must2= new MustHaveQuery(MustHaveQuery.MustHaveThing.garden);
+        categories.add(must2);
+        res= search.filterIntersection(ResultRecordList, categories);
+        list = res.getResultRecordList();
+        for(ResultRecord item: list){
+            assertTrue(item.getCost()>=400&&item.getCost()<=2000);
+            assertTrue(item.isWarehouse());
+        }
+
+        categories.remove(1);
+
         categories.add(must);
         res= search.filterIntersection(ResultRecordList, categories);
         list = res.getResultRecordList();
