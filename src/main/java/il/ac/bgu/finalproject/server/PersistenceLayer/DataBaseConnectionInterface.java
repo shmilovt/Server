@@ -12,7 +12,7 @@ import java.util.Set;
 public interface DataBaseConnectionInterface {
 
 
-    void connect() throws DataBaseFailedException;
+    void connect();
 
     void disConnect() throws DataBaseFailedException;
 
@@ -70,6 +70,8 @@ public interface DataBaseConnectionInterface {
     void updateApartmentDerivatives(Apartment apartment,String postID) throws DataBaseFailedException;
     SearchResults allResultsFromDB ();
 
-    }
+    int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException;
+    int isAddressDetailsExist(String street, int number);
+}
 
 

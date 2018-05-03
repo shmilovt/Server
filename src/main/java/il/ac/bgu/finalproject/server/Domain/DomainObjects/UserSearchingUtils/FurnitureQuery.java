@@ -7,7 +7,8 @@ public class FurnitureQuery extends CategoryQuery {
         this.furniture= furniture;
     }
 
-    public boolean MainQuery(ResultRecord apartment){
+    @Override
+    public boolean mainQuery(ResultRecord apartment){
         int furn= apartment.getFurniture();
         return (furn==this.furniture);
     }

@@ -14,7 +14,7 @@ public class SizeQuery extends CategoryQuery {
         if(min==-1)
             return size<=max;
         else if (max==-1)
-            return size<=min;
+            return size>=min;
         else return (size<=max && size>=min);
     }
 }

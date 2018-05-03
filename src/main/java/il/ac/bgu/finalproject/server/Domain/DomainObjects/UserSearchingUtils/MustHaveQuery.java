@@ -13,7 +13,8 @@ public class MustHaveQuery extends CategoryQuery{
         warehouse
     }
 
-    public boolean MainQuery(ResultRecord apartment) {
+    @Override
+    public boolean mainQuery(ResultRecord apartment) {
         if (thing == MustHaveThing.balcony) {
             if (apartment.isBalcony())
                 return true;

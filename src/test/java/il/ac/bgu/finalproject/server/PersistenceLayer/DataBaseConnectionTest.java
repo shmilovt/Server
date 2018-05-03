@@ -42,12 +42,12 @@ public class DataBaseConnectionTest {
         dbc.addPost("134", null, "nof2", "דירה מהממת", "2");
         dbc.addPost("144", null, "nof3", "דירה מהממת", "4");
         dbc.addPost("144", null, "mani", "דירה מדהימה", "5");
-        assertTrue(dbc.getPost("1") != null);
-        assertTrue(dbc.getPost("2") != null);
-        assertTrue(dbc.getPost("3") != null);
-        assertTrue(dbc.getPost("4") != null);
-        assertTrue(dbc.getPost("5") == null);
-        assertEquals("4", dbc.getPost("4").getApartmentID());
+        assertTrue(dbc.getPost("114") != null);
+        assertTrue(dbc.getPost("124") != null);
+        assertTrue(dbc.getPost("134") != null);
+        assertTrue(dbc.getPost("144") != null);
+        assertTrue(dbc.getPost("154") == null);
+        assertEquals("4", dbc.getPost("144").getApartmentID());
         System.out.println(dbc.GetAllPostsId().toString());
     }
 
@@ -78,9 +78,29 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void morePostsWithApartmentID() {
+    public void getApartmentContacts() throws DataBaseFailedException {
+        Address address = new Address("השלום", 20);
+        ApartmentLocation location = new ApartmentLocation(address, 3, 4);
+        Contact c1 = new Contact("gal", "0545555555");
+        Contact c2 = new Contact("Shir", "0546666666");
+        Set<Contact> contacts = new HashSet<Contact>();
+        contacts.add(c1);
+        contacts.add(c2);
+        Apartment apartment = new Apartment(location, 1000, contacts);
+
+        dbc.addApartmentDerivatives(apartment,"8");
+        int num=dbc.isApartmentExist(apartment);
+        assertTrue(num!=-1);
+
+        Set<Contact> contacts2= dbc.getApartmentContacts(num+"");
+        for (Contact contact2: contacts ){
+            assertTrue("Shir".equals(contact2.getName())||"gal".equals(contact2.getName()));
+            assertTrue("0545555555".equals(contact2.getPhone())||"0546666666".equals(contact2.getPhone()));
+        }
+
     }
 
+//    getAddressDetils, getApartmentRecordTBD, getApartmentContacts, addApartmentDerivatives, allResultsFromDB, isApartmentExist
 
     @Test
     public void isApartmentExist() throws DataBaseFailedException {
@@ -98,6 +118,11 @@ public class DataBaseConnectionTest {
     }
 
     @Test
+    public void getAddressDetils(){
+        System.out.println(dbc.getAddressDetils(5).toString());
+    }
+
+    @Test
     public void addApartmentDerivatives() throws DataBaseFailedException {
         Address address = new Address("יצחק רגר", 16);
         ApartmentLocation location = new ApartmentLocation(address, 3, 33);
@@ -109,7 +134,38 @@ public class DataBaseConnectionTest {
         Apartment apartment = new Apartment(location, 1000, contacts);
 
         dbc.addApartmentDerivatives(apartment,"2");
-        assertTrue(dbc.isApartmentExist(apartment)!=-1);
+        int num=dbc.isApartmentExist(apartment);
+        assertTrue(num!=-1);
+        Apartment apartment1= dbc.getApartmentRecordTBD(num+"");
+        assertEquals(apartment.getApartmentLocation().getAddress().getStreet(), apartment1.getApartmentLocation().getAddress().getStreet());
+        assertTrue(apartment.getApartmentLocation().getAddress().getNumber()==
+                apartment1.getApartmentLocation().getAddress().getNumber());
+        assertTrue(apartment.getApartmentLocation().getLongitude()==
+                apartment1.getApartmentLocation().getLongitude());
+        assertTrue(apartment.getApartmentLocation().getLatitude()==
+                apartment1.getApartmentLocation().getLatitude());
+        assertTrue(apartment.getApartmentLocation().getNeighborhood().equals(apartment1.getApartmentLocation().getNeighborhood()));
+        assertTrue(apartment.getApartmentLocation().getFloor()==
+                apartment1.getApartmentLocation().getFloor());
+        assertTrue(apartment.getNumberOfMates()==
+                apartment1.getNumberOfMates());
+        assertTrue(apartment.getGarden()==
+                apartment1.getGarden());
+        assertTrue(apartment.getAnimal()==
+                apartment1.getAnimal());
+        assertTrue(apartment.getBalcony()==
+                apartment1.getBalcony());
+        assertTrue(apartment.getProtectedSpace()==
+                apartment1.getProtectedSpace());
+        assertTrue(apartment.getCost()==
+                apartment1.getCost());
+        assertTrue(apartment.getSize()==
+                apartment1.getSize());
+        assertTrue(apartment.getFurniture()==
+                apartment1.getFurniture());
+        assertTrue(apartment.getNumberOfRooms()==
+                apartment1.getNumberOfRooms());
+
     }
 
     @Test

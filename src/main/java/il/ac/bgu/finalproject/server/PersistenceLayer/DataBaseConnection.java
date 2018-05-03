@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.Domain.Controllers.GoogleMapsController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
@@ -25,7 +26,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private  String addressDetailsIDString ="addressDetailsID";
     private  String apartmentIDString ="apartmentID";
 
-    public void connect() throws DataBaseFailedException {
+    public void connect() {
 //        String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
         String url = "jdbc:sqlite:ApartmentBS.db";
         try {
@@ -34,7 +35,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            throw new DataBaseFailedException("disconnect to the DataBase ",1);
+//            throw new DataBaseFailedException("disconnect to the DataBase ",1);
         }
         //System.out.println("Connection to SQLite has been established.");
     }
@@ -664,22 +665,28 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     ///===========GET OBJECTS FROM DB==============///
 
     public ApartmentLocation getAddressDetils (int addressDetilsID ){
+
         ApartmentLocation location= new ApartmentLocation();
-        Address address;
-        String sql = "SELECT street, numOfBuilding, timeFromUni, neighborhood, longitude, latitude " +
-                "FROM AddressDetails where addressDetailsNum= "  + addressDetilsID  ;
-        Statement stmt  = null;
+        Address address= new Address();
+        String sql = "SELECT AddressDetails.street, AddressDetails.numOfBuilding, AddressDetails.timeFromUni, " +
+                " AddressDetails.neighborhood, AddressDetails.longitude, AddressDetails.latitude " +
+                " FROM AddressDetails WHERE addressDetailsNum= '"  + addressDetilsID +"'" ;
         try {
-            stmt = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery(sql);
-            address=new Address(rs.getString(1),rs.getInt(2));
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            address= new Address(rs.getString(1),rs.getInt(2));
+            address.setStreet(rs.getString(1));
+            address.setNumber(rs.getInt(2));
+//            System.out.println("3) "+address.toString()+  "  4) "+address.getNumber());
             location.setAddress(address);
             location.setUniversity_distance(rs.getInt(3));
             location.setNeighborhood(rs.getString(4));
             location.setLongitude(rs.getDouble(5));
             location.setLatitude(rs.getDouble(6));
+
         }
-        catch(SQLException e){}
+        catch(SQLException e){
+        }
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
 //            return null;
@@ -688,14 +695,52 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public Apartment getApartmentRecordTBD(String id) {
+        List<Apartment> apartments = new LinkedList<Apartment>();
+        Apartment temp;
         try {
-            String sql = "SELECT * " +
-                    "FROM apartment where apartmentID =" + "'" + id + "'";
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, Apartment.size, " +
+                    " garden, gardenSize, protectedSpace, warehouse, animal, balcony, furniture," +
+                    " numberOfMates, numOfRooms  "
+                    + " FROM Apartment"
+                    + " WHERE apartmentID= " +id;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                //System.out.println(contacts.toString());
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+                location.setFloor(rs.getInt(3));
+                //System.out.println(location.toString());
+                temp = new Apartment(location, rs.getInt(4), rs.getInt(5), contacts);
+                //System.out.println(temp.toString());
+                temp.setGarden(rs.getInt(6));
+                temp.setGardenSize(rs.getInt(7));
+                temp.setProtectedSpace(rs.getInt(8));
+                temp.setWarehouse(rs.getInt(9));
+                temp.setAnimal(rs.getInt(10));
+                temp.setBalcony(rs.getInt(11));
+                temp.setFurniture(rs.getInt(12));
+                temp.setNumberOfMates(rs.getInt(13));
+                temp.setNumberOfRooms(rs.getDouble(14));
+                return temp;
+            }
+
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+//        disConnect();
+        return null;
+        /*try {
+            String sql = "SELECT addressDetailsID, numOfRooms, floor, Apartment.size, cost, garden, " +
+                    "gardenSize, protectedSpace, warehouse, animal, balcony, furniture, numberOfMates " +
+                    "FROM Apartment where apartmentID =" + "" + id + "";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
 
-            ApartmentLocation location= new ApartmentLocation();
-            location = getAddressDetils(rs.getInt(1));
+            ApartmentLocation location= getAddressDetils(rs.getInt(1));
+            System.out.println(location.toString());
             location.setFloor(rs.getInt(3));
 
             Set<Contact> contacts= getApartmentContacts(id);
@@ -720,7 +765,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             return null;
-        }
+        }*/
     }
 
     public SearchResults allResultsFromDB () {
@@ -813,6 +858,36 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
 //        disConnect();
         return apartments;
+    }
+
+    public Apartment getApartmentByID(String apartmentID) {
+//        connect();
+        List<Apartment> apartments = new LinkedList<Apartment>();
+        Apartment temp;
+        try {
+            String sql = "SELECT apartmentID, addressDetailsID, floor, cost, size"
+                    + " FROM Apartment"
+                    + " WHERE apartmentID= " +apartmentID;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                //System.out.println(contacts.toString());
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+                location.setFloor(rs.getInt(3));
+                //System.out.println(location.toString());
+                temp = new Apartment(location, rs.getInt(4), rs.getInt(5), contacts);
+                //System.out.println(temp.toString());
+                return temp;
+            }
+
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+//        disConnect();
+        return null;
     }
 
     public Set<Contact> getApartmentContacts(String id) {
@@ -972,11 +1047,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return -1;
     }
 
-    public int isAddressDetailsExist(Address address) {
+    public int isAddressDetailsExist(String street, int number) {
         Statement stmt = null;
         String sql = "SELECT addressDetailsNum FROM AddressDetails "
-                +" WHERE street= '"+address.getStreet()
-                +"' AND numOfBuilding= "+ address.getNumber();
+                +" WHERE street= '"+street
+                +"' AND numOfBuilding= "+ number;
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -993,7 +1068,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     public void addApartmentDerivatives(Apartment apartment, String postID) throws DataBaseFailedException {
-        int tempForAddressDetaileNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress());
+        int tempForAddressDetaileNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress().getStreet(),
+                apartment.getApartmentLocation().getAddress().getNumber());
         String tempForApartment;
         if (tempForAddressDetaileNum==-1) {
             //TODO: calc longitude, latitude, neighborhood
@@ -1082,7 +1158,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("create the contacts table",4);}
     }
-    public int getUserSuggestionsNum (String id, String field, String suggestion) {
+    private int getUserSuggestionsNum (String id, String field, String suggestion) {
         int value=-1;
         try {
             String sql = "SELECT counter FROM UserSuggestions " +
@@ -1099,7 +1175,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         return value;
     }
-    public void setUserSuggestions (String id, String field, String suggestion, int count) throws DataBaseFailedException {
+    private void setUserSuggestionsCounter (String id, String field, String suggestion, int count) throws DataBaseFailedException {
         try {
             String sql = "UPDATE UserSuggestions SET counter= ? " +
                     " WHERE apartmentID= ? AND field= ? AND suggestion= ?";
@@ -1116,7 +1192,64 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
+    private void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException {
+        try {
+            String sql = "INSERT INTO UserSuggestions(apartmentID, field, suggestion, counter)" +
+                    " VALUES (?,?,?,?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.setString(2, field);
+            pstmt.setString(3, suggestion);
+            pstmt.setInt(4, 1);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+    public int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException {
+        int counter=getUserSuggestionsNum(id,field,suggestion);
+        if (counter==-1) {
+            insertUserSuggestionsNum(id, field, suggestion);
+            return 1;
+        }
+        else {
+            setUserSuggestionsCounter(id,field,suggestion,counter+1);
+            return counter+1;
+        }
+    }
 
+    public void suggestionChangesApartmentReacord (String apartmentID, String field){
+        try {
+            String sql = "UPDATE Apartment SET Apartment.? WHERE apartmentID= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, field);
+            pstmt.setString(2, apartmentID);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+    }
+
+//    public void suggetionChangesAddress (String apartmentID, String street, int num ) throws DataBaseFailedException {
+//        GoogleMapsController googleMapsController= new GoogleMapsController();
+//        Apartment apartment= getApartmentRecordTBD(apartmentID);
+//        int tempForAddressDetaileNum = isAddressDetailsExist(street,num);
+//        String tempForApartment;
+//        if (tempForAddressDetaileNum == -1) {
+//            if (!street.isEmpty() && num > 0) {
+//                int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, num);
+//                double[] locationPoint = googleMapsController.getCoordinates(street, num);
+//                tempForAddressDetaileNum = addAddressDetailsRecord(
+//                        street, num + "",
+//                        timeToUni, "", locationPoint[0], locationPoint[1]);
+//            }
+//        }
+//    }
     public static void main(String[] args) throws Exception
     {
 /*        DataBaseConnection a=new DataBaseConnection();
