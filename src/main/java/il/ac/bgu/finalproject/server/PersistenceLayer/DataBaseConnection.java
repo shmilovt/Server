@@ -1158,7 +1158,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("create the contacts table",4);}
     }
-    private int getUserSuggestionsNum (String id, String field, String suggestion) {
+    public int getUserSuggestionsNum (String id, String field, String suggestion) {
         int value=-1;
         try {
             String sql = "SELECT counter FROM UserSuggestions " +
@@ -1175,7 +1175,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         return value;
     }
-    private void setUserSuggestionsCounter (String id, String field, String suggestion, int count) throws DataBaseFailedException {
+    public void setUserSuggestionsCounter (String id, String field, String suggestion, int count) throws DataBaseFailedException {
         try {
             String sql = "UPDATE UserSuggestions SET counter= ? " +
                     " WHERE apartmentID= ? AND field= ? AND suggestion= ?";
@@ -1192,7 +1192,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
-    private void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException {
+    public void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException {
         try {
             String sql = "INSERT INTO UserSuggestions(apartmentID, field, suggestion, counter)" +
                     " VALUES (?,?,?,?)";
@@ -1212,7 +1212,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     public int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException {
         int counter=getUserSuggestionsNum(id,field,suggestion);
         if (counter==-1) {
-            insertUserSuggestionsNum(id, field, suggestion);
+            insertUserSuggestionsRecord(id, field, suggestion);
             return 1;
         }
         else {
@@ -1221,17 +1221,48 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public void suggestionChangesApartmentReacord (String apartmentID, String field){
+    public void suggestionChangesApartmentReacord (String apartmentID, String suggestion, String field){
         try {
-            String sql = "UPDATE Apartment SET Apartment.? WHERE apartmentID= ?";
+            String sql = "UPDATE Apartment SET Apartment.? = ? WHERE apartmentID= ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, field);
-            pstmt.setString(2, apartmentID);
+            pstmt.setString(2, suggestion);
+            pstmt.setString(3, apartmentID);
             pstmt.executeUpdate();
         }
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+    }
+
+    public void suggestionChangesNeighborhood(String apartmentID, String suggestion){
+        int addressDetailsNum=-1;
+        try {
+            String sql = "SELECT Apartment.addressDetailsID "
+                    + " FROM Apartment"
+                    + " WHERE apartmentID= "+ apartmentID;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                addressDetailsNum= rs.getInt(1);
+            }
+        }
+        catch(SQLException e){System.out.println(e);}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+        if (addressDetailsNum!=-1) {
+            try {
+                String sql = "UPDATE AddressDetails SET AddressDetails.neighborhood = ? WHERE apartmentID= ?";
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, suggestion);
+                pstmt.setInt(2, addressDetailsNum);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+            } catch (Exception e) {
+                MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
+            }
         }
     }
 

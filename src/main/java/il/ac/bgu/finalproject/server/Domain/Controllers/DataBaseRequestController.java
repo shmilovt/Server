@@ -71,8 +71,29 @@ public class DataBaseRequestController {
     }
 
 
-
-
+    public void addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
+        int ans;
+        int counter=dataBaseConnectionInterface.getUserSuggestionsNum(id,field,suggestion);
+        if (counter==-1) {
+            dataBaseConnectionInterface.insertUserSuggestionsRecord(id, field, suggestion);
+            ans= 1;
+        }
+        else {
+            dataBaseConnectionInterface.setUserSuggestionsCounter(id,field,suggestion,counter+1);
+            ans= counter+1;
+        }
+        if (ans>5){
+            if (field.equals("neighborhood")){
+                dataBaseConnectionInterface.suggestionChangesNeighborhood(id,suggestion);
+            }
+            else if (field.equals("street")||field.equals("numOfBuilding")){
+                //get new apartmentLocation
+                //insert to addressDetails table
+            }
+            else
+                dataBaseConnectionInterface.suggestionChangesApartmentReacord(id,suggestion,field);
+        }
+    }
 
 
 }

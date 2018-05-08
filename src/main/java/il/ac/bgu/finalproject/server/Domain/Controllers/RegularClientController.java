@@ -46,7 +46,9 @@ public class RegularClientController {
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
     }
 
-//    public void addUserSuggestion()
+    public void addUserSuggestion(String id, String field, String suggestion){
+        dataBaseRequestController.addUserSuggestion(id, field, suggestion);
+    }
 
 /*
     public static void main(String[] args) throws Exception {
