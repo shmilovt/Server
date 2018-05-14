@@ -79,6 +79,7 @@ public interface DataBaseConnectionInterface {
     void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException;
     void suggestionChangesApartmentReacord (String apartmentID, String suggestion, String field);
     void suggestionChangesNeighborhood(String apartmentID, String suggestion);
+    void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
 
     }
 

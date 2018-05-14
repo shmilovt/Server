@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -88,7 +89,18 @@ public class DataBaseRequestController {
             }
             else if (field.equals("street")||field.equals("numOfBuilding")){
                 //get new apartmentLocation
+                ApartmentLocation apartmentLocation= new ApartmentLocation(); //SHAVIT FUNCTION HERE
                 //insert to addressDetails table
+                int addressDetailsNum= dataBaseConnectionInterface.isAddressDetailsExist(apartmentLocation.getAddress().getStreet(),
+                        apartmentLocation.getAddress().getNumber());
+                if (addressDetailsNum==-1) {
+                    addressDetailsNum = dataBaseConnectionInterface.addAddressDetailsRecord(apartmentLocation.getAddress().getStreet(),
+                            "" + apartmentLocation.getAddress().getNumber(), apartmentLocation.getDistanceFromUniversity(),
+                            apartmentLocation.getNeighborhood(), apartmentLocation.getLongitude(), apartmentLocation.getLatitude());
+                }
+                //change AddressId in Apartment record
+                dataBaseConnectionInterface.changeAddresDetailsForApartment(id, addressDetailsNum);
+
             }
             else
                 dataBaseConnectionInterface.suggestionChangesApartmentReacord(id,suggestion,field);

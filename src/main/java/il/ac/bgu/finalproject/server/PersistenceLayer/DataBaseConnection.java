@@ -1012,6 +1012,35 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(13, apartmentid);
             pstmt.executeUpdate();
             //System.out.println("Added");
+//            UpdateAddressDetailsForApartment(apartmentid,)
+            int addressDetailsNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress().getStreet(),
+                    apartment.getApartmentLocation().getAddress().getNumber());
+            if (addressDetailsNum==-1) {
+                addressDetailsNum = addAddressDetailsRecord(apartment.getApartmentLocation().getAddress().getStreet(),
+                        "" + apartment.getApartmentLocation().getAddress().getNumber(),
+                        apartment.getApartmentLocation().getDistanceFromUniversity(),
+                        apartment.getApartmentLocation().getNeighborhood(),
+                        apartment.getApartmentLocation().getLongitude(),
+                        apartment.getApartmentLocation().getLatitude());
+                changeAddresDetailsForApartment(apartmentid,addressDetailsNum);
+            }
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+
+    public void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException {
+        try {
+            String sql = "UPDATE Apartment SET addressDetailsID=? " +
+                    "WHERE apartmentID=? ";
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,apartmentid);
+            pstmt.setInt(2,addressDetailsNum);
+            pstmt.executeUpdate();
         }
         catch(SQLException e){}
         catch (Exception e){
