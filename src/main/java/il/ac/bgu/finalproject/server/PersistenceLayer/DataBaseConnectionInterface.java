@@ -80,6 +80,7 @@ public interface DataBaseConnectionInterface {
     void suggestionChangesApartmentReacord (String apartmentID, String suggestion, String field);
     void suggestionChangesNeighborhood(String apartmentID, String suggestion);
     void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
+    boolean login(String username, String password);
 
     }
 

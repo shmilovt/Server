@@ -107,5 +107,9 @@ public class DataBaseRequestController {
         }
     }
 
+    public boolean login (String username, String password){
+        return dataBaseConnectionInterface.login(username, password);
+    }
+
 
 }
