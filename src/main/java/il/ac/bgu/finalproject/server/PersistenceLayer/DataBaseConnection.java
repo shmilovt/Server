@@ -1369,6 +1369,42 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return false;
     }
 
+    public boolean changePassword(String username, String password){
+        try {
+            String sql = "UPDATE Admin "
+                    + " SET password=? "
+                    + " WHERE username= "+ username;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, password);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+            return true;
+        }
+        catch(SQLException e){System.out.println(e);}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+        return false;
+    }
+
+    public boolean changeEmailAddress(String username, String emailAddress){
+        try {
+            String sql = "UPDATE Admin "
+                    + " SET mailAddress=? "
+                    + " WHERE username= "+ username;
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, emailAddress);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+            return true;
+        }
+        catch(SQLException e){System.out.println(e);}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+        return false;
+    }
+
     public static void main(String[] args) throws Exception
     {
         /*

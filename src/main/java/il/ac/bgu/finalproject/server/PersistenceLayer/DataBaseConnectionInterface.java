@@ -73,14 +73,16 @@ public interface DataBaseConnectionInterface {
     int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException;
     int isAddressDetailsExist(String street, int number);
 
-
     int getUserSuggestionsNum (String id, String field, String suggestion);
+
     void setUserSuggestionsCounter (String id, String field, String suggestion, int count) throws DataBaseFailedException;
     void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException;
     void suggestionChangesApartmentReacord (String apartmentID, String suggestion, String field);
     void suggestionChangesNeighborhood(String apartmentID, String suggestion);
     void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
     boolean login(String username, String password);
+    boolean changePassword(String username, String password);
+    boolean changeEmailAddress(String username, String emailAddress);
 
     }
 
