@@ -46,7 +46,7 @@ public class RegularClientController {
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
     }
 
-    public void addUserSuggestion(String id, String field, String suggestion){
+    public void addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
         dataBaseRequestController.addUserSuggestion(id, field, suggestion);
     }
 
