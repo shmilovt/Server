@@ -3,18 +3,23 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 
 public class CalculatorAlgorithm {
-    public static Boolean isFairPrice(Apartment apartment){
-        int timeFromUniCost= calcTimeFromUniCost(apartment.getApartmentLocation().getDistanceFromUniversity());
-        int neighborhoodCost= calcNeighborhoodCost(apartment.getApartmentLocation().getNeighborhood());
-        int sizeCost= calcSizeCost(apartment.getCost());
-        int furnitureCost= calcFurnitureCost(apartment.getFurniture());
-        int gardenCost = calcGardenCost(apartment.getGarden(),apartment.getGardenSize());
-        int balconyCost= calcBalconyCost(apartment.getBalcony());
+    public static Boolean isFairPrice(Apartment apartment) {
+        int timeFromUniCost = calcTimeFromUniCost(apartment.getApartmentLocation().getDistanceFromUniversity());
+        int neighborhoodCost = 0;
+        if (apartment.getApartmentLocation().getAddress().getStreet().equals("וינגייט") &&
+                apartment.getApartmentLocation().getAddress().getNumber()>51) {
+            neighborhoodCost = CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
+        } else
+            neighborhoodCost = calcNeighborhoodCost(apartment.getApartmentLocation().getNeighborhood());
+        int sizeCost = calcSizeCost(apartment.getCost());
+        int furnitureCost = calcFurnitureCost(apartment.getFurniture());
+        int gardenCost = calcGardenCost(apartment.getGarden(), apartment.getGardenSize());
+        int balconyCost = calcBalconyCost(apartment.getBalcony());
 
-        int roomatesCost= calcRoomatesCost(apartment.getNumberOfMates());
+        int roomatesCost = calcRoomatesCost(apartment.getNumberOfMates());
 
-        int sum=1100+ timeFromUniCost+neighborhoodCost+sizeCost+furnitureCost+gardenCost+balconyCost+roomatesCost;
-        return (sum>= apartment.getCost());
+        int sum = 1100 + timeFromUniCost + neighborhoodCost + sizeCost + furnitureCost + gardenCost + balconyCost + roomatesCost;
+        return (sum >= apartment.getCost());
     }
 
     private static int calcBalconyCost(int balcony) {
@@ -24,8 +29,10 @@ public class CalculatorAlgorithm {
     }
 
     private static int calcGardenCost(int garden, int gardenSize) {
-        if(garden==1)
-            return CalculatorCosts.getInstance().getGardenCost();
+        if(garden==1) {
+//            if (gardenSize>15)
+                return CalculatorCosts.getInstance().getGardenCost();
+        }
         return 0;
     }
 
@@ -53,15 +60,16 @@ public class CalculatorAlgorithm {
             return CalculatorCosts.getInstance().getFurnitureCost_none();
     }
 
-    private static int calcSizeCost(int cost) {
+    private static int calcSizeCost(int cost) { //yanay say we can delete it
         if (cost<=25)
             return CalculatorCosts.getInstance().getSizeCost_25();
         else if (cost<=30)
             return CalculatorCosts.getInstance().getSizeCost_30();
         else if (cost<=35)
             return CalculatorCosts.getInstance().getSizeCost_35();
-        else
+        else if (cost>35)
             return CalculatorCosts.getInstance().getSizeCost_35_up();
+        else return 0;
     }
 
     private static int calcNeighborhoodCost(String neighborhood) {
@@ -69,72 +77,71 @@ public class CalculatorAlgorithm {
             case "שכונה ד'":
                 return CalculatorCosts.getInstance().getNeighborhoodCost_D();
             case "העיר העתיקה":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "שכונת דרום":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "שיכון דרום":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "המרכז האזרחי":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_D();
             case "שכונה א'":
-                break;
-//                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();////dont have////
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "שכונה ב'":
                 return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "שכונה ג'":
                 return CalculatorCosts.getInstance().getNeighborhoodCost_G();
             case "שכונה ה'":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "שכונה ו' החדשה":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "שכונה ו'":
                 return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "שכונה ט'":
-                break;
-                case "שכונה יא":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
+            case "שכונה יא":
+                return CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
             case "נאות אלון":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "נווה זאב":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "נווה נוי":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "נחל בקע":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "נחל עשן":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "נווה מנחם":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "הסיגליות":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "רמות":
                 return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
             case "נאות אברהם":
-                break;
-                case "נווה אילן":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
+//            case "נווה אילן":
+//                break; ////
             case "פלח 7":
-                break;
-            case "קריית גנים":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
+//            case "קריית גנים":
+//                break; ////
             case "הכלניות":
-                break;
-            case "שכונת רבין":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
+//            case "שכונת רבין":
+//                break; ////
             case "נאות לון":
-                break;
-            case "קריית הייטק":
-                break;
-            case "קרית יהודית":
-                break;
-            case "עמק שרה":
-                break;
+                return CalculatorCosts.getInstance().getNeighborhoodCost_B_Ramot();
+//            case "קריית הייטק":
+//                break;
+//            case "קרית יהודית":
+//                break;
+//            case "עמק שרה":
+//                break;
             default:
                 break;
         }
 
         //if (neighborhood==null)
-            return -1;
+        return 0;
     }
 
     private static int calcTimeFromUniCost(double timeFromUni) {
