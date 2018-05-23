@@ -1,4 +1,4 @@
-מאי 23, 2018 4:46:49 PM il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection getPost
+מאי 23, 2018 11:01:55 PM il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection getPost
 SEVERE: Unparseable date: ""
 java.text.ParseException: Unparseable date: ""
 	at java.text.DateFormat.parse(DateFormat.java:366)

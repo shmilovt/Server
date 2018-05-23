@@ -82,7 +82,7 @@ public interface DataBaseConnectionInterface {
     void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
     boolean login(String username, String password);
     boolean changePassword(String username, String password);
-    boolean changeEmailAddress(String username, String emailAddress);
+//    boolean changeEmailAddress(String username, String emailAddress);
 
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class DataBaseConnectionTest {
@@ -32,7 +33,7 @@ public class DataBaseConnectionTest {
 
     @AfterClass
     public static void endup() throws DataBaseFailedException {
-
+        dbc.changePassword("admin","123456");
 //        dbc.disConnect();
     }
 
@@ -184,5 +185,20 @@ public class DataBaseConnectionTest {
         int t= dbc.getConstValue("addressDetailsID");
         dbc.setConstValue("addressDetailsID",t+1);
         assertEquals(dbc.getConstValue("addressDetailsID"),t+1);
+    }
+
+    @Test
+    public void login(){
+        assertTrue(dbc.login("admin","123456"));
+        assertFalse(dbc.login("admin","12346"));
+        assertFalse(dbc.login("admina","123456"));
+    }
+
+    @Test
+    public void changePassword(){
+        assertTrue(dbc.login("admin","123456"));
+        dbc.changePassword("admin","12345");
+        assertTrue(dbc.login("admin","12345"));
+        assertFalse(dbc.login("admin","123456"));
     }
 }

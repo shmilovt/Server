@@ -113,9 +113,9 @@ public class DataBaseRequestController {
     public  boolean changePassword(String username, String password) {
         return dataBaseConnectionInterface.changePassword(username, password);
     }
-    public boolean changeEmailAddress(String username, String emailAddress){
-        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
-    }
+//    public boolean changeEmailAddress(String username, String emailAddress){
+//        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
+//    }
 
 
 }
