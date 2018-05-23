@@ -10,46 +10,51 @@ public class ServerController {
     private NLPController nlpController;
     private DataBaseRequestController dbController;
 
-    public ServerController(){
+    public ServerController() {
         nlpController = new NLPController();
         dbController = new DataBaseRequestController();
+        try {
+            dbController.connect();
+        } catch (DataBaseFailedException e) {
+            e.printStackTrace();
+        }
     }
 
     public Post getPost(String id) throws DataBaseFailedException {
-        dbController.connect();
+//        dbController.connect();
         Post post= dbController.getPost(id);
-        dbController.disconnect();
+//        dbController.disconnect();
         return post;
     }
 
     public void newPost(Post ourPost) throws DataBaseFailedException {
-        dbController.connect();
+//        dbController.connect();
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
         if(apartment!=null)
             dbController.manageApartment(apartment, ourPost.getID());
-        dbController.disconnect();
+//        dbController.disconnect();
     }
 
     public void updatePost(Post ourPost) throws DataBaseFailedException {
-        dbController.connect();
+//        dbController.connect();
         dbController.updatePost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
 
         dbController.manageApartment(apartment, ourPost.getID());
-        dbController.disconnect();
+//        dbController.disconnect();
     }
 
     public void deletePost(String id) throws DataBaseFailedException {
-        dbController.connect();
+//        dbController.connect();
         dbController.deletePost(id);
-        dbController.disconnect();
+//        dbController.disconnect();
     }
 
     public List<String> getAllPostsId() throws DataBaseFailedException {
-        dbController.connect();
+//        dbController.connect();
         List<String> postsID= dbController.getAllPostsId();
-        dbController.disconnect();
+//        dbController.disconnect();
         return postsID;
     }
 }

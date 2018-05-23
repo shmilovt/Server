@@ -382,7 +382,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             String sql = "SELECT * FROM posts where postID =" + "'" + id + "'";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            Post post = new Post(rs.getString(1), rs.getDate(2),
+
+            SimpleDateFormat simpleDateFormat= new SimpleDateFormat(dateFormat);
+
+            Post post = new Post(rs.getString(1), simpleDateFormat.parse(rs.getString(2)),
                     rs.getString(3), rs.getString(4),
                     rs.getString(5));
             return post;
@@ -1407,16 +1410,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
     public static void main(String[] args) throws Exception
     {
-        /*
+
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
         a.resetAdminTable();
-//        a.resetConstValueTable();
+        a.resetAllTables();
+        a.resetConstValueTable();
 //        a.resetUserSuggestionsTable();
-//        a.resetAllTables();
         a.disConnect();
-*/
-/*
+
+
         ServerController servercontroller=new ServerController();
         //servercontroller
         servercontroller.newPost(new Post("1231C_2476", new Date(new Date().getTime()-1000), "shlomi arzi","השותפה המקסימה שלנו Yarden Peretz עוזבת את הדירה. אני וGal Ben Maman מחפשים מישהי שתחליף את מקומה בחדר. דירת 4 חדרים חדשה משופצת לחלוטין עם חצר ענקית. הדירה באלעזר בן יאיר 16 כרבע שעה מאוניברסיטה. הדירה מרוהטת ויש בה הכל, רק להביא בגדים ולהכנס. עלות 1150 ש\\\"ח. כניסה מיידית :)\\nלפרטים:\\n0526516656\\n", ""));
@@ -1492,6 +1495,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         servercontroller.newPost(new Post("1231C_22341115", new Date(new Date().getTime()-989523), "margalit zhanani", "להשכרה בדרך מצדה\n₪2,700\n\nכתובת :דרך מצדה 95, קומה 2\n75 מטר נטו.\nמקום שקט ובטוח,יש שערים עם מפתח בכניסה לבניין\nדירת ארבעה חדרים-שלושה חדרי שינה, סלון מרווח ומואר,מטבח וחדר שירות.\nעברה שיפוץ כולל לפני שנה וחצי.\nכניסה מיידית\nמזגן בסלון+בשני חדרי שינה.\nהדירה מושכרת עם תנור משולב כיריים+מקרר חדשים.\nהדירה לא מרוהטת והמחיר לא כולל חשבונות.\nיש וועד בית.\n052-6035054 גיל.\n",""));
         servercontroller.newPost(new Post("1231C_22341116", new Date(new Date().getTime()-976523), "ben osor", "להשכרה במיתר יחידת דיור בשכונת רבין.\n70 מ\"ר + חצר פרטית + מחסן ומזווה חיצוני.\nנמצאת במקום מרכזי, קרובה לבתי הספר ולמרכז המסחרי של הישוב.\nשני חדרי שינה, מטבח, סלון ושני חדרי שירותים.\nיחידה יפה ומושקעת, בית אבן וגינה גדולה, יפה ומטופחת.\n\nמחיר 2700 ₪\nכדאי לראות.\n\nלפרטים -\nמאיר - 0525816460\nכרמלית - 0525816440\n",""));
         servercontroller.newPost(new Post("1231C_22341117", new Date(new Date().getTime()-96523), "rivka tamir", "***להשכרה ברחוב דונקלבלום 1 ב-ו' החדשה***\nדירת 4 חדרים משופצת מהיסוד!!\n-חדר הורים עם שרותים ומקלחת\n-בניין מתוחזק ברמה יוצאת דופן.\n-חניה+מחסן\n-ריהוט: פינת אוכל, 2 מיטות יחיד, 2 ארונות עץ מלא, ארון הזזה עם טריקה שקטה, 2 שידות עץ מלא, כריים, תנור, שולחן סלון, מזנון.\nכניסה: 14/11\nמחיר: 3400\nטלפון לפרטים: 0542054048 יעקב\n",""));
-        */
+
     }
 }

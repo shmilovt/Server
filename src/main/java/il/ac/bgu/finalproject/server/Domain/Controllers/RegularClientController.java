@@ -32,17 +32,17 @@ public class RegularClientController {
 
     public SearchResults searchApartments(List<CategoryQuery> categoryQueryList) {
         SearchAlgorithm searchAlgorithm = new SearchAlgorithm();
-        try {
-            dataBaseRequestController.connect();
-        } catch (DataBaseFailedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            dataBaseRequestController.connect();
+//        } catch (DataBaseFailedException e) {
+//            e.printStackTrace();
+//        }
         SearchResults apartmentList = dataBaseRequestController.allResultsRecordsFromDB();
-        try {
-            dataBaseRequestController.disconnect();
-        } catch (DataBaseFailedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            dataBaseRequestController.disconnect();
+//        } catch (DataBaseFailedException e) {
+//            e.printStackTrace();
+//        }
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
     }
 
