@@ -50,6 +50,9 @@ public class RegularClientController {
         dataBaseRequestController.addUserSuggestion(id, field, suggestion);
     }
 
+    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) throws DataBaseFailedException{
+        dataBaseRequestController.addSearchRecord(neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates);
+    }
 /*
     public static void main(String[] args) throws Exception {
         List<CategoryQuery> categoryQueryList = new LinkedList<CategoryQuery>();

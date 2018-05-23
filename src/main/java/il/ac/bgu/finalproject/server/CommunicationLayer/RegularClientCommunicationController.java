@@ -29,6 +29,9 @@ public class RegularClientCommunicationController {
     @RequestMapping(value = "/searchApartments", method = {RequestMethod.POST, RequestMethod.GET})
     public String searchApartments(@RequestParam String userSearchDTOString) {
         UserSearchDTO userSearchDTO = UserSearchDTO.fromJSON(userSearchDTOString);
+        service.addSearchRecord(userSearchDTO.getNeighborhood(),""+userSearchDTO.getDistanceFromUniversity(),
+                userSearchDTO.getCostDTO().toString(),userSearchDTO.getFloorDTO().toString(),userSearchDTO.getSizeDTO().toString(),
+                ""+userSearchDTO.getFurniture(),""+userSearchDTO.getNumberOfRooms(),""+userSearchDTO.getNumberOfMates());
         List<CategoryQuery> categoryQueryList = converter.convertFromDTO(userSearchDTO);
         SearchResults searchResult = service.searchApartments(categoryQueryList);
         SearchResultsDTO searchResultsDTO = converter.convertToDTO(searchResult);

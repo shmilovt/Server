@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.UserSearchDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -57,4 +58,5 @@ public class ServerController {
 //        dbController.disconnect();
         return postsID;
     }
+
 }

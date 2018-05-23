@@ -63,7 +63,7 @@ public interface DataBaseConnectionInterface {
     void deleteApartmentRecord(String id) throws DataBaseFailedException;
     Boolean morePostsWithApartmentID(String id);
     Boolean moreApartmentsWithAddressDetailsNum(String addressDetailsNum);
-    void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures) throws DataBaseFailedException;
+    void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) throws DataBaseFailedException;
     void updateApartmentRecord(Apartment apartment, String apartmentid) throws DataBaseFailedException;
     int isApartmentExist(Apartment apartment) throws DataBaseFailedException;
     void addApartmentDerivatives(Apartment apartment, String post) throws DataBaseFailedException;

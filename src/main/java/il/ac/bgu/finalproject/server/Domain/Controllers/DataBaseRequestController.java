@@ -117,5 +117,8 @@ public class DataBaseRequestController {
 //        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
 //    }
 
+    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) throws DataBaseFailedException{
+        dataBaseConnectionInterface.addSearchRecord(neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates);
+    }
 
 }

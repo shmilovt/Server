@@ -7,6 +7,7 @@ import java.util.List;
 public interface IService {
 
      SearchResults searchApartments(List<CategoryQuery> categoryQueryList);
+     void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) ;
 
 
 

@@ -309,7 +309,9 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "  floor text,\n" +
                 "  size text ,\n" +
                 "  furnitures text,\n" +
-                "  PRIMARY KEY (searchDate, neighborhood, timeFromUni, cost, floor, size, furnitures)" +
+                "  numOfRoomes text,\n" +
+                "  numOfMates text,\n" +
+                "  PRIMARY KEY (searchDate, neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates)" +
                 ")";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
@@ -966,12 +968,13 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures) throws DataBaseFailedException { //func that will be used by the client (Android App)
+    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor,
+                                String size, String furnitures, String numOfRoomes, String numOfMates) throws DataBaseFailedException { //func that will be used by the client (Android App)
         LocalDateTime now = LocalDateTime.now();
         try {
             String sql = "INSERT INTO SearchRecord(searchDate, neighborhood,"+
-                    " timeFromUni, cost, floor, size, furnitures)"+
-                    " VALUES(?,?,?,?,?,?,?)";
+                    " timeFromUni, cost, floor, size, furnitures, numOfRoomes ,numOfMates)"+
+                    " VALUES(?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, dtf.format(now));
@@ -981,6 +984,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.setString(5, floor);
             pstmt.setString(6, size);
             pstmt.setString(7, furnitures);
+            pstmt.setString(8, numOfRoomes);
+            pstmt.setString(9, numOfMates);
 
             pstmt.executeUpdate();
         }
@@ -1424,7 +1429,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
-        a.resetAdminTable();
+        a.resetSearchRecordsTable();
+//        a.resetAdminTable();
 //        a.resetAllTables();
 //        a.resetConstValueTable();
 //        a.resetUserSuggestionsTable();
