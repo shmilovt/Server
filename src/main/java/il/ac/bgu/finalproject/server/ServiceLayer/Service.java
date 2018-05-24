@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.SearchResultsDTO;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
@@ -10,6 +11,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.Cat
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestionUtils.UserSuggestion;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.NoUserNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -39,6 +41,46 @@ public class Service implements IService {
         } catch (DataBaseFailedException e) {
                         MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
         }
+    }
+
+    @Override
+    public boolean login(String username, String password)  {
+        try {
+            return adminClientController.login(username, password);
+        } catch (NoUserNameException e) {
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean changePassword(String username, String password) {
+        return adminClientController.changePassword(username, password);
+    }
+
+    @Override
+    public boolean newPostFromAdmin(String nameOfPublisher, String messege){
+        try {
+            return adminClientController.newPostFromAdmin(nameOfPublisher, messege);
+        } catch (DataBaseFailedException e) {
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return false;
+        }
+    }
+
+    @Override
+    public void insertGroup(String groupID) throws DataBaseFailedException{
+        adminClientController.insertGroup(groupID);
+    }
+
+    @Override
+    public void deleteGroup(String groupID) throws DataBaseFailedException{
+        adminClientController.deleteGroup(groupID);
+    }
+
+    @Override
+    public List<GroupDTO> GetAllGroups(){
+        return adminClientController.GetAllGroups();
     }
 
     public static void main(String[] args) throws Exception

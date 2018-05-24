@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
@@ -83,7 +84,14 @@ public interface DataBaseConnectionInterface {
     boolean login(String username, String password);
     boolean changePassword(String username, String password);
 //    boolean changeEmailAddress(String username, String emailAddress);
+    int getConstValue (String id) throws DataBaseFailedException;
+    void setConstValue (String id, int val) throws DataBaseFailedException;
 
-    }
+    void insertGroup(String groupID, String groupName) throws DataBaseFailedException;
+    void deleteGroup(String groupID) throws DataBaseFailedException;
+    List<GroupDTO> GetAllGroups();
+
+
+}
 
 

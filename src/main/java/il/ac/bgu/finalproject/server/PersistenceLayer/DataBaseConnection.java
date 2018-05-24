@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.Controllers.GoogleMapsController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
@@ -101,7 +102,22 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("insert into the ConstValues table",4);
-        }    }
+        }
+
+        sql= "INSERT INTO ConstValues(constV, numV) VALUES (?,?)";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,"postFromAdminID");
+            pstmt.setInt(2,0);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("insert into the ConstValues table",4);
+        }
+    }
     public int getConstValue (String id) throws DataBaseFailedException {
         int value=-1;
         try {
@@ -1424,13 +1440,87 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //        return false;
 //    }
 
+    public void resetGroupsTable() throws DataBaseFailedException {
+        String sql= "DROP TABLE Groups";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th admin table",4);
+        }
+        sql= "CREATE TABLE Groups(\n" +
+                "  groupID text PRIMARY KEY,\n" +
+                "  groupName text \n" +
+                ")";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+
+    public void insertGroup(String groupID, String groupName) throws DataBaseFailedException {
+        String sql= "INSERT INTO Groups(groupID, groupName) VALUES (?,?) ";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,groupID);
+            pstmt.setString(2,groupName);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+
+    public void deleteGroup(String groupID) throws DataBaseFailedException {
+        String sql = "DELETE FROM Groups WHERE groupID = ?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,groupID);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+
+    public List<GroupDTO> GetAllGroups() {
+        String sql = "SELECT groupID, groupName FROM Groups ";
+        List<GroupDTO> groups= new LinkedList<GroupDTO>();
+        try {
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            while (rs.next())
+                groups.add(new GroupDTO(rs.getString(1),rs.getString(2)));
+            return groups;
+        }
+        catch(SQLException e){return null;}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return null;
+        }
+    }
+
     public static void main(String[] args) throws Exception
     {
 
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
-        a.resetSearchRecordsTable();
-//        a.resetAdminTable();
+//        a.resetSearchRecordsTable();
+        a.resetAdminTable();
+        a.resetGroupsTable();
 //        a.resetAllTables();
 //        a.resetConstValueTable();
 //        a.resetUserSuggestionsTable();

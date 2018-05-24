@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
@@ -200,5 +201,15 @@ public class DataBaseConnectionTest {
         dbc.changePassword("admin","12345");
         assertTrue(dbc.login("admin","12345"));
         assertFalse(dbc.login("admin","123456"));
+    }
+
+    @Test
+    public void deleteGroup() throws DataBaseFailedException { //ALL GROUP METHODS WORKS!!
+//        dbc.resetGroupsTable();
+//        dbc.insertGroup("1357","matan");
+//        dbc.insertGroup("1358","boaz");
+//        dbc.insertGroup("1358","viki");
+//        List<GroupDTO> groupDTOList= dbc.GetAllGroups();
+//        dbc.deleteGroup("1357");
     }
 }

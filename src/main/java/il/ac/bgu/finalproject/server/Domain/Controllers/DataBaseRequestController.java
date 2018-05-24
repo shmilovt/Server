@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
@@ -120,5 +121,20 @@ public class DataBaseRequestController {
     public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) throws DataBaseFailedException{
         dataBaseConnectionInterface.addSearchRecord(neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates);
     }
+    public int getConstValue (String id) throws DataBaseFailedException {
+        return  dataBaseConnectionInterface.getConstValue(id);
+    }
+    public void setConstValue (String id, int val) throws DataBaseFailedException{
+        dataBaseConnectionInterface.setConstValue(id, val);
+    }
 
+    public void insertGroup(String groupID, String groupName) throws DataBaseFailedException{
+        dataBaseConnectionInterface.insertGroup(groupID, groupName);
+    }
+    public void deleteGroup(String groupID) throws DataBaseFailedException{
+        dataBaseConnectionInterface.deleteGroup(groupID);
+    }
+    public List<GroupDTO> getAllGroups(){
+        return dataBaseConnectionInterface.GetAllGroups();
+    }
 }
