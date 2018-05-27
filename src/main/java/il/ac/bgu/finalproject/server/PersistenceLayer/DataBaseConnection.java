@@ -1,5 +1,7 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.Controllers.GoogleMapsController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
@@ -1010,6 +1012,38 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("drop th contacts table",4);
         }
+    }
+
+    public List<SearchRecordDTO> getAllUserSearches(){
+        SearchRecordDTO tempSearchRecordDTO;
+        List<SearchRecordDTO> searchRecordDTOList= new LinkedList<SearchRecordDTO>();
+        try {
+            String sql = "SELECT searchDate, neighborhood, timeFromUni, cost, floor, SearchRecord.size," +
+                    " furnitures, numOfRoomes, numOfMates"
+                    + " FROM SearchRecord";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                tempSearchRecordDTO = new SearchRecordDTO();
+                tempSearchRecordDTO.setSearchDate(rs.getString(1));
+                tempSearchRecordDTO.setNeighborhood(rs.getString(2));
+                tempSearchRecordDTO.setDistanceFromUniversity(rs.getString(3));
+                tempSearchRecordDTO.setCost(rs.getString(4));
+                tempSearchRecordDTO.setFloor(rs.getString(5));
+                tempSearchRecordDTO.setSize(rs.getString(6));
+                tempSearchRecordDTO.setFurniture(rs.getString(7));
+                tempSearchRecordDTO.setNumberOfRooms(rs.getString(8));
+                tempSearchRecordDTO.setNumberOfMates(rs.getString(9));
+                searchRecordDTOList.add(tempSearchRecordDTO);
+            }
+        }
+        catch(SQLException e){System.out.println(e);}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+
+        return searchRecordDTOList;
     }
 
     public void updateApartmentRecord(Apartment apartment, String apartmentid) throws DataBaseFailedException {

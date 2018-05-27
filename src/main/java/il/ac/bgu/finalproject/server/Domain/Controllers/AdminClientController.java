@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CalculatorCosts;
@@ -55,5 +56,7 @@ public class AdminClientController {
     public List<GroupDTO> GetAllGroups(){
         return dataBaseRequestController.getAllGroups();
     }
-
+    public ArraySearchRecordDTO getAllUserSearches(){
+        return dataBaseRequestController.getAllUserSearches();
+    }
 }

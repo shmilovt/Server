@@ -1,5 +1,7 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
@@ -137,4 +139,16 @@ public class DataBaseRequestController {
     public List<GroupDTO> getAllGroups(){
         return dataBaseConnectionInterface.GetAllGroups();
     }
+
+    public ArraySearchRecordDTO getAllUserSearches(){
+        List<SearchRecordDTO> searchRecordDTOList= dataBaseConnectionInterface.getAllUserSearches();
+        int size=searchRecordDTOList.size();
+        SearchRecordDTO[] searchRecordDTOS= new SearchRecordDTO[size];
+        for (int i=0; i<size; i++){
+            searchRecordDTOS[i]= searchRecordDTOList.get(i);
+        }
+        ArraySearchRecordDTO arraySearchRecordDTO= new ArraySearchRecordDTO();
+        return arraySearchRecordDTO;
+    }
+
 }

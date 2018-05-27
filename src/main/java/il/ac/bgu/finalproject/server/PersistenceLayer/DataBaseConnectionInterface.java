@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
@@ -90,8 +91,10 @@ public interface DataBaseConnectionInterface {
     void insertGroup(String groupID, String groupName) throws DataBaseFailedException;
     void deleteGroup(String groupID) throws DataBaseFailedException;
     List<GroupDTO> GetAllGroups();
+    List<SearchRecordDTO> getAllUserSearches();
 
 
-}
+
+    }
 
 

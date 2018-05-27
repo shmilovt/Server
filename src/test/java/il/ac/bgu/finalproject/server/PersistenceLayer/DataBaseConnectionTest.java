@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
@@ -204,6 +205,13 @@ public class DataBaseConnectionTest {
     }
 
     @Test
+    public void getAllUserSearches() throws DataBaseFailedException {
+//        dbc.addSearchRecord("t","t","t","t","t","t","t","t");
+//        dbc.addSearchRecord("t","n","mm","oo","c","c","tt","e");
+//        List<SearchRecordDTO> searchRecordDTOList= dbc.getAllUserSearches();
+    }
+
+        @Test
     public void deleteGroup() throws DataBaseFailedException { //ALL GROUP METHODS WORKS!!
 //        dbc.resetGroupsTable();
 //        dbc.insertGroup("1357","matan");
