@@ -323,13 +323,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 "  searchDate text ,\n" +
                 "  neighborhood text,\n" +
                 "  timeFromUni text,\n" +
-                "  cost text ,\n" +
-                "  floor text,\n" +
-                "  size text ,\n" +
+                "  costMin text ,\n" +
+                "  costMax text ,\n" +
+                "  floorMin text,\n" +
+                "  floorMax text,\n" +
+                "  sizeMin text ,\n" +
+                "  sizeMax text ,\n" +
                 "  furnitures text,\n" +
                 "  numOfRoomes text,\n" +
                 "  numOfMates text,\n" +
-                "  PRIMARY KEY (searchDate, neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates)" +
+                "  protectedSpace INTEGER,\n" +
+                "  garden INTEGER,\n" +
+                "  balcony INTEGER,\n" +
+                "  pets INTEGER,\n" +
+                "  warehouse INTEGER,\n" +
+//        boolean protectedSpace, boolean garden, boolean balcony, boolean pets, boolean warehouse
+                "  PRIMARY KEY (searchDate, neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin," +
+                " sizeMin, furnitures,numOfRoomes, numOfMates, " +
+                "protectedSpace,  garden, balcony, pets, warehouse)" +
                 ")";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
@@ -986,25 +997,35 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor,
-                                String size, String furnitures, String numOfRoomes, String numOfMates) throws DataBaseFailedException { //func that will be used by the client (Android App)
+    public void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax,
+                                String sizeMin, String sizeMax, String furnitures, String numOfRoomes, String numOfMates,
+    int protectedSpace,  int garden, int balcony, int pets, int warehouse) throws DataBaseFailedException { //func that will be used by the client (Android App)
         LocalDateTime now = LocalDateTime.now();
         try {
-            String sql = "INSERT INTO SearchRecord(searchDate, neighborhood,"+
-                    " timeFromUni, cost, floor, size, furnitures, numOfRoomes ,numOfMates)"+
-                    " VALUES(?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO SearchRecord(searchDate, neighborhood," +
+                    " timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin, sizeMax, furnitures, numOfRoomes ,numOfMates," +
+                    " protectedSpace,  garden, balcony, pets, warehouse)" +
+                    " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, dtf.format(now));
             pstmt.setString(2, neighborhood);
             pstmt.setString(3, timeFromUni);
-            pstmt.setString(4, cost);
-            pstmt.setString(5, floor);
-            pstmt.setString(6, size);
-            pstmt.setString(7, furnitures);
-            pstmt.setString(8, numOfRoomes);
-            pstmt.setString(9, numOfMates);
+            pstmt.setString(4, costMin);
+            pstmt.setString(5, costMax);
+            pstmt.setString(6, floorMin);
+            pstmt.setString(7, floorMax);
+            pstmt.setString(8, sizeMin);
+            pstmt.setString(9, sizeMax);
+            pstmt.setString(10, furnitures);
+            pstmt.setString(11, numOfRoomes);
+            pstmt.setString(12, numOfMates);
 
+            pstmt.setInt(13, protectedSpace);
+            pstmt.setInt(14, garden);
+            pstmt.setInt(15, balcony);
+            pstmt.setInt(16, pets);
+            pstmt.setInt(17, warehouse);
             pstmt.executeUpdate();
         }
         catch(SQLException e){}
@@ -1018,8 +1039,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         SearchRecordDTO tempSearchRecordDTO;
         List<SearchRecordDTO> searchRecordDTOList= new LinkedList<SearchRecordDTO>();
         try {
-            String sql = "SELECT searchDate, neighborhood, timeFromUni, cost, floor, SearchRecord.size," +
-                    " furnitures, numOfRoomes, numOfMates"
+            String sql = "SELECT searchDate, neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax," +
+                    " SearchRecord.sizeMin, SearchRecord.sizeMax, " +
+                    " furnitures, numOfRoomes, numOfMates," +
+                    " protectedSpace,  garden, balcony, pets, warehouse "
                     + " FROM SearchRecord";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -1028,12 +1051,20 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 tempSearchRecordDTO.setSearchDate(rs.getString(1));
                 tempSearchRecordDTO.setNeighborhood(rs.getString(2));
                 tempSearchRecordDTO.setDistanceFromUniversity(rs.getString(3));
-                tempSearchRecordDTO.setCost(rs.getString(4));
-                tempSearchRecordDTO.setFloor(rs.getString(5));
-                tempSearchRecordDTO.setSize(rs.getString(6));
-                tempSearchRecordDTO.setFurniture(rs.getString(7));
-                tempSearchRecordDTO.setNumberOfRooms(rs.getString(8));
-                tempSearchRecordDTO.setNumberOfMates(rs.getString(9));
+                tempSearchRecordDTO.setCostMin(rs.getString(4));
+                tempSearchRecordDTO.setCostMax(rs.getString(5));
+                tempSearchRecordDTO.setFloorMin(rs.getString(6));
+                tempSearchRecordDTO.setFloorMax(rs.getString(7));
+                tempSearchRecordDTO.setSizeMin(rs.getString(8));
+                tempSearchRecordDTO.setSizeMax(rs.getString(9));
+                tempSearchRecordDTO.setFurniture(rs.getString(10));
+                tempSearchRecordDTO.setNumberOfRooms(rs.getString(11));
+                tempSearchRecordDTO.setNumberOfMates(rs.getString(12));
+                tempSearchRecordDTO.setProtectedSpace(rs.getInt(13));
+                tempSearchRecordDTO.setGarden(rs.getInt(14));
+                tempSearchRecordDTO.setBalcony(rs.getInt(15));
+                tempSearchRecordDTO.setPets(rs.getInt(16));
+                tempSearchRecordDTO.setWarehous(rs.getInt(17));
                 searchRecordDTOList.add(tempSearchRecordDTO);
             }
         }

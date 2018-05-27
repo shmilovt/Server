@@ -50,8 +50,8 @@ public class RegularClientController {
         dataBaseRequestController.addUserSuggestion(id, field, suggestion);
     }
 
-    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) throws DataBaseFailedException{
-        dataBaseRequestController.addSearchRecord(neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates);
+    public void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse) throws DataBaseFailedException{
+        dataBaseRequestController.addSearchRecord(neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin, sizeMax, furnitures,numOfRoomes, numOfMates, protectedSpace,  garden, balcony, pets, warehouse);
     }
 /*
     public static void main(String[] args) throws Exception {

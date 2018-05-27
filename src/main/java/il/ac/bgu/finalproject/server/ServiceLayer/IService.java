@@ -11,7 +11,7 @@ import java.util.List;
 public interface IService {
 
      SearchResults searchApartments(List<CategoryQuery> categoryQueryList);
-     void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates) ;
+     void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse);
      boolean login(String username, String password);
      boolean changePassword(String username, String password);
      boolean newPostFromAdmin(String nameOfPublisher, String messege);

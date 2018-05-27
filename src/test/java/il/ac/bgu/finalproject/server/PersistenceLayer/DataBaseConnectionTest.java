@@ -206,9 +206,10 @@ public class DataBaseConnectionTest {
 
     @Test
     public void getAllUserSearches() throws DataBaseFailedException {
-//        dbc.addSearchRecord("t","t","t","t","t","t","t","t");
-//        dbc.addSearchRecord("t","n","mm","oo","c","c","tt","e");
-//        List<SearchRecordDTO> searchRecordDTOList= dbc.getAllUserSearches();
+        dbc.resetSearchRecordsTable();
+        dbc.addSearchRecord("t","t","t","tmax","t","tmax","t","tmax","tt","tt","tt",0,1,0,1,0);
+        dbc.addSearchRecord("t","n","mm","oomax","c","cmax","tt","emax","tt","tt","tt",0,1,0,1,0);
+        List<SearchRecordDTO> searchRecordDTOList= dbc.getAllUserSearches();
     }
 
         @Test

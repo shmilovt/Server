@@ -2,8 +2,7 @@ package il.ac.bgu.finalproject.server.CommunicationLayer;
 
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.*;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.*;
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +28,39 @@ public class RegularClientCommunicationController {
     @RequestMapping(value = "/searchApartments", method = {RequestMethod.POST, RequestMethod.GET})
     public String searchApartments(@RequestParam String userSearchDTOString) {
         UserSearchDTO userSearchDTO = UserSearchDTO.fromJSON(userSearchDTOString);
+        CategoryType[] categoryTypes = userSearchDTO.getPriorities();
+        int protectedSpace=0;
+        int garden=0;
+        int balcony=0;
+        int pets=0;
+        int warehouse=0;
+        for(CategoryType categoryType : categoryTypes){
+            switch (categoryType){
+                case balcony:
+                    balcony=1;
+                    break;
+                case animals:
+                    pets=1;
+                    break;
+                case protectedSpace:
+                    protectedSpace=1;
+                    break;
+                case yard:
+                    garden=1;
+                    break;
+                case warehouse:
+                    warehouse=1;
+                    break;
+                default:
+                    break;
+            }
+        }
         service.addSearchRecord(userSearchDTO.getNeighborhood(),""+userSearchDTO.getDistanceFromUniversity(),
-                userSearchDTO.getCostDTO().toString(),userSearchDTO.getFloorDTO().toString(),userSearchDTO.getSizeDTO().toString(),
-                ""+userSearchDTO.getFurniture(),""+userSearchDTO.getNumberOfRooms(),""+userSearchDTO.getNumberOfMates());
+                ""+userSearchDTO.getCostDTO().getMinCost(), ""+userSearchDTO.getCostDTO().getMaxCost(),
+                ""+userSearchDTO.getFloorDTO().getMinFloor(), ""+userSearchDTO.getFloorDTO().getMaxFloor(),
+                ""+userSearchDTO.getSizeDTO().getMinSize(), ""+userSearchDTO.getSizeDTO().getMaxSize(),
+                ""+userSearchDTO.getFurniture(),""+userSearchDTO.getNumberOfRooms(),""+userSearchDTO.getNumberOfMates(),
+         protectedSpace,  garden, balcony, pets, warehouse);
         List<CategoryQuery> categoryQueryList = converter.convertFromDTO(userSearchDTO);
         SearchResults searchResult = service.searchApartments(categoryQueryList);
         SearchResultsDTO searchResultsDTO = converter.convertToDTO(searchResult);

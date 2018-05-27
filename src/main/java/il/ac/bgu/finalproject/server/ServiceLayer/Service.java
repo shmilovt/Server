@@ -37,10 +37,10 @@ public class Service implements IService {
     }
 
     @Override
-    public void addSearchRecord(String neighborhood, String timeFromUni, String cost, String floor, String size, String furnitures,String numOfRoomes, String numOfMates)  {
+    public void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse){
         try {
-            regularClientController.addSearchRecord(neighborhood, timeFromUni, cost, floor, size, furnitures,numOfRoomes, numOfMates);
-        } catch (DataBaseFailedException e) {
+            regularClientController.addSearchRecord(neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin, sizeMax, furnitures,numOfRoomes, numOfMates, protectedSpace,  garden, balcony, pets, warehouse);
+            } catch (DataBaseFailedException e) {
                         MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
         }
     }
