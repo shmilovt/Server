@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.CalculatorDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
@@ -19,4 +20,5 @@ public interface IService {
      void deleteGroup(String groupID) throws DataBaseFailedException;
      List<GroupDTO> GetAllGroups();
      ArraySearchRecordDTO getAllUserSearches();
+     CalculatorDTO getCalcCosts();
 }

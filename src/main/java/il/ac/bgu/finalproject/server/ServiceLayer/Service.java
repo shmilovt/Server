@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
 
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.CalculatorDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.SearchResultsDTO;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
@@ -87,6 +88,11 @@ public class Service implements IService {
     @Override
     public ArraySearchRecordDTO getAllUserSearches(){
         return adminClientController.getAllUserSearches();
+    }
+
+    @Override
+    public CalculatorDTO getCalcCosts(){
+        return adminClientController.getCalcCosts();
     }
 
     public static void main(String[] args) throws Exception
