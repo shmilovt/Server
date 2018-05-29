@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
 public class ResultRecordDTO {
+    private int apartmentID;
     private String street;
     private int number;
     private String neighborhood;
@@ -182,5 +183,13 @@ public class ResultRecordDTO {
 
     public void setLon(double lon) {
         this.lon = lon;
+    }
+
+    public int getApartmentID() {
+        return apartmentID;
+    }
+
+    public void setApartmentID(int apartmentID) {
+        this.apartmentID = apartmentID;
     }
 }

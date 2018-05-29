@@ -212,7 +212,14 @@ public class DataBaseConnectionTest {
         List<SearchRecordDTO> searchRecordDTOList= dbc.getAllUserSearches();
     }
 
-        @Test
+    @Test
+    public void suggestionChangesApartmentReacord(){
+        dbc.allResultsFromDB();
+        dbc.suggestionChangesNeighborhood("0","bupr");
+        dbc.suggestionChangesApartmentReacord("0","2","numOfRooms");
+    }
+
+    @Test
     public void deleteGroup() throws DataBaseFailedException { //ALL GROUP METHODS WORKS!!
 //        dbc.resetGroupsTable();
 //        dbc.insertGroup("1357","matan");

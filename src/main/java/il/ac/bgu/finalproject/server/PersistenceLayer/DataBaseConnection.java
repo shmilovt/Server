@@ -1249,18 +1249,18 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
     public void resetUserSuggestionsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE userSuggestions";
-//        try {
-//            PreparedStatement pstmt = conn.prepareStatement(sql);;
-//            pstmt.executeUpdate();
-//        }
-//        catch(SQLException e){}
-//        catch (Exception e){
-//            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-//            throw new DataBaseFailedException("drop th contacts table",4);
-//        }
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
 
         sql= "CREATE TABLE UserSuggestions(\n" +
-                "  apartmentID text NOT NULL,\n" +
+                "  apartmentID INTEGER NOT NULL,\n" +
                 "  field text NOT NULL,\n" +
                 "  suggestion text NOT NULL,\n" +
                 "  counter int NOT NULL,\n" +
@@ -1584,11 +1584,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
 //        a.resetSearchRecordsTable();
-        a.resetAdminTable();
-        a.resetGroupsTable();
+//        a.resetAdminTable();
+//        a.resetGroupsTable();
 //        a.resetAllTables();
 //        a.resetConstValueTable();
-//        a.resetUserSuggestionsTable();
+        a.resetUserSuggestionsTable();
         a.disConnect();
 
 /*

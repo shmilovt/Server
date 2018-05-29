@@ -1,12 +1,15 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 
 
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ApartmentDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ContactApartmentDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Converter {
@@ -93,6 +96,7 @@ public class Converter {
         ResultRecordDTO tempResultRecordDTO;
         for (ResultRecord resultRecord : resultRecordList) {
             tempResultRecordDTO = new ResultRecordDTO();
+            tempResultRecordDTO.setApartmentID(resultRecord.getApartmentID());
             tempResultRecordDTO.setStreet(resultRecord.getStreet());
             tempResultRecordDTO.setNumber(resultRecord.getNumber());
             tempResultRecordDTO.setNeighborhood(resultRecord.getNeighborhood());
@@ -113,6 +117,7 @@ public class Converter {
             tempResultRecordDTO.setLon(resultRecord.getLon());
             ContactDTO[] contactDTOS = convertToDTO(resultRecord.getContacts());
             tempResultRecordDTO.setContacts(contactDTOS);
+            tempResultRecordDTO.setText(resultRecord.getText());
 
             resultRecordDTOS[i] = tempResultRecordDTO;
             i++;
@@ -121,11 +126,60 @@ public class Converter {
         return searchResultsDTO;
     }
 
+
+
+    public List<ApartmentDTO> convertToDTOAdminApartment(SearchResults searchResult) {
+        List<ResultRecord> resultRecordList = searchResult.getResultRecordList();
+        List<ApartmentDTO> ans= new LinkedList<ApartmentDTO>();
+        int i = 0;
+        ApartmentDTO apartmentDTO;
+        for (ResultRecord resultRecord : resultRecordList) {
+            apartmentDTO = new ApartmentDTO();
+            apartmentDTO.setApartmentID(resultRecord.getApartmentID());
+            apartmentDTO.setStreet(resultRecord.getStreet());
+            apartmentDTO.setNumber(resultRecord.getNumber());
+            apartmentDTO.setNeighborhood(resultRecord.getNeighborhood());
+            apartmentDTO.setFloor(resultRecord.getFloor());
+            apartmentDTO.setDistanceFromUniversity(resultRecord.getDistanceFromUniversity());
+            apartmentDTO.setCost(resultRecord.getCost());
+            apartmentDTO.setSize(resultRecord.getSize());
+            apartmentDTO.setBalcony(resultRecord.isBalcony());
+            apartmentDTO.setYard(resultRecord.isYard());
+            apartmentDTO.setAnimals(resultRecord.isAnimals());
+            apartmentDTO.setWarehouse(resultRecord.isWarehouse());
+            apartmentDTO.setProtectedSpace(resultRecord.isProtectedSpace());
+            apartmentDTO.setFurniture(resultRecord.getFurniture());
+            apartmentDTO.setNumberOfRooms(resultRecord.getNumberOfRooms());
+            apartmentDTO.setNumberOfRoomates(resultRecord.getNumberOfRoomates());
+            apartmentDTO.setDateOfPublish(resultRecord.getDateOfPublish());
+            apartmentDTO.setLat(resultRecord.getLat());
+            apartmentDTO.setLon(resultRecord.getLon());
+            ContactApartmentDTO[] contactDTOS = convertContectToDTOAdmin(resultRecord.getContacts());
+            apartmentDTO.setContacts(contactDTOS);
+            apartmentDTO.setText(resultRecord.getText());
+
+            ans.add(apartmentDTO);
+            i++;
+        }
+        return ans;
+    }
+
     public ContactDTO[] convertToDTO(Contact[] contacts) {
         ContactDTO[] contactDTOS = new ContactDTO[contacts.length];
         ContactDTO tempContactDTO;
         for (int i = 0; i < contacts.length; i++) {
             tempContactDTO = new ContactDTO();
+            tempContactDTO.setName(contacts[i].getName());
+            tempContactDTO.setPhone(contacts[i].getPhone());
+            contactDTOS[i] = tempContactDTO;
+        }
+        return contactDTOS;
+    }
+    public ContactApartmentDTO[] convertContectToDTOAdmin(Contact[] contacts) {
+        ContactApartmentDTO[] contactDTOS = new ContactApartmentDTO[contacts.length];
+        ContactApartmentDTO tempContactDTO;
+        for (int i = 0; i < contacts.length; i++) {
+            tempContactDTO = new ContactApartmentDTO();
             tempContactDTO.setName(contacts[i].getName());
             tempContactDTO.setPhone(contacts[i].getPhone());
             contactDTOS[i] = tempContactDTO;

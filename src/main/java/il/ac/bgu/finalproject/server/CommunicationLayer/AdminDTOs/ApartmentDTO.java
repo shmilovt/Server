@@ -1,8 +1,6 @@
-package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
+package il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs;
 
-import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
-
-public class ResultRecord {
+public class ApartmentDTO {
     private int apartmentID;
     private String street;
     private int number;
@@ -21,38 +19,11 @@ public class ResultRecord {
     private int numberOfRoomates;
     private String dateOfPublish; //just date without time
     private String text;
-    private Contact[] contacts;
+    private ContactApartmentDTO [] contacts;
     private double lat; // קווי אורך
     private double lon; // קווי רוחב
 
-    public ResultRecord(){
-    }
-    public ResultRecord(String street, int number, String neighborhood, int floor, double distanceFromUniversity,
-             int cost, int size, boolean balcony, boolean yard, boolean animals, boolean warehouse ,
-             boolean protectedSpace, int furniture, double numberOfRooms, int numberOfRoomates, String dateOfPublish, //just date without time
-             String text, Contact[] contacts, double lat, // קווי אורך
-             double lon){
-        this.street= street;
-        this.number= number;
-        this.neighborhood= neighborhood;
-        this.floor= floor;
-        this.distanceFromUniversity= distanceFromUniversity;
-        this.cost= cost;
-        this.size= size;
-        this.balcony= balcony;
-        this.yard= yard;
-        this.animals= animals;
-        this.warehouse= warehouse;
-        this.protectedSpace= protectedSpace;
-        this.furniture= furniture;
-        this.numberOfRooms= numberOfRooms;
-        this.numberOfRoomates= numberOfRoomates;
-        this.dateOfPublish= dateOfPublish;
-        this.text=text;
-        this.contacts=contacts;
-        this.lat= lat;
-        this.lon= lon;
-    }
+    public ApartmentDTO(){}
 
     public String getStreet() {
         return street;
@@ -190,11 +161,11 @@ public class ResultRecord {
         this.text = text;
     }
 
-    public Contact[] getContacts() {
+    public ContactApartmentDTO[] getContacts() {
         return contacts;
     }
 
-    public void setContacts(Contact[] contacts) {
+    public void setContacts(ContactApartmentDTO[] contacts) {
         this.contacts = contacts;
     }
 

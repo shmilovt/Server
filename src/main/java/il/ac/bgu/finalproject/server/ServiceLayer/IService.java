@@ -21,4 +21,13 @@ public interface IService {
      List<GroupDTO> GetAllGroups();
      ArraySearchRecordDTO getAllUserSearches();
      CalculatorDTO getCalcCosts();
+     SearchResults getAllApartments();
+     void setNewCalculator(int protectedSpaceCost, int timeFromUniCost_10, int timeFromUniCost_20,
+                           int timeFromUniCost_G_20, int neighborhoodCost_B_Ramot,
+                           int neighborhoodCost_oldV_Wingate, int neighborhoodCost_D,
+                           int neighborhoodCost_G, int furnitureCost_full, int furnitureCost_half,
+                           int furnitureCost_none, int sizeCost_25, int sizeCost_30, int sizeCost_35,
+                           int sizeCost_35_up, int roomatesCost_1, int roomatesCost_2, int roomatesCost_3,
+                           int roomatesCost_4, int roomatesCost_5, int roomatesCost_6, int gardenCost,
+                           int balconyCost);
 }

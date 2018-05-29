@@ -95,6 +95,29 @@ public class Service implements IService {
         return adminClientController.getCalcCosts();
     }
 
+    @Override
+    public SearchResults getAllApartments() {
+        return adminClientController.getAllApartments();
+    }
+
+    @Override
+    public void setNewCalculator(int protectedSpaceCost, int timeFromUniCost_10, int timeFromUniCost_20,
+                                 int timeFromUniCost_G_20, int neighborhoodCost_B_Ramot,
+                                 int neighborhoodCost_oldV_Wingate, int neighborhoodCost_D,
+                                 int neighborhoodCost_G, int furnitureCost_full, int furnitureCost_half,
+                                 int furnitureCost_none, int sizeCost_25, int sizeCost_30, int sizeCost_35,
+                                 int sizeCost_35_up, int roomatesCost_1, int roomatesCost_2, int roomatesCost_3,
+                                 int roomatesCost_4, int roomatesCost_5, int roomatesCost_6, int gardenCost,
+                                 int balconyCost) {
+        adminClientController.setNewCalculator(protectedSpaceCost, timeFromUniCost_10, timeFromUniCost_20,
+                timeFromUniCost_G_20, neighborhoodCost_B_Ramot,
+                neighborhoodCost_oldV_Wingate, neighborhoodCost_D,
+                neighborhoodCost_G, furnitureCost_full, furnitureCost_half,
+                furnitureCost_none, sizeCost_25, sizeCost_30, sizeCost_35,
+                sizeCost_35_up, roomatesCost_1, roomatesCost_2, roomatesCost_3,
+                roomatesCost_4, roomatesCost_5, roomatesCost_6, gardenCost, balconyCost);
+    }
+
     public static void main(String[] args) throws Exception
     {
         ServerController serverController=new ServerController();
