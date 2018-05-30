@@ -140,15 +140,15 @@ public class DataBaseRequestController {
         return dataBaseConnectionInterface.GetAllGroups();
     }
 
-    public ArraySearchRecordDTO getAllUserSearches(){
-        List<SearchRecordDTO> searchRecordDTOList= dataBaseConnectionInterface.getAllUserSearches();
-        int size=searchRecordDTOList.size();
-        SearchRecordDTO[] searchRecordDTOS= new SearchRecordDTO[size];
-        for (int i=0; i<size; i++){
-            searchRecordDTOS[i]= searchRecordDTOList.get(i);
-        }
-        ArraySearchRecordDTO arraySearchRecordDTO= new ArraySearchRecordDTO();
-        return arraySearchRecordDTO;
+    public List<SearchRecordDTO>  getAllUserSearches(){
+        return dataBaseConnectionInterface.getAllUserSearches();
+//        int size=searchRecordDTOList.size();
+//        SearchRecordDTO[] searchRecordDTOS= new SearchRecordDTO[size];
+//        for (int i=0; i<size; i++){
+//            searchRecordDTOS[i]= searchRecordDTOList.get(i);
+//        }
+//        ArraySearchRecordDTO arraySearchRecordDTO= new ArraySearchRecordDTO();
+//        return arraySearchRecordDTO;
     }
 
 }

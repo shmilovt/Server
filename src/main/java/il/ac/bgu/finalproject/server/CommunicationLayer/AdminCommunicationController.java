@@ -61,9 +61,9 @@ public class AdminCommunicationController {
 
     @RequestMapping(value = "/getAllUserSearches", method = {RequestMethod.POST, RequestMethod.GET})
     public String search2() {
-        ArraySearchRecordDTO arraySearchRecordDTO = service.getAllUserSearches();
+        List<SearchRecordDTO> SearchRecordDTOs = service.getAllUserSearches();
         Gson gson = new Gson();
-        String json = gson.toJson(arraySearchRecordDTO);
+        String json = gson.toJson(SearchRecordDTOs);
         return json;
     }
 

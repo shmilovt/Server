@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.CalculatorDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
@@ -19,7 +20,7 @@ public interface IService {
      void insertGroup(String groupID) throws DataBaseFailedException;
      void deleteGroup(String groupID) throws DataBaseFailedException;
      List<GroupDTO> GetAllGroups();
-     ArraySearchRecordDTO getAllUserSearches();
+     List<SearchRecordDTO> getAllUserSearches();
      CalculatorDTO getCalcCosts();
      SearchResults getAllApartments();
      void setNewCalculator(int protectedSpaceCost, int timeFromUniCost_10, int timeFromUniCost_20,
