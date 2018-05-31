@@ -46,8 +46,17 @@ public class RegularClientController {
         return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
     }
 
-    public void addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
-        dataBaseRequestController.addUserSuggestion(id, field, suggestion);
+    public int addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
+        return  dataBaseRequestController.addUserSuggestion(id, field, suggestion);
+    }
+    public void suggestionChangesApartmentInt(String id, String field, int suggest){
+        dataBaseRequestController.suggestionChangesApartmentInt(id, field, suggest);
+    }
+    public void suggestionChangesApartmentDouble(String id, String field, double suggest){
+        dataBaseRequestController.suggestionChangesApartmentDouble(id, field, suggest);
+    }
+    public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
+        dataBaseRequestController.suggestionChangesAddress(id, field, street, numB, neighborhood);
     }
 
     public void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse) throws DataBaseFailedException{

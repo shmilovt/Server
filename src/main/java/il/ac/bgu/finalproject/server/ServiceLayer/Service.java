@@ -119,6 +119,22 @@ public class Service implements IService {
                 roomatesCost_4, roomatesCost_5, roomatesCost_6, gardenCost, balconyCost);
     }
 
+    @Override
+    public int addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
+        return regularClientController.addUserSuggestion(id, field, suggestion);
+    }
+
+    @Override
+    public void suggestionChangesApartmentInt(String id, String field, int suggest){
+        regularClientController.suggestionChangesApartmentInt(id, field, suggest);
+    }
+    public void suggestionChangesApartmentDouble(String id, String field, double suggest){
+        regularClientController.suggestionChangesApartmentDouble(id, field, suggest);
+    }
+    public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
+        regularClientController.suggestionChangesAddress(id, field, street, numB, neighborhood);
+    }
+
     public static void main(String[] args) throws Exception
     {
         ServerController serverController=new ServerController();

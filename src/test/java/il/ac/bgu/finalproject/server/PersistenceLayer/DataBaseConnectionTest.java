@@ -1,11 +1,15 @@
 package il.ac.bgu.finalproject.server.PersistenceLayer;
 
+import com.google.gson.Gson;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.AddressDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
+import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.ReportDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -214,9 +218,23 @@ public class DataBaseConnectionTest {
 
     @Test
     public void suggestionChangesApartmentReacord(){
-        dbc.allResultsFromDB();
-        dbc.suggestionChangesNeighborhood("0","bupr");
-        dbc.suggestionChangesApartmentReacord("0","2","numOfRooms");
+        ReportDTO.Field field= ReportDTO.Field.address;
+        AddressDTO addressDTO= new AddressDTO();
+        addressDTO.setNeighborhood("ringle");
+        addressDTO.setNumOfBuilding(34);
+        addressDTO.setStreet("bloom");
+        Gson gson= new Gson();
+        String te= gson.toJson(addressDTO);
+//        ResultRecord("0",field,)
+        System.out.println(te);
+//        dbc.allResultsFromDB();
+//        dbc.suggestionChangesApartmentReacord("0",2,"floor");
+//        dbc.suggestionChangesNeighborhood("0","bupr");
+    }
+
+    @Test
+    public void suggestionChangesApartmentInt(){
+        dbc.suggestionChangesApartmentInt("0","floor",2);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package il.ac.bgu.finalproject.server.Domain.Controllers;
 
+import com.google.gson.Gson;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.ArraySearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.SearchRecordDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
@@ -75,7 +76,7 @@ public class DataBaseRequestController {
     }
 
 
-    public void addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
+    public int addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {
         int ans;
         int counter=dataBaseConnectionInterface.getUserSuggestionsNum(id,field,suggestion);
         if (counter==-1) {
@@ -86,28 +87,50 @@ public class DataBaseRequestController {
             dataBaseConnectionInterface.setUserSuggestionsCounter(id,field,suggestion,counter+1);
             ans= counter+1;
         }
-        if (ans>5){
-            if (field.equals("neighborhood")){
-                dataBaseConnectionInterface.suggestionChangesNeighborhood(id,suggestion);
-            }
-            else if (field.equals("street")||field.equals("numOfBuilding")){
-                //get new apartmentLocation
-                ApartmentLocation apartmentLocation= new ApartmentLocation(); //SHAVIT FUNCTION HERE
-                //insert to addressDetails table
-                int addressDetailsNum= dataBaseConnectionInterface.isAddressDetailsExist(apartmentLocation.getAddress().getStreet(),
-                        apartmentLocation.getAddress().getNumber());
-                if (addressDetailsNum==-1) {
-                    addressDetailsNum = dataBaseConnectionInterface.addAddressDetailsRecord(apartmentLocation.getAddress().getStreet(),
-                            "" + apartmentLocation.getAddress().getNumber(), apartmentLocation.getDistanceFromUniversity(),
-                            apartmentLocation.getNeighborhood(), apartmentLocation.getLongitude(), apartmentLocation.getLatitude());
-                }
-                //change AddressId in Apartment record
-                dataBaseConnectionInterface.changeAddresDetailsForApartment(id, addressDetailsNum);
 
-            }
-            else
-                dataBaseConnectionInterface.suggestionChangesApartmentReacord(id,suggestion,field);
-        }
+        return ans;
+//        if (ans>5){
+//            Gson gson= new Gson();
+////            if (field.equals("address")){
+////
+////            }
+////            else
+////                if(field.equals("address")||field.equals("address")||field.equals("address")) {
+////                    dataBaseConnectionInterface.suggestionChangesApartmentReacord(id, suggestion, field);
+////                }
+//
+//            if (field.equals("neighborhood")){
+//                dataBaseConnectionInterface.suggestionChangesNeighborhood(id,suggestion);
+//            }
+//            else if (field.equals("street")||field.equals("numOfBuilding")){
+//                //get new apartmentLocation
+//                ApartmentLocation apartmentLocation= new ApartmentLocation(); //SHAVIT FUNCTION HERE
+//                //insert to addressDetails table
+//                int addressDetailsNum= dataBaseConnectionInterface.isAddressDetailsExist(apartmentLocation.getAddress().getStreet(),
+//                        apartmentLocation.getAddress().getNumber());
+//                if (addressDetailsNum==-1) {
+//                    addressDetailsNum = dataBaseConnectionInterface.addAddressDetailsRecord(apartmentLocation.getAddress().getStreet(),
+//                            "" + apartmentLocation.getAddress().getNumber(), apartmentLocation.getDistanceFromUniversity(),
+//                            apartmentLocation.getNeighborhood(), apartmentLocation.getLongitude(), apartmentLocation.getLatitude());
+//                }
+//                //change AddressId in Apartment record
+//                dataBaseConnectionInterface.changeAddresDetailsForApartment(id, addressDetailsNum);
+//
+//            }
+//            else {
+//                int t= gson.fromJson(id,Integer.class);
+//                dataBaseConnectionInterface.suggestionChangesApartmentReacord(id, t, field);
+//            }
+//        }
+    }
+    public void suggestionChangesApartmentInt(String id, String field, int suggest){
+        dataBaseConnectionInterface.suggestionChangesApartmentInt(id, field, suggest);
+    }
+    public void suggestionChangesApartmentDouble(String id, String field, double suggest){
+        dataBaseConnectionInterface.suggestionChangesApartmentDouble(id, field, suggest);
+    }
+    public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
+        dataBaseConnectionInterface.suggestionChangesAddress(id, field, street, numB, neighborhood);
     }
 
     public boolean login (String username, String password){

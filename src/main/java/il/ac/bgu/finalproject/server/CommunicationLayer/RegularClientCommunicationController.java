@@ -1,8 +1,10 @@
 package il.ac.bgu.finalproject.server.CommunicationLayer;
 
+import com.google.gson.Gson;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.*;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.*;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,6 +88,41 @@ public class RegularClientCommunicationController {
         SearchResults searchResult = service.searchApartments(categoryQueries);
         SearchResultsDTO searchResultsDTO = converter.convertToDTO(searchResult);
         String jsonString = SearchResultsDTO.toJSON(searchResultsDTO);
+        return jsonString;
+    }
+
+    @RequestMapping(value = "/addUserReport", method = {RequestMethod.POST, RequestMethod.GET})
+    public String addUserReport(@RequestParam String report) {
+        Gson gson= new Gson();
+        ReportDTO reportDTO= ReportDTO.fromJSON(report);
+        int count=0;
+        try {
+            count= service.addUserSuggestion(reportDTO.getAddressID(),""+reportDTO.getField(),reportDTO.getContentInGson());
+        } catch (DataBaseFailedException e) {
+            e.printStackTrace();
+        }
+        if (count>5) {
+            switch (reportDTO.getField()) {
+                case size:
+                    double t1 = gson.fromJson(reportDTO.getContentInGson(), Double.class);
+                    service.suggestionChangesApartmentDouble(reportDTO.getAddressID(), ""+reportDTO.getField(), t1);
+                    break;
+                case numOfRooms:
+                    double t2 = gson.fromJson(reportDTO.getContentInGson(), Double.class);
+                    service.suggestionChangesApartmentDouble(reportDTO.getAddressID(), ""+reportDTO.getField(), t2);
+                    break;
+
+                case address:
+                    AddressDTO addressDTO= gson.fromJson(reportDTO.getContentInGson(),AddressDTO.class);
+                    service.suggestionChangesAddress(reportDTO.getAddressID(), ""+reportDTO.getField(),addressDTO.getStreet(),addressDTO.getNumOfBuilding(),addressDTO.getNeighborhood());
+                    break;
+                default:
+                    int t3 = gson.fromJson(reportDTO.getContentInGson(), Integer.class);
+                    service.suggestionChangesApartmentInt(reportDTO.getAddressID(), ""+reportDTO.getField(), t3);
+                    break;
+            }
+        }
+        String jsonString = gson.toJson(true);
         return jsonString;
     }
 

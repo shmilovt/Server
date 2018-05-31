@@ -1339,13 +1339,55 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public void suggestionChangesApartmentReacord (String apartmentID, String suggestion, String field){
+    public void suggestionChangesApartmentInt(String id, String field, int suggest){
         try {
-            String sql = "UPDATE Apartment SET Apartment.? = ? WHERE apartmentID= ?";
+            String sql = "UPDATE Apartment SET "+field+" = ? WHERE apartmentID= ?";
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, field);
-            pstmt.setString(2, suggestion);
-            pstmt.setString(3, apartmentID);
+            pstmt.setInt(1, suggest);
+            pstmt.setString(2, id);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+    }
+    public void suggestionChangesApartmentDouble(String id, String field, double suggest){
+        try {
+            String sql = "UPDATE Apartment SET "+field+" = ? WHERE apartmentID= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setDouble(1, suggest);
+            pstmt.setString(2, id);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+    }
+
+    public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
+//        try {
+////            String sql = "UPDATE Apartment SET "+field+" = ? WHERE apartmentID= ?";
+////            PreparedStatement pstmt = conn.prepareStatement(sql);
+////            pstmt.setDouble(1, suggest);
+////            pstmt.setString(2, id);
+////            pstmt.executeUpdate();
+//        }
+//        catch(SQLException e){}
+//        catch (Exception e){
+//            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//        }
+    }
+
+
+    public void suggestionChangesApartmentReacord (String apartmentID, int suggestion, String field){
+        try {
+            String sql = "UPDATE Apartment SET Apartment.?= ? WHERE apartmentID= ?";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, "floor");
+            pstmt.setInt(2, 1);
+            pstmt.setString(3, "0");
             pstmt.executeUpdate();
         }
         catch(SQLException e){}

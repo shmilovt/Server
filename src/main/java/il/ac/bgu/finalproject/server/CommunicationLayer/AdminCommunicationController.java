@@ -12,6 +12,7 @@ import il.ac.bgu.finalproject.server.ServiceLayer.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class AdminCommunicationController {
     private Converter converter;
 
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
-    public String login(String usernamePasswordString) {
+    public String login(@RequestParam String usernamePasswordString) {
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         boolean ans = service.login(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
         Gson gson = new Gson();
@@ -34,7 +35,7 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/changePassword", method = {RequestMethod.POST, RequestMethod.GET})
-    public String changePassword(String usernamePasswordString) {
+    public String changePassword(@RequestParam String usernamePasswordString) {
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         boolean ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
         Gson gson = new Gson();
@@ -43,7 +44,7 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
-    public String newPostFromAdmin(String usernamePasswordString) {
+    public String newPostFromAdmin(@RequestParam String usernamePasswordString) {
         NewPostDTO usernamePasswordDTO = NewPostDTO.fromJSON(usernamePasswordString);
         boolean ans = service.newPostFromAdmin(usernamePasswordDTO.getPublisherName(), usernamePasswordDTO.getPublisherName());
         Gson gson = new Gson();
@@ -76,7 +77,7 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/insertGroup", method = {RequestMethod.POST, RequestMethod.GET})
-    public String insertGroup(String groupIdString) {
+    public String insertGroup(@RequestParam String groupIdString) {
         Gson gson = new Gson();
         String groupID = gson.fromJson(groupIdString, String.class);
         try {
@@ -90,7 +91,7 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/deleteGroup", method = {RequestMethod.POST, RequestMethod.GET})
-    public String deleteGroup(String groupIdString) {
+    public String deleteGroup(@RequestParam String groupIdString) {
         Gson gson = new Gson();
         String groupID = gson.fromJson(groupIdString, String.class);
         try {
@@ -113,7 +114,7 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/setNewCalculator", method = {RequestMethod.POST, RequestMethod.GET})
-    public String setNewCalculator(String calcolatorString) {
+    public String setNewCalculator(@RequestParam String calcolatorString) {
         Gson gson = new Gson();
         CalculatorDTO calculatorDTO = gson.fromJson(calcolatorString, CalculatorDTO.class);
         service.setNewCalculator(calculatorDTO.getProtectedSpaceCost(), calculatorDTO.getTimeFromUniCost_10(),

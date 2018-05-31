@@ -31,4 +31,9 @@ public interface IService {
                            int sizeCost_35_up, int roomatesCost_1, int roomatesCost_2, int roomatesCost_3,
                            int roomatesCost_4, int roomatesCost_5, int roomatesCost_6, int gardenCost,
                            int balconyCost);
-}
+
+     int addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException ;
+     void suggestionChangesApartmentInt(String id, String field, int suggest);
+     void suggestionChangesApartmentDouble(String id, String field, double suggest);
+     void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood);
+     }

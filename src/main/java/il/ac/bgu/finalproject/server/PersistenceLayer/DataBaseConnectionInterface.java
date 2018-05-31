@@ -81,8 +81,13 @@ public interface DataBaseConnectionInterface {
 
     void setUserSuggestionsCounter (String id, String field, String suggestion, int count) throws DataBaseFailedException;
     void insertUserSuggestionsRecord (String id, String field, String suggestion) throws DataBaseFailedException;
-    void suggestionChangesApartmentReacord (String apartmentID, String suggestion, String field);
+    void suggestionChangesApartmentInt(String id, String field, int suggest);
+    void suggestionChangesApartmentDouble(String id, String field, double suggest);
+    void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood);
+    void suggestionChangesApartmentReacord (String apartmentID, int suggestion, String field);
     void suggestionChangesNeighborhood(String apartmentID, String suggestion);
+
+
     void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
     boolean login(String username, String password);
     boolean changePassword(String username, String password);
