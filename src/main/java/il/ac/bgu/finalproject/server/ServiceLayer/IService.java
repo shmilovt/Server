@@ -13,12 +13,12 @@ public interface IService {
 
      SearchResults searchApartments(List<CategoryQuery> categoryQueryList);
      void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse);
-     boolean login(String username, String password);
-     boolean changePassword(String username, String password);
+     int login(String username, String password);
+     int changePassword(String username, String password);
      boolean newPostFromAdmin(String nameOfPublisher, String messege);
 
-     void insertGroup(String groupID) throws DataBaseFailedException;
-     void deleteGroup(String groupID) throws DataBaseFailedException;
+     int insertGroup(String groupID) throws DataBaseFailedException;
+     int deleteGroup(String groupID) throws DataBaseFailedException;
      List<GroupDTO> GetAllGroups();
      List<SearchRecordDTO> getAllUserSearches();
      CalculatorDTO getCalcCosts();

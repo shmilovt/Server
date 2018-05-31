@@ -238,7 +238,9 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void deleteGroup() throws DataBaseFailedException { //ALL GROUP METHODS WORKS!!
+    public void deleteGroup() throws DataBaseFailedException {
+        System.out.println(dbc.userExist("admin"));
+        //ALL GROUP METHODS WORKS!!
 //        dbc.resetGroupsTable();
 //        dbc.insertGroup("1357","matan");
 //        dbc.insertGroup("1358","boaz");

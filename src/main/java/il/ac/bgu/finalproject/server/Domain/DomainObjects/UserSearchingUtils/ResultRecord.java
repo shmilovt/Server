@@ -3,7 +3,7 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 
 public class ResultRecord {
-    private int apartmentID;
+    private String apartmentID;
     private String street;
     private int number;
     private String neighborhood;
@@ -214,11 +214,11 @@ public class ResultRecord {
         this.lon = lon;
     }
 
-    public int getApartmentID() {
+    public String getApartmentID() {
         return apartmentID;
     }
 
-    public void setApartmentID(int apartmentID) {
+    public void setApartmentID(String apartmentID) {
         this.apartmentID = apartmentID;
     }
 }

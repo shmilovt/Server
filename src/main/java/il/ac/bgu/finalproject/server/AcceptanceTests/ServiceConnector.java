@@ -13,11 +13,7 @@ public class ServiceConnector {
     }
 
 
-
-
-
-
-
-
-
+    public IService getBridge() {
+        return bridge;
+    }
 }

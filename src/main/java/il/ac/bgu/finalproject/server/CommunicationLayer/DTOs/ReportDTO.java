@@ -3,7 +3,7 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.DTOs;
 import com.google.gson.Gson;
 
 public class ReportDTO {
-    private String addressID;
+    private String apartmentID;
     private Field field;
     private String contentInGson;
 
@@ -20,12 +20,12 @@ public class ReportDTO {
 
     }
 
-    public String getAddressID() {
-        return addressID;
+    public String getApartmentID() {
+        return apartmentID;
     }
 
-    public void setAddressID(String addressID) {
-        this.addressID = addressID;
+    public void setApartmentID(String apartmentID) {
+        this.apartmentID = apartmentID;
     }
 
     public Field getField() {

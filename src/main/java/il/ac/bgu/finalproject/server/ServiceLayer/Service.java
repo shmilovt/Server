@@ -47,17 +47,17 @@ public class Service implements IService {
     }
 
     @Override
-    public boolean login(String username, String password)  {
+    public int login(String username, String password)  {
         try {
             return adminClientController.login(username, password);
         } catch (NoUserNameException e) {
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            return false;
+            return -1;
         }
     }
 
     @Override
-    public boolean changePassword(String username, String password) {
+    public int changePassword(String username, String password) {
         return adminClientController.changePassword(username, password);
     }
 
@@ -72,13 +72,13 @@ public class Service implements IService {
     }
 
     @Override
-    public void insertGroup(String groupID) throws DataBaseFailedException{
-        adminClientController.insertGroup(groupID);
+    public int insertGroup(String groupID) throws DataBaseFailedException{
+        return adminClientController.insertGroup(groupID);
     }
 
     @Override
-    public void deleteGroup(String groupID) throws DataBaseFailedException{
-        adminClientController.deleteGroup(groupID);
+    public int deleteGroup(String groupID) throws DataBaseFailedException{
+        return adminClientController.deleteGroup(groupID);
     }
 
     @Override

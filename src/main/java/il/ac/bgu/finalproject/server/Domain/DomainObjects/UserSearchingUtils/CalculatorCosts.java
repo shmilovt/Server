@@ -1,6 +1,8 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 
 public class CalculatorCosts {
+    public static int basicCost=1100;
+
     private int protectedSpaceCost;
     private int timeFromUniCost_10;
     private int timeFromUniCost_20;

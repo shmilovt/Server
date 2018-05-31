@@ -91,10 +91,12 @@ public interface DataBaseConnectionInterface {
     void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
     boolean login(String username, String password);
     boolean changePassword(String username, String password);
+    boolean userExist(String username);
 //    boolean changeEmailAddress(String username, String emailAddress);
     int getConstValue (String id) throws DataBaseFailedException;
     void setConstValue (String id, int val) throws DataBaseFailedException;
 
+    boolean groupExist(String groupid);
     void insertGroup(String groupID, String groupName) throws DataBaseFailedException;
     void deleteGroup(String groupID) throws DataBaseFailedException;
     List<GroupDTO> GetAllGroups();

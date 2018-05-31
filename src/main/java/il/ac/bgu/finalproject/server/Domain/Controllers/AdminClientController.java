@@ -27,13 +27,13 @@ public class AdminClientController {
     }
 
 
-    public boolean login(String username, String password) throws NoUserNameException {
+    public int login(String username, String password) throws NoUserNameException {
         if (username == null || password == null)
             throw new NoUserNameException(username);
         return dataBaseRequestController.login(username, password);
     }
 
-    public boolean changePassword(String username, String password) {
+    public int changePassword(String username, String password) {
         return dataBaseRequestController.changePassword(username, password);
     }
 
@@ -108,17 +108,17 @@ public class AdminClientController {
 
     public boolean newPostFromAdmin(String nameOfPublisher, String messege) throws DataBaseFailedException {
         int t= dataBaseRequestController.getConstValue(postFromAdminID);
-        Post post= new Post(""+t, new Date(), nameOfPublisher, messege, "-1");
+        Post post= new Post(""+t, new Date(), nameOfPublisher, messege, ""+t);
         serverController.newPost(post); //is it correct to use ServerController?
         dataBaseRequestController.setConstValue(postFromAdminID,t+1);
         return true;
     }
 
-    public void insertGroup(String groupID) throws DataBaseFailedException{
-        dataBaseRequestController.insertGroup(groupID, "group");
+    public int insertGroup(String groupID) throws DataBaseFailedException{
+        return dataBaseRequestController.insertGroup(groupID, "group");
     }
-    public void deleteGroup(String groupID) throws DataBaseFailedException{
-        dataBaseRequestController.deleteGroup(groupID);
+    public int deleteGroup(String groupID) throws DataBaseFailedException{
+        return dataBaseRequestController.deleteGroup(groupID);
     }
     public List<GroupDTO> GetAllGroups(){
         return dataBaseRequestController.getAllGroups();

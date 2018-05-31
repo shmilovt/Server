@@ -26,6 +26,7 @@ public class CalculatorDTO {
     private int roomatesCost_6;
     private int gardenCost;
     private int balconyCost;
+    private int basicCost;
 
     public CalculatorDTO(){}
 
@@ -37,6 +38,18 @@ public class CalculatorDTO {
     public static CalculatorDTO fromJSON(String jsonString){
         Gson gson = new Gson();
         return gson.fromJson(jsonString, CalculatorDTO.class);
+    }
+
+    public boolean isLegal(){
+        int sum= protectedSpaceCost+ Math.max(timeFromUniCost_10, Math.max(timeFromUniCost_20,timeFromUniCost_G_20))+
+                Math.max(neighborhoodCost_B_Ramot, Math.max(neighborhoodCost_oldV_Wingate, Math.max(neighborhoodCost_D, neighborhoodCost_G)))+
+                Math.max(furnitureCost_full, Math.max(furnitureCost_half, furnitureCost_none))+
+                Math.max(sizeCost_25, Math.max(sizeCost_30, Math.max(sizeCost_35, sizeCost_35_up)))+
+                Math.max(roomatesCost_1, Math.max(roomatesCost_2, Math.max(roomatesCost_3,
+                        Math.max(roomatesCost_4, Math.max(roomatesCost_5, roomatesCost_6)))))+
+                gardenCost+balconyCost+
+                basicCost;
+        return sum<2000;
     }
 
     public int getProtectedSpaceCost() {
@@ -221,5 +234,13 @@ public class CalculatorDTO {
 
     public void setBalconyCost(int balconyCost) {
         this.balconyCost = balconyCost;
+    }
+
+    public int getBasicCost() {
+        return basicCost;
+    }
+
+    public void setBasicCost(int basicCost) {
+        this.basicCost = basicCost;
     }
 }

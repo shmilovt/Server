@@ -133,11 +133,19 @@ public class DataBaseRequestController {
         dataBaseConnectionInterface.suggestionChangesAddress(id, field, street, numB, neighborhood);
     }
 
-    public boolean login (String username, String password){
-        return dataBaseConnectionInterface.login(username, password);
+    public int login (String username, String password){
+        if (dataBaseConnectionInterface.userExist(username)){
+            if (dataBaseConnectionInterface.login(username, password)){ return 1; }
+            else return 0;
+        }
+        else return -1;
     }
-    public  boolean changePassword(String username, String password) {
-        return dataBaseConnectionInterface.changePassword(username, password);
+    public  int changePassword(String username, String password) {
+        if (dataBaseConnectionInterface.userExist(username)){
+            if (dataBaseConnectionInterface.changePassword(username, password)){ return 1; }
+            else return 0;
+        }
+        else return -1;
     }
 //    public boolean changeEmailAddress(String username, String emailAddress){
 //        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
@@ -153,11 +161,19 @@ public class DataBaseRequestController {
         dataBaseConnectionInterface.setConstValue(id, val);
     }
 
-    public void insertGroup(String groupID, String groupName) throws DataBaseFailedException{
-        dataBaseConnectionInterface.insertGroup(groupID, groupName);
+    public int insertGroup(String groupID, String groupName) throws DataBaseFailedException{
+        if (dataBaseConnectionInterface.groupExist(groupID)) {
+            dataBaseConnectionInterface.insertGroup(groupID, groupName);
+            return 1;
+        }
+        else return -1;
     }
-    public void deleteGroup(String groupID) throws DataBaseFailedException{
-        dataBaseConnectionInterface.deleteGroup(groupID);
+    public int deleteGroup(String groupID) throws DataBaseFailedException{
+        if (dataBaseConnectionInterface.groupExist(groupID)) {
+            dataBaseConnectionInterface.deleteGroup(groupID);
+            return 1;
+        }
+        else return -1;
     }
     public List<GroupDTO> getAllGroups(){
         return dataBaseConnectionInterface.GetAllGroups();

@@ -276,7 +276,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("drop th contacts table",4);
-        }    }
+        }
+    }
 
     public void resetPostsTable() throws DataBaseFailedException {
         String sql= "DROP TABLE posts";
@@ -813,7 +814,6 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                     + " FROM Apartment"
                     + " JOIN Posts P ON Apartment.apartmentID = P.apartmentID";
             Statement stmt = conn.createStatement();
-            System.out.println("fdfdf");
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 Set<Contact> contacts = getApartmentContacts(rs.getString(1));
@@ -843,6 +843,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //                    temp.setDateOfPublish("");
 //                }
                 temp.setText(rs.getString(15));
+                temp.setApartmentID(""+rs.getInt(1));
                 Contact [] contactsArray= new Contact [contacts.size()] ;
                 int i=0;
                 for (Contact con: contacts){
@@ -1522,7 +1523,24 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             pstmt.executeUpdate();
             return true;
         }
-        catch(SQLException e){System.out.println(e);}
+        catch(SQLException e){return false;}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            return false;
+        }
+//        return false;
+    }
+
+    public boolean userExist(String username){
+        try {
+            String sql = "SELECT Admin.username FROM Admin "
+                    + " WHERE username= '"+username+"'";
+            Statement stmt  = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next())
+                return true;
+        }
+        catch(SQLException e){return false;}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
         }
@@ -1572,6 +1590,22 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
             throw new DataBaseFailedException("drop th contacts table",4);
         }
+    }
+
+    public boolean groupExist(String groupid){
+        try {
+            String sql = "SELECT groupID FROM Groups"
+                    + " WHERE groupID= '"+groupid+"'";
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            if (rs.next())
+                return true;
+        }
+        catch(SQLException e){return false;}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+        return false;
     }
 
     public void insertGroup(String groupID, String groupName) throws DataBaseFailedException {

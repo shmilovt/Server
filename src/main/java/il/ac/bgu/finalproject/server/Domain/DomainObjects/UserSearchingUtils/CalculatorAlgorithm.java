@@ -11,14 +11,25 @@ public class CalculatorAlgorithm {
             neighborhoodCost = CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
         } else
             neighborhoodCost = calcNeighborhoodCost(apartment.getApartmentLocation().getNeighborhood());
-        int sizeCost = calcSizeCost(apartment.getCost());
+        int numOfmates= apartment.getNumberOfMates();
+        if (numOfmates==-1) {
+            if (apartment.getNumberOfRooms()!=-1) {
+                if (apartment.getNumberOfRooms() % 1 == 0)
+                    numOfmates = (int) apartment.getNumberOfRooms() - 1;
+                else
+                    numOfmates = (int) apartment.getNumberOfRooms();
+            }
+            else
+                numOfmates=3;
+        }
+        int sizeCost = calcSizeCost(apartment.getCost(),numOfmates);
         int furnitureCost = calcFurnitureCost(apartment.getFurniture());
         int gardenCost = calcGardenCost(apartment.getGarden(), apartment.getGardenSize());
         int balconyCost = calcBalconyCost(apartment.getBalcony());
 
         int roomatesCost = calcRoomatesCost(apartment.getNumberOfMates());
 
-        int sum = 1100 + timeFromUniCost + neighborhoodCost + sizeCost + furnitureCost + gardenCost + balconyCost + roomatesCost;
+        int sum = CalculatorCosts.basicCost + timeFromUniCost + neighborhoodCost + sizeCost + furnitureCost + gardenCost + balconyCost + roomatesCost;
         return (sum >= apartment.getCost());
     }
 
@@ -60,14 +71,16 @@ public class CalculatorAlgorithm {
             return CalculatorCosts.getInstance().getFurnitureCost_none();
     }
 
-    private static int calcSizeCost(int cost) { //yanay say we can delete it
-        if (cost<=25)
+    private static int calcSizeCost(int size,int nunOfMates) { //yanay say we can delete it
+        if (size>50)
+            size=(int)size/nunOfMates;
+        if (size<=25)
             return CalculatorCosts.getInstance().getSizeCost_25();
-        else if (cost<=30)
+        else if (size<=30)
             return CalculatorCosts.getInstance().getSizeCost_30();
-        else if (cost<=35)
+        else if (size<=35)
             return CalculatorCosts.getInstance().getSizeCost_35();
-        else if (cost>35)
+        else if (size>35)
             return CalculatorCosts.getInstance().getSizeCost_35_up();
         else return 0;
     }
