@@ -33,7 +33,12 @@ public class AdminCommunicationController {
         int ans = service.login(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
         Gson gson = new Gson();
         String json = gson.toJson(ans);
-        ResponseEntity.status(200).body(json);
+        if(ans==1)
+            ResponseEntity.status(200).body(json);
+        else if(ans==0)
+            ResponseEntity.status(400).body(json);
+        else if(ans==-1)
+            ResponseEntity.status(500).body(json);
         return json;
     }
 
@@ -43,8 +48,13 @@ public class AdminCommunicationController {
         int ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
         Gson gson = new Gson();
         String json = gson.toJson(ans);
+        if(ans==1)
+            ResponseEntity.status(200).body(json);
+        else if(ans==0)
+            ResponseEntity.status(400).body(json);
+        else if(ans==-1)
+            ResponseEntity.status(500).body(json);
         return json;
-//        ResponseEntity.status(200).body(json);
     }
 
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})

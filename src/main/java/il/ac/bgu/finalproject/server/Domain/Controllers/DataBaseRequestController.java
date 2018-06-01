@@ -136,16 +136,16 @@ public class DataBaseRequestController {
     public int login (String username, String password){
         if (dataBaseConnectionInterface.userExist(username)){
             if (dataBaseConnectionInterface.login(username, password)){ return 1; }
-            else return 0;
+            else return -1;
         }
-        else return -1;
+        else return 0;
     }
     public  int changePassword(String username, String password) {
         if (dataBaseConnectionInterface.userExist(username)){
             if (dataBaseConnectionInterface.changePassword(username, password)){ return 1; }
-            else return 0;
+            else return -1;
         }
-        else return -1;
+        else return 0;
     }
 //    public boolean changeEmailAddress(String username, String emailAddress){
 //        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
