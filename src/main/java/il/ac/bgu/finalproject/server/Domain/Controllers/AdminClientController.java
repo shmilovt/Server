@@ -81,29 +81,6 @@ public class AdminClientController {
                 furnitureCost_none, sizeCost_25, sizeCost_30, sizeCost_35,
                 sizeCost_35_up, roomatesCost_1, roomatesCost_2, roomatesCost_3,
                 roomatesCost_4, roomatesCost_5, roomatesCost_6, gardenCost, balconyCost);
-//        CalculatorCosts.getInstance().setProtectedSpaceCost(protectedSpaceCost);
-//        CalculatorCosts.getInstance().setTimeFromUniCost_10(timeFromUniCost_10);
-//        CalculatorCosts.getInstance().setTimeFromUniCost_20(timeFromUniCost_20);
-//        CalculatorCosts.getInstance().setTimeFromUniCost_G_20(calculator.getTimeFromUniCost_G_20());
-//        CalculatorCosts.getInstance().setNeighborhoodCost_B_Ramot(calculator.getNeighborhoodCost_B_Ramot());
-//        CalculatorCosts.getInstance().setNeighborhoodCost_oldV_Wingate(calculator.getNeighborhoodCost_oldV_Wingate());
-//        CalculatorCosts.getInstance().setNeighborhoodCost_D(calculator.getNeighborhoodCost_D());
-//        CalculatorCosts.getInstance().setNeighborhoodCost_G(calculator.getNeighborhoodCost_G());
-//        CalculatorCosts.getInstance().setFurnitureCost_full(calculator.getFurnitureCost_full());
-//        CalculatorCosts.getInstance().setFurnitureCost_half(calculator.getFurnitureCost_half());
-//        CalculatorCosts.getInstance().setFurnitureCost_none(calculator.getFurnitureCost_none());
-//        CalculatorCosts.getInstance().setSizeCost_25(calculator.getSizeCost_25());
-//        CalculatorCosts.getInstance().setSizeCost_30(calculator.getSizeCost_30());
-//        CalculatorCosts.getInstance().setSizeCost_35(calculator.getSizeCost_35());
-//        CalculatorCosts.getInstance().setSizeCost_35_up(calculator.getSizeCost_35_up());
-//        CalculatorCosts.getInstance().setRoomatesCost_1(calculator.getRoomatesCost_1());
-//        CalculatorCosts.getInstance().setRoomatesCost_2(calculator.getRoomatesCost_2());
-//        CalculatorCosts.getInstance().setRoomatesCost_3(calculator.getRoomatesCost_3());
-//        CalculatorCosts.getInstance().setRoomatesCost_4(calculator.getRoomatesCost_4());
-//        CalculatorCosts.getInstance().setRoomatesCost_5(calculator.getRoomatesCost_5());
-//        CalculatorCosts.getInstance().setRoomatesCost_6(calculator.getRoomatesCost_6());
-//        CalculatorCosts.getInstance().setGardenCost(calculator.getGardenCost());
-//        CalculatorCosts.getInstance().setBalconyCost(calculator.getBalconyCost());
     }
 
     public boolean newPostFromAdmin(String nameOfPublisher, String messege) throws DataBaseFailedException {
@@ -114,10 +91,10 @@ public class AdminClientController {
         return true;
     }
 
-    public int insertGroup(String groupID) throws DataBaseFailedException{
+    public int insertGroup(String groupID) {
         return dataBaseRequestController.insertGroup(groupID, "group");
     }
-    public int deleteGroup(String groupID) throws DataBaseFailedException{
+    public int deleteGroup(String groupID){
         return dataBaseRequestController.deleteGroup(groupID);
     }
     public List<GroupDTO> GetAllGroups(){

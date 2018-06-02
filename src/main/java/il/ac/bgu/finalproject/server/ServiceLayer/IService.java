@@ -17,8 +17,8 @@ public interface IService {
      int changePassword(String username, String password);
      boolean newPostFromAdmin(String nameOfPublisher, String messege);
 
-     int insertGroup(String groupID) throws DataBaseFailedException;
-     int deleteGroup(String groupID) throws DataBaseFailedException;
+     int insertGroup(String groupID);
+     int deleteGroup(String groupID);
      List<GroupDTO> GetAllGroups();
      List<SearchRecordDTO> getAllUserSearches();
      CalculatorDTO getCalcCosts();

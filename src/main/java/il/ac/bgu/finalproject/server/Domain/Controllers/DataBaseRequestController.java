@@ -161,17 +161,25 @@ public class DataBaseRequestController {
         dataBaseConnectionInterface.setConstValue(id, val);
     }
 
-    public int insertGroup(String groupID, String groupName) throws DataBaseFailedException{
+    public int insertGroup(String groupID, String groupName) {
         if (dataBaseConnectionInterface.groupExist(groupID)) {
-            dataBaseConnectionInterface.insertGroup(groupID, groupName);
-            return 1;
+            try {
+                dataBaseConnectionInterface.insertGroup(groupID, groupName);
+                return 1;
+            } catch (DataBaseFailedException e) {
+                return 0;
+            }
         }
         else return -1;
     }
-    public int deleteGroup(String groupID) throws DataBaseFailedException{
+    public int deleteGroup(String groupID){
         if (dataBaseConnectionInterface.groupExist(groupID)) {
-            dataBaseConnectionInterface.deleteGroup(groupID);
-            return 1;
+            try {
+                dataBaseConnectionInterface.deleteGroup(groupID);
+                return 1;
+            } catch (DataBaseFailedException e) {
+                return 0;
+            }
         }
         else return -1;
     }

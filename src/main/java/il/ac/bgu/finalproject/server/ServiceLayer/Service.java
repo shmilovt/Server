@@ -72,12 +72,12 @@ public class Service implements IService {
     }
 
     @Override
-    public int insertGroup(String groupID) throws DataBaseFailedException{
+    public int insertGroup(String groupID) {
         return adminClientController.insertGroup(groupID);
     }
 
     @Override
-    public int deleteGroup(String groupID) throws DataBaseFailedException{
+    public int deleteGroup(String groupID){
         return adminClientController.deleteGroup(groupID);
     }
 

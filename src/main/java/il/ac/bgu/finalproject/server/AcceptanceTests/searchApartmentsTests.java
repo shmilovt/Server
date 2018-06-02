@@ -22,6 +22,15 @@ public class searchApartmentsTests {
 
     }
 
+    @Test
+    public void newPostFromAdmin(){
+        serviceConnector.getBridge().newPostFromAdmin("bupr","דירת גן ! ! ! שלושה חדרים (שני חדרי שינה וסלון) ביואל השופט 6. חצר ענקית מגודרת. מטבח ענק! שירותים ומקלחת משופצים! 70 מ\"ר. איזור סטודנטיאלי. הרחוב הכי יפה בשכונה ד'. כניסה בספטמבר. 2500 ש\"ח.\n" +
+                "בבקשה להתקשר לבעלת הדירה לתיאום. \n" +
+                "052-4770573");
+
+
+    }
+
     @AfterClass
     public static void endup() {
       //  dbc.changePassword("admin","123456");

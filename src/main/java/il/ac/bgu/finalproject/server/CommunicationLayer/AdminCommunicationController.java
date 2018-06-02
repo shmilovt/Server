@@ -27,34 +27,34 @@ public class AdminCommunicationController {
     @Autowired
     private Converter converter;
 
+    public String normalizeAnsWithStatus(int ans){
+        Gson gson = new Gson();
+        String json;
+        if (ans==1) {
+            json = gson.toJson(true);
+            ResponseEntity.status(200).body(json);
+        } else if (ans==0){
+            json = gson.toJson(true);
+            ResponseEntity.status(430).body(json);}
+        else{
+            json = gson.toJson(false);
+            ResponseEntity.status(500).body(json);
+        }
+        return json;
+    }
+
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     public String login(@RequestParam String usernamePasswordString) {
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = service.login(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
-        Gson gson = new Gson();
-        String json = gson.toJson(ans);
-        if(ans==1)
-            ResponseEntity.status(200).body(json);
-        else if(ans==0)
-            ResponseEntity.status(400).body(json);
-        else if(ans==-1)
-            ResponseEntity.status(500).body(json);
-        return json;
+        return normalizeAnsWithStatus(ans);
     }
 
     @RequestMapping(value = "/changePassword", method = {RequestMethod.POST, RequestMethod.GET})
     public String changePassword(@RequestParam String usernamePasswordString) {
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
-        Gson gson = new Gson();
-        String json = gson.toJson(ans);
-        if(ans==1)
-            ResponseEntity.status(200).body(json);
-        else if(ans==0)
-            ResponseEntity.status(400).body(json);
-        else if(ans==-1)
-            ResponseEntity.status(500).body(json);
-        return json;
+        return normalizeAnsWithStatus(ans);
     }
 
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
@@ -94,28 +94,16 @@ public class AdminCommunicationController {
     public String insertGroup(@RequestParam String groupIdString) {
         Gson gson = new Gson();
         String groupID = gson.fromJson(groupIdString, String.class);
-        try {
-            service.insertGroup(groupID);
-        } catch (DataBaseFailedException e) {
-            String json = gson.toJson(false);
-            return json;
-        }
-        String json = gson.toJson(true);
-        return json;
+        int t= service.insertGroup(groupID);
+        return normalizeAnsWithStatus(t);
     }
 
     @RequestMapping(value = "/deleteGroup", method = {RequestMethod.POST, RequestMethod.GET})
     public String deleteGroup(@RequestParam String groupIdString) {
         Gson gson = new Gson();
         String groupID = gson.fromJson(groupIdString, String.class);
-        try {
-            service.deleteGroup(groupID);
-        } catch (DataBaseFailedException e) {
-            String json = gson.toJson(false);
-            return json;
-        }
-        String json = gson.toJson(true);
-        return json;
+        int t= service.deleteGroup(groupID);
+        return normalizeAnsWithStatus(t);
     }
 
     @RequestMapping(value = "/getAllApartments", method = {RequestMethod.POST, RequestMethod.GET})
