@@ -135,7 +135,7 @@ public class Service implements IService {
         regularClientController.suggestionChangesAddress(id, field, street, numB, neighborhood);
     }
 
-    public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood){
+    public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
         regularClientController.addressFieldCase(id, b,  b1, b2, street, numOfBuilding, neighborhood);
     }
 

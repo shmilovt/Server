@@ -37,5 +37,5 @@ public interface IService {
      void suggestionChangesApartmentDouble(String id, String field, double suggest);
      void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood);
 
-    void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood);
+    void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException;
 }

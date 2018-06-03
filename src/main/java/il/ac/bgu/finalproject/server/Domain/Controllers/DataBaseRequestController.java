@@ -198,28 +198,39 @@ public class DataBaseRequestController {
 //        return arraySearchRecordDTO;
     }
 
-    public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
-        if (b|b1){
+    public void addressFieldCase(String apartmentId, boolean streetBool, boolean numBuildingBool, boolean neighborhoodBool, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
+        if (streetBool||numBuildingBool){
             //address has changed
-            Apartment apartment= dataBaseConnectionInterface.getApartmentRecordTBD(id);
-            if (!(b && street!=null && street!=""))
+            Apartment apartment= dataBaseConnectionInterface.getApartmentRecordTBD(apartmentId);
+            if (!(streetBool && street!=null && street!=""))
                 street=apartment.getApartmentLocation().getAddress().getStreet();
-            if (!(b1 && numOfBuilding!= -1))
+            if (!(numBuildingBool && numOfBuilding!= -1))
                 numOfBuilding=apartment.getApartmentLocation().getAddress().getNumber();
             int addressDetailsId= dataBaseConnectionInterface.isAddressDetailsExist(street,numOfBuilding);
             if (addressDetailsId!= -1) {//exist
-                if (b2 && neighborhood!=null && neighborhood!=""){
-                    dataBaseConnectionInterface.suggestionChangesNeighborhood(id, neighborhood);
+                if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
+                    dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
                 }
             }
             else { // addressDetails need to be created
-//                addressDetailsId= dataBaseConnectionInterface.addAddressDetailsRecord(street,numOfBuilding,)
+                GoogleMapsController googleMapsController= new GoogleMapsController();
+
+                if (!street.isEmpty() && numOfBuilding> 0) {
+                    int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, numOfBuilding);
+                    double[] locationPoint = googleMapsController.getCoordinates(street, numOfBuilding);
+                    if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
+//                        neighborhood = here_and_now;
+                    }
+                    addressDetailsId = dataBaseConnectionInterface.addAddressDetailsRecord(
+                            street, numOfBuilding + "",
+                            timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
+                }
             }
-            dataBaseConnectionInterface.changeAddresDetailsForApartment(id,addressDetailsId);
+            dataBaseConnectionInterface.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
         }
         else{
-            if (b2 && neighborhood!=null && neighborhood!=""){
-                dataBaseConnectionInterface.suggestionChangesNeighborhood(id, neighborhood);
+            if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
+                dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
             }
         }
     }
