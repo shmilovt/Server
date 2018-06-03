@@ -93,32 +93,44 @@ public class RegularClientCommunicationController {
 
     @RequestMapping(value = "/addUserReport", method = {RequestMethod.POST, RequestMethod.GET})
     public String addUserReport(@RequestParam String report) {
-        Gson gson= new Gson();
-        ReportDTO reportDTO= ReportDTO.fromJSON(report);
-        int count=0;
+        Gson gson = new Gson();
+        ReportDTO reportDTO = ReportDTO.fromJSON(report);
+        int count = 0;
+        int count2,count3;
         try {
-            count= service.addUserSuggestion(reportDTO.getApartmentID(),""+reportDTO.getField(),reportDTO.getContentInGson());
+            if (reportDTO.getField() == ReportDTO.Field.address) {
+                AddressDTO addressDTO= AddressDTO.fromJSON(reportDTO.getContentInGson());
+                count = service.addUserSuggestion(reportDTO.getApartmentID(), "street" , addressDTO.getStreet());
+                count2 = service.addUserSuggestion(reportDTO.getApartmentID(), "numOfBuilding" , ""+addressDTO.getNumOfBuilding());
+                count3 = service.addUserSuggestion(reportDTO.getApartmentID(), "neighborhood" , addressDTO.getNeighborhood());
+
+                service.addressFieldCase(reportDTO.getApartmentID(),count>5,count2>5,count3>5,addressDTO.getStreet(),addressDTO.getNumOfBuilding(), addressDTO.getNeighborhood());
+            } else {
+                count = service.addUserSuggestion(reportDTO.getApartmentID(), "" + reportDTO.getField(), reportDTO.getContentInGson());
+            }
         } catch (DataBaseFailedException e) {
             e.printStackTrace();
         }
-        if (count>5) {
+
+        if (count > 5) {
             switch (reportDTO.getField()) {
                 case size:
                     double t1 = gson.fromJson(reportDTO.getContentInGson(), Double.class);
-                    service.suggestionChangesApartmentDouble(reportDTO.getApartmentID(), ""+reportDTO.getField(), t1);
+                    service.suggestionChangesApartmentDouble(reportDTO.getApartmentID(), "" + reportDTO.getField(), t1);
                     break;
                 case numOfRooms:
                     double t2 = gson.fromJson(reportDTO.getContentInGson(), Double.class);
-                    service.suggestionChangesApartmentDouble(reportDTO.getApartmentID(), ""+reportDTO.getField(), t2);
+                    service.suggestionChangesApartmentDouble(reportDTO.getApartmentID(), "" + reportDTO.getField(), t2);
                     break;
 
                 case address:
-                    AddressDTO addressDTO= gson.fromJson(reportDTO.getContentInGson(),AddressDTO.class);
-                    service.suggestionChangesAddress(reportDTO.getApartmentID(), ""+reportDTO.getField(),addressDTO.getStreet(),addressDTO.getNumOfBuilding(),addressDTO.getNeighborhood());
+//                    AddressDTO addressDTO = gson.fromJson(reportDTO.getContentInGson(), AddressDTO.class);
+//                    service.suggestionChangesAddress(reportDTO.getApartmentID(), "" + reportDTO.getField(), addressDTO.getStreet(), addressDTO.getNumOfBuilding(), addressDTO.getNeighborhood());
+
                     break;
                 default:
                     int t3 = gson.fromJson(reportDTO.getContentInGson(), Integer.class);
-                    service.suggestionChangesApartmentInt(reportDTO.getApartmentID(), ""+reportDTO.getField(), t3);
+                    service.suggestionChangesApartmentInt(reportDTO.getApartmentID(), "" + reportDTO.getField(), t3);
                     break;
             }
         }

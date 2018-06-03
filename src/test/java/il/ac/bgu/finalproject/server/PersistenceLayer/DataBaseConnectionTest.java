@@ -239,7 +239,9 @@ public class DataBaseConnectionTest {
 
     @Test
     public void deleteGroup() throws DataBaseFailedException {
-        System.out.println(dbc.userExist("admin"));
+//        System.out.println(dbc.userExist("admin"));
+        dbc.suggestionChangesNeighborhood("0","הפרחים");
+
         //ALL GROUP METHODS WORKS!!
 //        dbc.resetGroupsTable();
 //        dbc.insertGroup("1357","matan");

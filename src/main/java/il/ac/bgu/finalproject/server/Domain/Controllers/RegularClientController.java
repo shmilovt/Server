@@ -62,6 +62,10 @@ public class RegularClientController {
     public void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse) throws DataBaseFailedException{
         dataBaseRequestController.addSearchRecord(neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin, sizeMax, furnitures,numOfRoomes, numOfMates, protectedSpace,  garden, balcony, pets, warehouse);
     }
+
+    public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) {
+        dataBaseRequestController.addressFieldCase(id, b,  b1, b2, street, numOfBuilding, neighborhood);
+    }
 /*
     public static void main(String[] args) throws Exception {
         List<CategoryQuery> categoryQueryList = new LinkedList<CategoryQuery>();

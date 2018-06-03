@@ -36,4 +36,6 @@ public interface IService {
      void suggestionChangesApartmentInt(String id, String field, int suggest);
      void suggestionChangesApartmentDouble(String id, String field, double suggest);
      void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood);
-     }
+
+    void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood);
+}

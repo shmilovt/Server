@@ -167,10 +167,10 @@ public class DataBaseRequestController {
                 dataBaseConnectionInterface.insertGroup(groupID, groupName);
                 return 1;
             } catch (DataBaseFailedException e) {
-                return 0;
+                return -1;
             }
         }
-        else return -1;
+        else return 0;
     }
     public int deleteGroup(String groupID){
         if (dataBaseConnectionInterface.groupExist(groupID)) {
@@ -178,10 +178,10 @@ public class DataBaseRequestController {
                 dataBaseConnectionInterface.deleteGroup(groupID);
                 return 1;
             } catch (DataBaseFailedException e) {
-                return 0;
+                return -1;
             }
         }
-        else return -1;
+        else return 0;
     }
     public List<GroupDTO> getAllGroups(){
         return dataBaseConnectionInterface.GetAllGroups();
@@ -198,4 +198,29 @@ public class DataBaseRequestController {
 //        return arraySearchRecordDTO;
     }
 
+    public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
+        if (b|b1){
+            //address has changed
+            Apartment apartment= dataBaseConnectionInterface.getApartmentRecordTBD(id);
+            if (!(b && street!=null && street!=""))
+                street=apartment.getApartmentLocation().getAddress().getStreet();
+            if (!(b1 && numOfBuilding!= -1))
+                numOfBuilding=apartment.getApartmentLocation().getAddress().getNumber();
+            int addressDetailsId= dataBaseConnectionInterface.isAddressDetailsExist(street,numOfBuilding);
+            if (addressDetailsId!= -1) {//exist
+                if (b2 && neighborhood!=null && neighborhood!=""){
+                    dataBaseConnectionInterface.suggestionChangesNeighborhood(id, neighborhood);
+                }
+            }
+            else { // addressDetails need to be created
+//                addressDetailsId= dataBaseConnectionInterface.addAddressDetailsRecord(street,numOfBuilding,)
+            }
+            dataBaseConnectionInterface.changeAddresDetailsForApartment(id,addressDetailsId);
+        }
+        else{
+            if (b2 && neighborhood!=null && neighborhood!=""){
+                dataBaseConnectionInterface.suggestionChangesNeighborhood(id, neighborhood);
+            }
+        }
+    }
 }

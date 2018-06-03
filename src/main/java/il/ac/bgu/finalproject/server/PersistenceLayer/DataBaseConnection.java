@@ -1415,10 +1415,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         if (addressDetailsNum!=-1) {
             try {
-                String sql = "UPDATE AddressDetails SET AddressDetails.neighborhood = ? WHERE apartmentID= ?";
+                String sql = "UPDATE AddressDetails SET neighborhood = ?  WHERE addressDetailsNum= ?";
                 PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setString(1, suggestion);
                 pstmt.setInt(2, addressDetailsNum);
+                pstmt.setString(1, suggestion);
                 pstmt.executeUpdate();
             } catch (SQLException e) {
             } catch (Exception e) {
@@ -1427,21 +1427,21 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-//    public void suggetionChangesAddress (String apartmentID, String street, int num ) throws DataBaseFailedException {
-//        GoogleMapsController googleMapsController= new GoogleMapsController();
-//        Apartment apartment= getApartmentRecordTBD(apartmentID);
-//        int tempForAddressDetaileNum = isAddressDetailsExist(street,num);
-//        String tempForApartment;
-//        if (tempForAddressDetaileNum == -1) {
-//            if (!street.isEmpty() && num > 0) {
-//                int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, num);
-//                double[] locationPoint = googleMapsController.getCoordinates(street, num);
-//                tempForAddressDetaileNum = addAddressDetailsRecord(
-//                        street, num + "",
-//                        timeToUni, "", locationPoint[0], locationPoint[1]);
-//            }
-//        }
-//    }
+    public void suggetionChangesAddress (String apartmentID, String street, int num ) throws DataBaseFailedException {
+        GoogleMapsController googleMapsController= new GoogleMapsController();
+        Apartment apartment= getApartmentRecordTBD(apartmentID);
+        int tempForAddressDetaileNum = isAddressDetailsExist(street,num);
+        String tempForApartment;
+        if (tempForAddressDetaileNum == -1) {
+            if (!street.isEmpty() && num > 0) {
+                int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, num);
+                double[] locationPoint = googleMapsController.getCoordinates(street, num);
+                tempForAddressDetaileNum = addAddressDetailsRecord(
+                        street, num + "",
+                        timeToUni, "", locationPoint[0], locationPoint[1]);
+            }
+        }
+    }
 
     public void resetAdminTable() throws DataBaseFailedException {
         String sql= "DROP TABLE Admin ";

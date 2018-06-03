@@ -34,11 +34,11 @@ public class AdminCommunicationController {
             json = gson.toJson(true);
             ResponseEntity.status(200).body(json);
         } else if (ans==0){
-            json = gson.toJson(true);
+            json = gson.toJson(false);
             ResponseEntity.status(430).body(json);}
         else{
             json = gson.toJson(false);
-            ResponseEntity.status(500).body(json);
+            ResponseEntity.status(200).body(json);
         }
         return json;
     }
