@@ -8,7 +8,7 @@ public class RelevantQuery extends CategoryQuery {
     public RelevantQuery() {
     }
 
-    ;
+
     public static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
 
 
@@ -33,8 +33,10 @@ public class RelevantQuery extends CategoryQuery {
     public boolean mainQuery(ResultRecord apartment) {
         if ((apartment.getLat() != -1) && (apartment.getLat() != -1)) {
             if (timeBetweenDates(apartment.getDateOfPublish())) {
-                if (apartment.getContacts().length > 0)
+                if (apartment.getContacts().length > 0) {
+//                    if (CalculatorAlgorithm.isFairPrice(apartment))
                     return true;
+                }
             }
         }
         return false;

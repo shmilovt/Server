@@ -3,15 +3,15 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 
 public class CalculatorAlgorithm {
-    public static Boolean isFairPrice(Apartment apartment) {
-        int timeFromUniCost = calcTimeFromUniCost(apartment.getApartmentLocation().getDistanceFromUniversity());
+    public static Boolean isFairPrice(ResultRecord apartment) {
+        int timeFromUniCost = calcTimeFromUniCost(apartment.getDistanceFromUniversity());
         int neighborhoodCost = 0;
-        if (apartment.getApartmentLocation().getAddress().getStreet().equals("וינגייט") &&
-                apartment.getApartmentLocation().getAddress().getNumber()>51) {
+        if (apartment.getStreet().equals("וינגייט") &&
+                apartment.getNumber()>51) {
             neighborhoodCost = CalculatorCosts.getInstance().getNeighborhoodCost_oldV_Wingate();
         } else
-            neighborhoodCost = calcNeighborhoodCost(apartment.getApartmentLocation().getNeighborhood());
-        int numOfmates= apartment.getNumberOfMates();
+            neighborhoodCost = calcNeighborhoodCost(apartment.getNeighborhood());
+        int numOfmates= apartment.getNumberOfRoomates();
         if (numOfmates==-1) {
             if (apartment.getNumberOfRooms()!=-1) {
                 if (apartment.getNumberOfRooms() % 1 == 0)
@@ -24,23 +24,23 @@ public class CalculatorAlgorithm {
         }
         int sizeCost = calcSizeCost(apartment.getCost(),numOfmates);
         int furnitureCost = calcFurnitureCost(apartment.getFurniture());
-        int gardenCost = calcGardenCost(apartment.getGarden(), apartment.getGardenSize());
-        int balconyCost = calcBalconyCost(apartment.getBalcony());
+        int gardenCost = calcGardenCost(apartment.isYard(), /*apartment.getGardenSize()*/0);
+        int balconyCost = calcBalconyCost(apartment.isBalcony());
 
-        int roomatesCost = calcRoomatesCost(apartment.getNumberOfMates());
+        int roomatesCost = calcRoomatesCost(apartment.getNumberOfRoomates());
 
         int sum = CalculatorCosts.basicCost + timeFromUniCost + neighborhoodCost + sizeCost + furnitureCost + gardenCost + balconyCost + roomatesCost;
         return (sum >= apartment.getCost());
     }
 
-    private static int calcBalconyCost(int balcony) {
-        if (balcony==1)
+    private static int calcBalconyCost(boolean balcony) {
+        if (balcony)
             return CalculatorCosts.getInstance().getBalconyCost();
         return 0;
     }
 
-    private static int calcGardenCost(int garden, int gardenSize) {
-        if(garden==1) {
+    private static int calcGardenCost(boolean garden, int gardenSize) {
+        if(garden) {
 //            if (gardenSize>15)
                 return CalculatorCosts.getInstance().getGardenCost();
         }
