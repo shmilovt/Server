@@ -64,9 +64,9 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
-    public String newPostFromAdmin(@RequestParam String usernamePasswordString) {
-        NewPostDTO usernamePasswordDTO = NewPostDTO.fromJSON(usernamePasswordString);
-        int ans = service.newPostFromAdmin(usernamePasswordDTO.getPublisherName(), usernamePasswordDTO.getMessege());
+    public String newPostFromAdmin(@RequestParam String newPostString) {
+        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+        int ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
         Gson gson = new Gson();
         String json = gson.toJson(ans);
         return json;

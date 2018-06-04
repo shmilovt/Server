@@ -49,7 +49,7 @@ public class CalculatorDTO {
                         Math.max(roomatesCost_4, Math.max(roomatesCost_5, roomatesCost_6)))))+
                 gardenCost+balconyCost+
                 basicCost;
-        return sum<2000;
+        return sum<3000;
     }
 
     public int getProtectedSpaceCost() {
