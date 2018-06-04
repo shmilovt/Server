@@ -45,22 +45,28 @@ public class AdminCommunicationController {
 
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     public String login(@RequestParam String usernamePasswordString) {
+        Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = service.login(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
-        return normalizeAnsWithStatus(ans);
+        String json= gson.toJson(ans);
+        return json;
+//        return normalizeAnsWithStatus(ans);
     }
 
     @RequestMapping(value = "/changePassword", method = {RequestMethod.POST, RequestMethod.GET})
     public String changePassword(@RequestParam String usernamePasswordString) {
+        Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
-        return normalizeAnsWithStatus(ans);
+        String json= gson.toJson(ans);
+        return json;
+//        return normalizeAnsWithStatus(ans);
     }
 
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
     public String newPostFromAdmin(@RequestParam String usernamePasswordString) {
         NewPostDTO usernamePasswordDTO = NewPostDTO.fromJSON(usernamePasswordString);
-        boolean ans = service.newPostFromAdmin(usernamePasswordDTO.getPublisherName(), usernamePasswordDTO.getMessege());
+        int ans = service.newPostFromAdmin(usernamePasswordDTO.getPublisherName(), usernamePasswordDTO.getMessege());
         Gson gson = new Gson();
         String json = gson.toJson(ans);
         return json;
@@ -85,6 +91,7 @@ public class AdminCommunicationController {
     @RequestMapping(value = "/getCalculator", method = {RequestMethod.POST, RequestMethod.GET})
     public String getCalculator() {
         CalculatorDTO calculatorDTO = service.getCalcCosts();
+        calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
         Gson gson = new Gson();
         String json = gson.toJson(calculatorDTO);
         return json;
@@ -95,7 +102,9 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         String groupID = gson.fromJson(groupIdString, String.class);
         int t= service.insertGroup(groupID);
-        return normalizeAnsWithStatus(t);
+        String json= gson.toJson(t);
+        return json;
+//        return normalizeAnsWithStatus(t);
     }
 
     @RequestMapping(value = "/deleteGroup", method = {RequestMethod.POST, RequestMethod.GET})
@@ -103,7 +112,9 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         String groupID = gson.fromJson(groupIdString, String.class);
         int t= service.deleteGroup(groupID);
-        return normalizeAnsWithStatus(t);
+        String json= gson.toJson(t);
+        return json;
+//        return normalizeAnsWithStatus(t);
     }
 
     @RequestMapping(value = "/getAllApartments", method = {RequestMethod.POST, RequestMethod.GET})

@@ -15,7 +15,7 @@ public interface IService {
      void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse);
      int login(String username, String password);
      int changePassword(String username, String password);
-     boolean newPostFromAdmin(String nameOfPublisher, String messege);
+     int newPostFromAdmin(String nameOfPublisher, String messege);
 
      int insertGroup(String groupID);
      int deleteGroup(String groupID);

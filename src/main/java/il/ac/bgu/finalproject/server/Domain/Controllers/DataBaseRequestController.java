@@ -21,10 +21,8 @@ public class DataBaseRequestController {
     public DataBaseConnectionInterface dataBaseConnectionInterface;
 
     public DataBaseRequestController() {
-
         dataBaseConnectionInterface = new DataBaseConnection();
         dataBaseConnectionInterface.connect();
-
     }
 
     public void connect() throws DataBaseFailedException {dataBaseConnectionInterface.connect();}
@@ -162,7 +160,7 @@ public class DataBaseRequestController {
     }
 
     public int insertGroup(String groupID, String groupName) {
-        if (dataBaseConnectionInterface.groupExist(groupID)) {
+        if (!dataBaseConnectionInterface.groupExist(groupID)) {
             try {
                 dataBaseConnectionInterface.insertGroup(groupID, groupName);
                 return 1;
@@ -219,7 +217,7 @@ public class DataBaseRequestController {
                     int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, numOfBuilding);
                     double[] locationPoint = googleMapsController.getCoordinates(street, numOfBuilding);
                     if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
-//                        neighborhood = here_and_now;
+                        neighborhood = apartment.getApartmentLocation().getNeighborhood();
                     }
                     addressDetailsId = dataBaseConnectionInterface.addAddressDetailsRecord(
                             street, numOfBuilding + "",

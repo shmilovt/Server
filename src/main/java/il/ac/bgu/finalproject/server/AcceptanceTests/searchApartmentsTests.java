@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class searchApartmentsTests {
-    private ServiceConnector serviceConnector;
+    private ServiceConnector serviceConnector= new ServiceConnector();
 
 
     @BeforeClass

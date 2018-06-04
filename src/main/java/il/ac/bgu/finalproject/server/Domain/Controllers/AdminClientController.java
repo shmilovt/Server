@@ -15,15 +15,15 @@ import java.util.Date;
 import java.util.List;
 
 public class AdminClientController {
-    DataBaseRequestController dataBaseRequestController;
-    ServerController serverController;
+    private DataBaseRequestController dataBaseRequestController;
+    private ServerController serverController;
     private static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
     private final String postFromAdminID= "postFromAdminID";
 
 
     public AdminClientController() {
         dataBaseRequestController = new DataBaseRequestController();
-        ServerController serverController= new ServerController();
+        serverController= new ServerController();
     }
 
 
@@ -83,12 +83,19 @@ public class AdminClientController {
                 roomatesCost_4, roomatesCost_5, roomatesCost_6, gardenCost, balconyCost);
     }
 
-    public boolean newPostFromAdmin(String nameOfPublisher, String messege) throws DataBaseFailedException {
-        int t= dataBaseRequestController.getConstValue(postFromAdminID);
-        Post post= new Post(""+t, new Date(), nameOfPublisher, messege, ""+t);
-        serverController.newPost(post); //is it correct to use ServerController?
-        dataBaseRequestController.setConstValue(postFromAdminID,t+1);
-        return true;
+    public int newPostFromAdmin(String nameOfPublisher, String messege){
+        int t= 0;
+        try {
+            t = dataBaseRequestController.getConstValue(postFromAdminID);
+            Post post= new Post(""+t, new Date(), nameOfPublisher, messege, ""+t);
+            int ret= serverController.newPost(post); //is it correct to use ServerController?
+            dataBaseRequestController.setConstValue(postFromAdminID,t+1);
+            return ret;
+        } catch (DataBaseFailedException e) {
+            return -1;
+        }
+//        return 1;
+//        return true;
     }
 
     public int insertGroup(String groupID) {

@@ -26,9 +26,9 @@ import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 public class Service implements IService {
 
     @Autowired
-    private AdminClientController adminClientController;
+    private AdminClientController adminClientController= new AdminClientController();
     @Autowired
-    private RegularClientController regularClientController;
+    private RegularClientController regularClientController= new RegularClientController();
 
 
     @Override
@@ -62,13 +62,8 @@ public class Service implements IService {
     }
 
     @Override
-    public boolean newPostFromAdmin(String nameOfPublisher, String messege){
-        try {
-            return adminClientController.newPostFromAdmin(nameOfPublisher, messege);
-        } catch (DataBaseFailedException e) {
-            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            return false;
-        }
+    public int newPostFromAdmin(String nameOfPublisher, String messege){
+        return adminClientController.newPostFromAdmin(nameOfPublisher, messege);
     }
 
     @Override

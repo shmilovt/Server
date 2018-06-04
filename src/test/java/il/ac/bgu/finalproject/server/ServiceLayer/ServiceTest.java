@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.ServiceLayer;
 
 import il.ac.bgu.finalproject.server.Domain.Controllers.AdminClientController;
+import il.ac.bgu.finalproject.server.Domain.Controllers.DataBaseRequestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -10,8 +11,11 @@ import static org.testng.Assert.*;
 public class ServiceTest {
 
     @Autowired
-    private IService service;
-    private AdminClientController adminClientController;
+    private IService service= new Service();
+//    @Autowired
+//    private AdminClientController adminClientController= new AdminClientController();
+//    @Autowired
+//    private DataBaseRequestController dataBaseRequestController= new DataBaseRequestController();
 
     @Test
     public void testSearchApartments() throws Exception {
@@ -31,7 +35,7 @@ public class ServiceTest {
 
     @Test
     public void testNewPostFromAdmin() throws Exception {
-        adminClientController.newPostFromAdmin("bupr","דירת גן ! ! ! שלושה חדרים (שני חדרי שינה וסלון) ביואל השופט 6. חצר ענקית מגודרת. מטבח ענק! שירותים ומקלחת משופצים! 70 מ\"ר. איזור סטודנטיאלי. הרחוב הכי יפה בשכונה ד'. כניסה בספטמבר. 2500 ש\"ח.\n" +
+        service.newPostFromAdmin("bupr","דירת גן ! ! ! שלושה חדרים (שני חדרי שינה וסלון) ביואל השופט 6. חצר ענקית מגודרת. מטבח ענק! שירותים ומקלחת משופצים! 70 מ\"ר. איזור סטודנטיאלי. הרחוב הכי יפה בשכונה ד'. כניסה בספטמבר. 2500 ש\"ח.\n" +
                 "בבקשה להתקשר לבעלת הדירה לתיאום. \n" +
                 "052-4770573");
     }

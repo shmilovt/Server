@@ -28,12 +28,17 @@ public class ServerController {
         return post;
     }
 
-    public void newPost(Post ourPost) throws DataBaseFailedException {
+    public int newPost(Post ourPost) throws DataBaseFailedException {
 //        dbController.connect();
         dbController.addPost(ourPost);
         Apartment apartment = nlpController.generateNLP(ourPost);
+        if (apartment.getContacts().isEmpty())
+            return -2;
+        if (apartment.getApartmentLocation().getAddress().getStreet()==""||apartment.getApartmentLocation().getAddress().getNumber()==-1)
+            return -3;
         if(apartment!=null)
             dbController.manageApartment(apartment, ourPost.getID());
+        return 1;
 //        dbController.disconnect();
     }
 
