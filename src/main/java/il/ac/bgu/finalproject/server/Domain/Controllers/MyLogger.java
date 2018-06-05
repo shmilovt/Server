@@ -14,7 +14,7 @@ public class MyLogger {
             FileHandler fh;
 
             try {
-                fh = new FileHandler("src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\Domain\\Controllers\\Logger\\mylog.log");
+                fh = new FileHandler("mylog.log");
                 instance.addHandler(fh);
                 SimpleFormatter formatter = new SimpleFormatter();
                 fh.setFormatter(formatter);

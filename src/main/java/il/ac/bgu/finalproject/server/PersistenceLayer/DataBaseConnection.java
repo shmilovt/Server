@@ -827,11 +827,31 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
                 temp.setDistanceFromUniversity(location.getDistanceFromUniversity());
                 temp.setCost(rs.getInt(4));
                 temp.setSize(rs.getInt(5));
-                temp.setBalcony(rs.getBoolean(6));
-                temp.setYard(rs.getBoolean(7));
-                temp.setAnimals(rs.getBoolean(8));
-                temp.setWarehouse(rs.getBoolean(9));
-                temp.setProtectedSpace(rs.getBoolean(10));
+//                if (rs.getInt(6)==1)
+//                    temp.setBalcony(true);
+//                else
+//                    temp.setBalcony(false);
+//                if (rs.getInt(7)==1)
+//                    temp.setYard(true);
+//                else
+//                    temp.setYard(false);
+//                if (rs.getInt(8)==1)
+//                    temp.setAnimals(true);
+//                else
+//                    temp.setAnimals(false);
+//                if (rs.getInt(9)==1)
+//                    temp.setWarehouse(true);
+//                else
+//                    temp.setWarehouse(false);
+//                if (rs.getInt(10)==1)
+//                    temp.setProtectedSpace(true);
+//                else
+//                    temp.setProtectedSpace(false);
+                temp.setBalcony(rs.getInt(6));
+                temp.setYard(rs.getInt(7));
+                temp.setAnimals(rs.getInt(8));
+                temp.setWarehouse(rs.getInt(9));
+                temp.setProtectedSpace(rs.getInt(10));
                 temp.setFurniture(rs.getInt(11));
                 temp.setNumberOfRooms(rs.getDouble(12));
                 temp.setNumberOfRoomates(rs.getInt(13));
@@ -1531,6 +1551,16 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 //        return false;
     }
 
+    public boolean isCorrectEmail(String username, String email) throws SQLException {
+        String sql = "SELECT mailAddress FROM Admin "
+                + " WHERE username= '" + username + "'";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next())
+            return rs.getString(1).equals(email);
+        return false;
+    }
+
     public boolean userExist(String username){
         try {
             String sql = "SELECT Admin.username FROM Admin "
@@ -1543,6 +1573,74 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){return false;}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+        return false;
+    }
+
+    public void resetUUIDTable() throws DataBaseFailedException {
+        String sql= "DROP TABLE UUID ";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th admin table",4);
+        }
+        sql= "CREATE TABLE UUID(\n" +
+                "  username text NOT NULL ,\n" +
+                "  dateOfRequest text NOT NULL , \n" +
+                "  uuString text, \n" +
+                " PRIMARY KEY(username, dateOfRequest)"+
+                ")";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);;
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+    }
+    public boolean addToUUIDTable(String username, String date, String uuString) throws DataBaseFailedException {
+        String sql= "INSERT INTO UUID(username, dateOfRequest, uuString) VALUES (?,?,?) ";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1,username);
+            pstmt.setString(2,date);
+            pstmt.setString(3,uuString);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
+        }
+        return false;
+    }
+
+    public boolean UUIDExistAndValid(String uuString) throws DataBaseFailedException {
+        String sql= "SELECT dateOfRequest FROM UUID WHERE uuString= '"+uuString+"'";
+        try {
+            Statement stmt  = conn.createStatement();
+            ResultSet rs    = stmt.executeQuery(sql);
+            if (rs.next()) {
+                SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+                Date now = new Date();
+                Date gdate = formatter.parse(rs.getString(1));
+                long gap = now.getTime() - gdate.getTime();
+                //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
+                return (gap < 86400000); //one day
+            }
+            else
+                return false;
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            throw new DataBaseFailedException("drop th contacts table",4);
         }
         return false;
     }

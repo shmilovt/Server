@@ -8,6 +8,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
@@ -92,18 +93,20 @@ public interface DataBaseConnectionInterface {
     boolean login(String username, String password);
     boolean changePassword(String username, String password);
     boolean userExist(String username);
-//    boolean changeEmailAddress(String username, String emailAddress);
+    boolean isCorrectEmail(String username, String email) throws SQLException;
+    boolean addToUUIDTable(String username, String newDateString, String email) throws DataBaseFailedException;
+    boolean UUIDExistAndValid(String uuString) throws DataBaseFailedException;
+    //    boolean changeEmailAddress(String username, String emailAddress);
+
     int getConstValue (String id) throws DataBaseFailedException;
     void setConstValue (String id, int val) throws DataBaseFailedException;
-
     boolean groupExist(String groupid);
     void insertGroup(String groupID, String groupName) throws DataBaseFailedException;
     void deleteGroup(String groupID) throws DataBaseFailedException;
+
     List<GroupDTO> GetAllGroups();
+
     List<SearchRecordDTO> getAllUserSearches();
-
-
-
-    }
+}
 
 

@@ -12,9 +12,11 @@ import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnectionInterface;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class DataBaseRequestController {
     private static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
@@ -145,20 +147,51 @@ public class DataBaseRequestController {
         }
         else return 0;
     }
+    public  String forgotPassword(String username, String email) {
+//            if (dataBaseConnectionInterface.userExist(username)||dataBaseConnectionInterface.isCorrectEmail(username,email)){
+        try {
+            if (dataBaseConnectionInterface.isCorrectEmail(username,email)) {
+                if (dataBaseConnectionInterface.userExist(username)) {
+                    String randomUUID = "" + UUID.randomUUID();
+                    Date dd = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat();
+                    sdf.applyPattern(dateFormat);
+                    String newDateString = sdf.format(dd);
+                    try {
+                        if (dataBaseConnectionInterface.addToUUIDTable(username, newDateString, email)){return randomUUID;}
+                        else return "-1";
+                    } catch (DataBaseFailedException e) {
+                        return "-1";
+                    }
+                } else return "-2";
+            }
+            else return "0";
+        } catch (SQLException e) {
+            return "-1";
+        }
+    }
+    public int checkCCUID(String ccuid) {
+        try {
+            if (dataBaseConnectionInterface.UUIDExistAndValid(ccuid)){return 1;}
+            else return 0;
+        } catch (DataBaseFailedException e) {
+            return -1;
+        }
+    }
+    //        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
 //    public boolean changeEmailAddress(String username, String emailAddress){
-//        return dataBaseConnectionInterface.changeEmailAddress(username, emailAddress);
-//    }
 
+//    }
     public void addSearchRecord(String neighborhood, String timeFromUni, String costMin, String costMax, String floorMin, String floorMax, String sizeMin, String sizeMax, String furnitures,String numOfRoomes, String numOfMates, int protectedSpace,  int garden, int balcony, int pets, int warehouse) throws DataBaseFailedException{
         dataBaseConnectionInterface.addSearchRecord(neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin, sizeMax, furnitures,numOfRoomes, numOfMates, protectedSpace,  garden, balcony, pets, warehouse);
     }
     public int getConstValue (String id) throws DataBaseFailedException {
         return  dataBaseConnectionInterface.getConstValue(id);
     }
+
     public void setConstValue (String id, int val) throws DataBaseFailedException{
         dataBaseConnectionInterface.setConstValue(id, val);
     }
-
     public int insertGroup(String groupID, String groupName) {
         if (!dataBaseConnectionInterface.groupExist(groupID)) {
             try {
@@ -181,6 +214,7 @@ public class DataBaseRequestController {
         }
         else return 0;
     }
+
     public List<GroupDTO> getAllGroups(){
         return dataBaseConnectionInterface.GetAllGroups();
     }
@@ -219,9 +253,11 @@ public class DataBaseRequestController {
                     if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
                         neighborhood = apartment.getApartmentLocation().getNeighborhood();
                     }
-                    addressDetailsId = dataBaseConnectionInterface.addAddressDetailsRecord(
-                            street, numOfBuilding + "",
-                            timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
+                    if (locationPoint[0]!=-1&&locationPoint[1]!=-1) {
+                        addressDetailsId = dataBaseConnectionInterface.addAddressDetailsRecord(
+                                street, numOfBuilding + "",
+                                timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
+                    }
                 }
             }
             dataBaseConnectionInterface.changeAddresDetailsForApartment(apartmentId,addressDetailsId);

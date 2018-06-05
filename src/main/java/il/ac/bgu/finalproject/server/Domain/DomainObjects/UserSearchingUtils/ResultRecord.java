@@ -11,11 +11,13 @@ public class ResultRecord {
     private double distanceFromUniversity;
     private int cost;
     private int size;
-    private boolean balcony;
-    private boolean yard;
-    private boolean animals;
-    private boolean warehouse ;
-    private boolean protectedSpace;
+
+    private int balcony;
+    private int yard;
+    private int animals;
+    private int warehouse ;
+    private int protectedSpace;
+
     private int furniture;
     private double numberOfRooms;
     private int numberOfRoomates;
@@ -28,8 +30,8 @@ public class ResultRecord {
     public ResultRecord(){
     }
     public ResultRecord(String street, int number, String neighborhood, int floor, double distanceFromUniversity,
-             int cost, int size, boolean balcony, boolean yard, boolean animals, boolean warehouse ,
-             boolean protectedSpace, int furniture, double numberOfRooms, int numberOfRoomates, String dateOfPublish, //just date without time
+             int cost, int size, int balcony, int yard, int animals, int warehouse ,
+                        int protectedSpace, int furniture, double numberOfRooms, int numberOfRoomates, String dateOfPublish, //just date without time
              String text, Contact[] contacts, double lat, // קווי אורך
              double lon){
         this.street= street;
@@ -110,43 +112,43 @@ public class ResultRecord {
         this.size = size;
     }
 
-    public boolean isBalcony() {
+    public int getBalcony() {
         return balcony;
     }
 
-    public void setBalcony(boolean balcony) {
+    public void setBalcony(int balcony) {
         this.balcony = balcony;
     }
 
-    public boolean isYard() {
+    public int getYard() {
         return yard;
     }
 
-    public void setYard(boolean yard) {
+    public void setYard(int yard) {
         this.yard = yard;
     }
 
-    public boolean isAnimals() {
+    public int getAnimals() {
         return animals;
     }
 
-    public void setAnimals(boolean animals) {
+    public void setAnimals(int animals) {
         this.animals = animals;
     }
 
-    public boolean isWarehouse() {
+    public int getWarehouse() {
         return warehouse;
     }
 
-    public void setWarehouse(boolean warehouse) {
+    public void setWarehouse(int warehouse) {
         this.warehouse = warehouse;
     }
 
-    public boolean isProtectedSpace() {
+    public int getProtectedSpace() {
         return protectedSpace;
     }
 
-    public void setProtectedSpace(boolean protectedSpace) {
+    public void setProtectedSpace(int protectedSpace) {
         this.protectedSpace = protectedSpace;
     }
 

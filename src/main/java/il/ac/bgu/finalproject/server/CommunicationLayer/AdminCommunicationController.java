@@ -6,6 +6,7 @@ import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.Converter;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.SearchResultsDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.UserSearchDTO;
+import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CalculatorCosts;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.logging.Level;
 
 @RestController
 public class AdminCommunicationController {
@@ -63,13 +65,39 @@ public class AdminCommunicationController {
 //        return normalizeAnsWithStatus(ans);
     }
 
+    @RequestMapping(value = "/forgotPassword", method = {RequestMethod.POST, RequestMethod.GET})
+    public String forgotPassword(@RequestParam String usernamePasswordString) {
+        Gson gson = new Gson();
+        UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
+        String ans = service.forgotPassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
+        String json= gson.toJson(ans);
+        return json;
+    }
+
+    @RequestMapping(value = "/checkCCUID", method = {RequestMethod.POST, RequestMethod.GET})
+    public String checkCCUID(@RequestParam String ccString) {
+        Gson gson = new Gson();
+        String ccuid= gson.fromJson(ccString,String.class);
+        int ans = service.checkCCUID(ccuid);
+        String json= gson.toJson(ans);
+        return json;
+    }
+
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
     public String newPostFromAdmin(@RequestParam String newPostString) {
-        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
-        int ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
         Gson gson = new Gson();
-        String json = gson.toJson(ans);
-        return json;
+        try {
+            NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+            int ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+            String json = gson.toJson(ans);
+            return json;
+        }
+        catch (NullPointerException e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            String json = gson.toJson(e.getStackTrace());
+            return json;
+
+        }
     }
 
     @RequestMapping(value = "/getAllGroups", method = {RequestMethod.POST, RequestMethod.GET})

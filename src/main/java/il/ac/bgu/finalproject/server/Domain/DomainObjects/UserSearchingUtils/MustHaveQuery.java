@@ -16,19 +16,19 @@ public class MustHaveQuery extends CategoryQuery{
     @Override
     public boolean mainQuery(ResultRecord apartment) {
         if (thing == MustHaveThing.balcony) {
-            if (apartment.isBalcony())
+            if (apartment.getBalcony()==1)
                 return true;
         } else if (thing == MustHaveThing.garden) {
-            if (apartment.isYard())
+            if (apartment.getYard()==1)
                 return true;
         } else if (thing == MustHaveThing.pets) {
-            if (apartment.isAnimals())
+            if (apartment.getAnimals()==1)
                 return true;
         } else if (thing == MustHaveThing.protectedSpace) {
-            if (apartment.isProtectedSpace())
+            if (apartment.getProtectedSpace()==1)
                 return true;
         } else if (thing == MustHaveThing.warehouse) {
-            if (apartment.isWarehouse())
+            if (apartment.getWarehouse()==1)
                 return true;
         }
         return false;

@@ -41,7 +41,7 @@ public class SearchAlgorithmTest {
         list = res.getResultRecordList();
         for(ResultRecord item: list){
             assertTrue(item.getCost()>=400&&item.getCost()<=2000);
-            assertTrue(item.isWarehouse());
+            assertTrue(item.getWarehouse()==1);
         }
 
         categories.remove(1);
@@ -51,7 +51,7 @@ public class SearchAlgorithmTest {
         list = res.getResultRecordList();
         for(ResultRecord item: list){
             assertTrue(item.getCost()>=400&&item.getCost()<=2000);
-            assertTrue(item.isWarehouse());
+            assertTrue(item.getWarehouse()==1);
         }
 
         categories.remove(1);
@@ -94,7 +94,7 @@ public class SearchAlgorithmTest {
         List<ResultRecord> list = res.getResultRecordList();
         for(ResultRecord item: list) {
             assertFalse(item.getCost() >= 400 && item.getCost() <= 2000
-                    && item.isWarehouse() && item.getSize() >= 60 && item.getSize() <= 100);
+                    && item.getWarehouse()==1 && item.getSize() >= 60 && item.getSize() <= 100);
             assertTrue(item.getLat() != -1 && item.getLon() != -1);
             item.getDateOfPublish();
             SimpleDateFormat formatter = new SimpleDateFormat(RelevantQuery.dateFormat);

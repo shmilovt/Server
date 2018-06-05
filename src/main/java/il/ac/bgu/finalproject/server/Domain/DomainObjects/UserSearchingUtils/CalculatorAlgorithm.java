@@ -24,8 +24,8 @@ public class CalculatorAlgorithm {
         }
         int sizeCost = calcSizeCost(apartment.getCost(),numOfmates);
         int furnitureCost = calcFurnitureCost(apartment.getFurniture());
-        int gardenCost = calcGardenCost(apartment.isYard(), /*apartment.getGardenSize()*/0);
-        int balconyCost = calcBalconyCost(apartment.isBalcony());
+        int gardenCost = calcGardenCost(apartment.getYard()==1, /*apartment.getGardenSize()*/0);
+        int balconyCost = calcBalconyCost(apartment.getBalcony()==1);
 
         int roomatesCost = calcRoomatesCost(apartment.getNumberOfRoomates());
 

@@ -34,7 +34,11 @@ public class Service implements IService {
     @Override
     public SearchResults searchApartments(List<CategoryQuery> categoryQueryList) {
        return regularClientController.searchApartments(categoryQueryList);
+    }
 
+    @Override
+    public SearchResults filterMoreResults(List<CategoryQuery> categoryQueryList) {
+        return regularClientController.filterMoreResults(categoryQueryList);
     }
 
     @Override
@@ -59,6 +63,16 @@ public class Service implements IService {
     @Override
     public int changePassword(String username, String password) {
         return adminClientController.changePassword(username, password);
+    }
+
+    @Override
+    public String forgotPassword(String username, String email) {
+        return adminClientController.forgotPassword(username, email);
+    }
+
+    @Override
+    public int checkCCUID(String ccuid){
+        return adminClientController.checkCCUID(ccuid);
     }
 
     @Override

@@ -71,6 +71,16 @@ public class RegularClientCommunicationController {
     }
 
     @RequestMapping(value = "/userSearchDTO", method = {RequestMethod.POST, RequestMethod.GET})
+    public String moreResults(@RequestParam String userSearchDTOString) {
+        UserSearchDTO userSearchDTO = UserSearchDTO.fromJSON(userSearchDTOString);
+        List<CategoryQuery> categoryQueryList = converter.convertFromDTO(userSearchDTO);
+        SearchResults searchResult = service.filterMoreResults(categoryQueryList);
+        SearchResultsDTO searchResultsDTO = converter.convertToDTO(searchResult);
+        String jsonString = SearchResultsDTO.toJSON(searchResultsDTO);
+        return jsonString;
+    }
+
+    @RequestMapping(value = "/userSearchDTO", method = {RequestMethod.POST, RequestMethod.GET})
     public String search1() {
         UserSearchDTO userSearchDTO = new UserSearchDTO();
         CategoryType [] priorities = new CategoryType[1];

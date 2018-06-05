@@ -37,6 +37,14 @@ public class AdminClientController {
         return dataBaseRequestController.changePassword(username, password);
     }
 
+    public String forgotPassword(String username, String email) {
+        return dataBaseRequestController.forgotPassword(username, email);
+    }
+
+    public int checkCCUID(String ccuid) {
+        return dataBaseRequestController.checkCCUID(ccuid);
+    }
+
     public CalculatorDTO getCalcCosts(){
         //I think we should build an object.. im not sure getInstance() is good enough
         CalculatorDTO calculatorDTO= new CalculatorDTO();
@@ -82,7 +90,6 @@ public class AdminClientController {
                 sizeCost_35_up, roomatesCost_1, roomatesCost_2, roomatesCost_3,
                 roomatesCost_4, roomatesCost_5, roomatesCost_6, gardenCost, balconyCost);
     }
-
     public int newPostFromAdmin(String nameOfPublisher, String messege){
         int t= 0;
         try {
@@ -97,16 +104,17 @@ public class AdminClientController {
 //        return 1;
 //        return true;
     }
-
     public int insertGroup(String groupID) {
         return dataBaseRequestController.insertGroup(groupID, "group");
     }
     public int deleteGroup(String groupID){
         return dataBaseRequestController.deleteGroup(groupID);
     }
+
     public List<GroupDTO> GetAllGroups(){
         return dataBaseRequestController.getAllGroups();
     }
+
     public List<SearchRecordDTO> getAllUserSearches(){
         return dataBaseRequestController.getAllUserSearches();
     }

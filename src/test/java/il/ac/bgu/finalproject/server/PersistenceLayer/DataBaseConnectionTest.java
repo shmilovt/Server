@@ -32,7 +32,6 @@ public class DataBaseConnectionTest {
 
     @BeforeClass
     public static void setup() throws DataBaseFailedException {
-
         dbc.connect();
 //        dbc.resetAllTables();
     }
@@ -239,8 +238,9 @@ public class DataBaseConnectionTest {
 
     @Test
     public void deleteGroup() throws DataBaseFailedException {
+        dbc.resetUUIDTable();
 //        System.out.println(dbc.userExist("admin"));
-        dbc.suggestionChangesNeighborhood("0","הפרחים");
+//        dbc.suggestionChangesNeighborhood("0","הפרחים");
 
         //ALL GROUP METHODS WORKS!!
 //        dbc.resetGroupsTable();
