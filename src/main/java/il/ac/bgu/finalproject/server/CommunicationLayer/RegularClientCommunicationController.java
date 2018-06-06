@@ -70,7 +70,7 @@ public class RegularClientCommunicationController {
         return jsonString;
     }
 
-    @RequestMapping(value = "/userSearchDTO", method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = "/moreResults", method = {RequestMethod.POST, RequestMethod.GET})
     public String moreResults(@RequestParam String userSearchDTOString) {
         UserSearchDTO userSearchDTO = UserSearchDTO.fromJSON(userSearchDTOString);
         List<CategoryQuery> categoryQueryList = converter.convertFromDTO(userSearchDTO);
