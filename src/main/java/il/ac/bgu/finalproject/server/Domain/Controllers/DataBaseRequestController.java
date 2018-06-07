@@ -7,6 +7,7 @@ import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.Encryption;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
@@ -21,10 +22,12 @@ import java.util.UUID;
 public class DataBaseRequestController {
     private static final String dateFormat = "yyyy/MM/dd HH:mm:ss";
     public DataBaseConnectionInterface dataBaseConnectionInterface;
+//    private Encryption encryption;
 
     public DataBaseRequestController() {
         dataBaseConnectionInterface = new DataBaseConnection();
         dataBaseConnectionInterface.connect();
+//        encryption= new Encryption();
     }
 
     public void connect() throws DataBaseFailedException {dataBaseConnectionInterface.connect();}
@@ -135,8 +138,12 @@ public class DataBaseRequestController {
 
     public int login (String username, String password){
         if (dataBaseConnectionInterface.userExist(username)){
-            if (dataBaseConnectionInterface.login(username, password)){ return 1; }
-            else return -1;
+            try {
+                if (dataBaseConnectionInterface.login(username, password)){ return 1; }
+                else return -1;
+            } catch (SQLException e) {
+                return 0;
+            }
         }
         else return 0;
     }

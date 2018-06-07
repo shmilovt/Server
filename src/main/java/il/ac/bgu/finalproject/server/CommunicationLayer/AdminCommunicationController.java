@@ -86,18 +86,10 @@ public class AdminCommunicationController {
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
     public String newPostFromAdmin(@RequestParam String newPostString) {
         Gson gson = new Gson();
-        try {
-            NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
-            int ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
-            String json = gson.toJson(ans);
-            return json;
-        }
-        catch (NullPointerException e){
-            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            String json = gson.toJson(e.getStackTrace());
-            return json;
-
-        }
+        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+        int ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+        String json = gson.toJson(ans);
+        return json;
     }
 
     @RequestMapping(value = "/getAllGroups", method = {RequestMethod.POST, RequestMethod.GET})

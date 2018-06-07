@@ -1507,24 +1507,17 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public boolean login(String username, String password){
-        String passwordFromDB="";
-        try {
-            String sql = "SELECT Admin.password "
-                    + " FROM Admin"
-                    + " WHERE username= '"+ username+"'";
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            if (rs.next()) {
-                passwordFromDB= rs.getString(1);
-            }
-            return passwordFromDB.equals(password);
+    public boolean login(String username, String password) throws SQLException {
+        String passwordFromDB = "";
+        String sql = "SELECT Admin.password "
+                + " FROM Admin"
+                + " WHERE username= '" + username + "'";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            passwordFromDB = rs.getString(1);
         }
-        catch(SQLException e){return false;}
-        catch (Exception e){
-            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-        }
-        return false;
+        return passwordFromDB.equals(password);
     }
 
     public boolean changePassword(String username, String password){

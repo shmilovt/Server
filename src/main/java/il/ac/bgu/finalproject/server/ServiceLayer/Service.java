@@ -51,13 +51,8 @@ public class Service implements IService {
     }
 
     @Override
-    public int login(String username, String password)  {
-        try {
-            return adminClientController.login(username, password);
-        } catch (NoUserNameException e) {
-            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            return -1;
-        }
+    public int login(String username, String password) {
+        return adminClientController.login(username, password);
     }
 
     @Override
@@ -137,13 +132,18 @@ public class Service implements IService {
     public void suggestionChangesApartmentInt(String id, String field, int suggest){
         regularClientController.suggestionChangesApartmentInt(id, field, suggest);
     }
+
+    @Override
     public void suggestionChangesApartmentDouble(String id, String field, double suggest){
         regularClientController.suggestionChangesApartmentDouble(id, field, suggest);
     }
+
+    @Override
     public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
         regularClientController.suggestionChangesAddress(id, field, street, numB, neighborhood);
     }
 
+    @Override
     public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
         regularClientController.addressFieldCase(id, b,  b1, b2, street, numOfBuilding, neighborhood);
     }

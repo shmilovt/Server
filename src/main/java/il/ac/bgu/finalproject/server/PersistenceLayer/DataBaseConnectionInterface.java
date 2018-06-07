@@ -90,7 +90,7 @@ public interface DataBaseConnectionInterface {
 
 
     void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
-    boolean login(String username, String password);
+    boolean login(String username, String password) throws SQLException;
     boolean changePassword(String username, String password);
     boolean userExist(String username);
     boolean isCorrectEmail(String username, String email) throws SQLException;

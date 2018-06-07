@@ -27,9 +27,9 @@ public class AdminClientController {
     }
 
 
-    public int login(String username, String password) throws NoUserNameException {
+    public int login(String username, String password) {
         if (username == null || password == null)
-            throw new NoUserNameException(username);
+            return 0;
         return dataBaseRequestController.login(username, password);
     }
 
