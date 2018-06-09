@@ -1,18 +1,33 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects;
 
+import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
+
 import javax.crypto.Cipher;
 import java.security.*;
+import java.util.logging.Level;
 
 public class Encryption {
     // generate public and private keys
-    KeyPair keyPair;
-    PublicKey pubKey;
-    PrivateKey privateKey;
+    private KeyPair keyPair;
+    private PublicKey pubKey;
+    private PrivateKey privateKey;
+
+    private static Encryption instance = null;
+    public static Encryption getInstance() { //retuns null in case of NoSuchAlgorithmException
+        if(instance == null) {
+            try {
+                instance = new Encryption();
+            } catch (NoSuchAlgorithmException e) {
+                MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+            }
+        }
+        return instance;
+    }
 
     public Encryption() throws NoSuchAlgorithmException {
-        keyPair = buildKeyPair();
-        pubKey = keyPair.getPublic();
-        privateKey = keyPair.getPrivate();
+        setKeyPair(buildKeyPair());
+        setPubKey(getKeyPair().getPublic());
+        setPrivateKey(getKeyPair().getPrivate());
     }
 
 //    // encrypt the message
@@ -31,17 +46,42 @@ public class Encryption {
         return keyPairGenerator.genKeyPair();
     }
 
-    public static byte[] encrypt(PrivateKey privateKey, String message) throws Exception {
+    public String encrypt(String message) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+        cipher.init(Cipher.ENCRYPT_MODE, getPrivateKey());
 
-        return cipher.doFinal(message.getBytes());
+        return new String(cipher.doFinal(message.getBytes()));
     }
 
-    public static byte[] decrypt(PublicKey publicKey, byte [] encrypted) throws Exception {
+    public String decrypt(String encryptedString) throws Exception {
+        byte[] encrypted = encryptedString.getBytes();
         Cipher cipher = Cipher.getInstance("RSA");
-        cipher.init(Cipher.DECRYPT_MODE, publicKey);
+        cipher.init(Cipher.DECRYPT_MODE, getPubKey() );
 
-        return cipher.doFinal(encrypted);
+        return new String(cipher.doFinal(encrypted));
+    }
+
+    public KeyPair getKeyPair() {
+        return keyPair;
+    }
+
+    public void setKeyPair(KeyPair keyPair) {
+        this.keyPair = keyPair;
+    }
+
+    public PublicKey getPubKey() {
+        return pubKey;
+    }
+
+    public void setPubKey(PublicKey pubKey) {
+        this.pubKey = pubKey;
+    }
+
+    public PrivateKey getPrivateKey() {
+        return privateKey;
+    }
+
+    public void setPrivateKey(PrivateKey privateKey) {
+        this.privateKey = privateKey;
     }
 }

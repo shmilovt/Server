@@ -9,6 +9,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Address
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.Encryption;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import org.junit.AfterClass;
@@ -16,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +44,22 @@ public class DataBaseConnectionTest {
 //        dbc.disConnect();
     }
 
+    @Test
+    public void stam() throws DataBaseFailedException {
+        String enc="1";
+        try {
+            enc= Encryption.getInstance().encrypt("I want to make love");
+            System.out.println(enc);
+        } catch (Exception e) {
+            System.out.println("forever alone");
+        }
+        try {
+            String dec= Encryption.getInstance().decrypt(enc);
+            System.out.println(dec);
+        } catch (Exception e) {
+            System.out.println("forever alone");
+        }
+    }
 
 //    @Test
 //    public void addPost() throws DataBaseFailedException {
@@ -67,6 +85,7 @@ public class DataBaseConnectionTest {
 //        assertEquals("mani", dbc.getPost("4").getPublisherName());
 //
 //    }
+
 
     @Test
     public void deletePost() throws DataBaseFailedException {
@@ -193,14 +212,14 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void login(){
+    public void login() throws SQLException {
         assertTrue(dbc.login("admin","123456"));
         assertFalse(dbc.login("admin","12346"));
         assertFalse(dbc.login("admina","123456"));
     }
 
     @Test
-    public void changePassword(){
+    public void changePassword() throws SQLException {
         assertTrue(dbc.login("admin","123456"));
         dbc.changePassword("admin","12345");
         assertTrue(dbc.login("admin","12345"));

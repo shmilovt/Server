@@ -39,7 +39,7 @@ public class RegularClientController {
     public SearchResults filterMoreResults(List<CategoryQuery> categoryQueryList) {
         SearchAlgorithm searchAlgorithm = new SearchAlgorithm();
         SearchResults apartmentList = dataBaseRequestController.allResultsRecordsFromDB();
-        return searchAlgorithm.filterIntersection(apartmentList, categoryQueryList);
+        return searchAlgorithm.filterMoreResults(apartmentList, categoryQueryList);
     }
 
     public int addUserSuggestion(String id, String field, String suggestion) throws DataBaseFailedException {

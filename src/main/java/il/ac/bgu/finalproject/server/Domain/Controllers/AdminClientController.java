@@ -13,6 +13,15 @@ import il.ac.bgu.finalproject.server.Domain.Exceptions.NoUserNameException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import il.ac.bgu.finalproject.server.Domain.Exceptions.NoUserNameException;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Date;
+import java.util.Properties;
+import java.util.UUID;
+
 
 public class AdminClientController {
     private DataBaseRequestController dataBaseRequestController;
@@ -38,7 +47,10 @@ public class AdminClientController {
     }
 
     public String forgotPassword(String username, String email) {
-        return dataBaseRequestController.forgotPassword(username, email);
+        String uuid= dataBaseRequestController.forgotPassword(username, email);
+        if (uuid!="-1"||uuid!="-2"||uuid!="0")
+            sendEmailToCreateNewPass(uuid,email);
+        return uuid;
     }
 
     public int checkCCUID(String ccuid) {
@@ -122,4 +134,60 @@ public class AdminClientController {
     public SearchResults getAllApartments() {
         return dataBaseRequestController.allResultsRecordsFromDB();
     }
+
+    private static boolean sendEmailToCreateNewPass(String uniqueId, String email)
+    {
+        ////////////////////
+        // Autentication ///
+        ////////////////////
+        final String username = "apartmentsBS@gmail.com"; // enter your mail id
+        final String password = "1Tamir2Shavit3Nofar\n";// enter ur password
+
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        ////////////////////
+        ///Create Message///
+        ////////////////////
+
+        try {
+
+            Message message = new MimeMessage(session);
+            try {
+                message.setFrom(new InternetAddress("apartmentsBS@gmail.com")); // same email id
+            } catch (MessagingException e) {
+                return false;
+            }
+//            message.setRecipients(Message.RecipientType.TO,
+//                    InternetAddress.parse(email));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse("shavit91@gmail.com"));// whome u have to send mails that person id
+            message.setSubject("Testing Subject");
+            message.setText("Dear admin,"
+                    + "\n\n here is link to reset you password: https://apartmentrentweb20180514054014.azurewebsites.net/ResetPassword.aspx?Uid=" + uniqueId);
+
+            //////////////////
+            ///send message///
+            //////////////////
+
+            Transport.send(message);
+
+            System.out.println("Done");
+            return true;
+        } catch (MessagingException e) {
+            return false;
+        }
+    }
+
 }
