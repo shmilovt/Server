@@ -143,6 +143,8 @@ public class DataBaseRequestController {
                 else return -1;
             } catch (SQLException e) {
                 return 0;
+            } catch (Exception e) {
+                return 0;
             }
         }
         else return 0;

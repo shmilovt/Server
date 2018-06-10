@@ -90,7 +90,7 @@ public class SearchAlgorithmTest {
         categories.add(cost);
         categories.add(must);
         categories.add(size);
-        SearchResults res= search.filterIntersection(ResultRecordList, categories);
+        SearchResults res= search.filterMoreResults(ResultRecordList, categories);
         List<ResultRecord> list = res.getResultRecordList();
         for(ResultRecord item: list) {
             assertFalse(item.getCost() >= 400 && item.getCost() <= 2000

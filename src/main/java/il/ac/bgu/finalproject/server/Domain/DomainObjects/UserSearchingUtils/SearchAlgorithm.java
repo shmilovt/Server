@@ -71,6 +71,10 @@ public class SearchAlgorithm {
                             afterFiltering5.add(element);
                     }
                 }
+                resultAfterFiltering.addAll(afterFiltering2);
+                resultAfterFiltering.addAll(afterFiltering3);
+                resultAfterFiltering.addAll(afterFiltering4);
+                resultAfterFiltering.addAll(afterFiltering5);
             }
         }
         return  new SearchResults(resultAfterFiltering);

@@ -8,9 +8,9 @@ import java.util.logging.Level;
 
 public class Encryption {
     // generate public and private keys
-    private KeyPair keyPair;
-    private PublicKey pubKey;
-    private PrivateKey privateKey;
+    private final KeyPair keyPair= buildKeyPair();
+//    private PublicKey pubKey;
+//    private PrivateKey privateKey;
 
     private static Encryption instance = null;
     public static Encryption getInstance() { //retuns null in case of NoSuchAlgorithmException
@@ -25,9 +25,9 @@ public class Encryption {
     }
 
     public Encryption() throws NoSuchAlgorithmException {
-        setKeyPair(buildKeyPair());
-        setPubKey(getKeyPair().getPublic());
-        setPrivateKey(getKeyPair().getPrivate());
+//        setKeyPair(buildKeyPair());
+//        setPubKey(getKeyPair().getPublic());
+//        setPrivateKey(getKeyPair().getPrivate());
     }
 
 //    // encrypt the message
@@ -46,15 +46,15 @@ public class Encryption {
         return keyPairGenerator.genKeyPair();
     }
 
-    public String encrypt(String message) throws Exception {
+    public byte[] encrypt(String message) throws Exception {
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.ENCRYPT_MODE, getPrivateKey());
 
-        return new String(cipher.doFinal(message.getBytes()));
+        return cipher.doFinal(message.getBytes());
     }
 
-    public String decrypt(String encryptedString) throws Exception {
-        byte[] encrypted = encryptedString.getBytes();
+    public String decrypt(byte[] encrypted) throws Exception {
+//        byte[] encrypted = encryptedString.getBytes();
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, getPubKey() );
 
@@ -65,23 +65,15 @@ public class Encryption {
         return keyPair;
     }
 
-    public void setKeyPair(KeyPair keyPair) {
-        this.keyPair = keyPair;
-    }
+//    public void setKeyPair(KeyPair keyPair) {
+//        this.keyPair = keyPair;
+//    }
 
     public PublicKey getPubKey() {
-        return pubKey;
-    }
-
-    public void setPubKey(PublicKey pubKey) {
-        this.pubKey = pubKey;
+        return keyPair.getPublic();
     }
 
     public PrivateKey getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(PrivateKey privateKey) {
-        this.privateKey = privateKey;
+        return keyPair.getPrivate();
     }
 }

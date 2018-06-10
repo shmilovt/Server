@@ -16,6 +16,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.security.KeyPair;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -30,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 public class DataBaseConnectionTest {
     private static DataBaseConnection dbc = new DataBaseConnection();
     private static Connection testConn = null;
+//    private static KeyPair keyPair=
 
 
     @BeforeClass
@@ -46,19 +48,26 @@ public class DataBaseConnectionTest {
 
     @Test
     public void stam() throws DataBaseFailedException {
-        String enc="1";
+        byte[] enc={0};
+        String dec="";
+        Encryption encryption= Encryption.getInstance();
+//        String s="love everybody bla bla bla because all you need if love. free love, and tha BTS sing about fake a loveeee";
+        String s="123456";
         try {
-            enc= Encryption.getInstance().encrypt("I want to make love");
-            System.out.println(enc);
+            enc= encryption.encrypt(s);
+            System.out.println(new String(enc));
         } catch (Exception e) {
             System.out.println("forever alone");
         }
         try {
-            String dec= Encryption.getInstance().decrypt(enc);
-            System.out.println(dec);
+            dec= encryption.decrypt(enc);
+//            System.out.println(dec);
         } catch (Exception e) {
             System.out.println("forever alone");
+            e.printStackTrace();
         }
+        System.out.println(""+encryption.getKeyPair().getPrivate().toString());
+        assertTrue(s.equals(dec));
     }
 
 //    @Test
@@ -212,14 +221,15 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void login() throws SQLException {
+    public void login() throws Exception {
+        dbc.resetAdminTable();
         assertTrue(dbc.login("admin","123456"));
         assertFalse(dbc.login("admin","12346"));
         assertFalse(dbc.login("admina","123456"));
     }
 
     @Test
-    public void changePassword() throws SQLException {
+    public void changePassword() throws Exception {
         assertTrue(dbc.login("admin","123456"));
         dbc.changePassword("admin","12345");
         assertTrue(dbc.login("admin","12345"));

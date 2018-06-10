@@ -7,6 +7,7 @@ import il.ac.bgu.finalproject.server.Domain.Controllers.GoogleMapsController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.Controllers.ServerController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.*;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.Encryption;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -28,6 +29,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     private static Connection conn = null;
     private  String addressDetailsIDString ="addressDetailsID";
     private  String apartmentIDString ="apartmentID";
+//    private Encryption encryption;
 
     public void connect() {
 //        String url = "jdbc:sqlite:src\\main\\java\\il\\ac\\bgu\\finalproject\\server\\PersistenceLayer\\db\\ApartmentBS.db";
@@ -1494,8 +1496,20 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         SimpleDateFormat sdf= new SimpleDateFormat();
         sdf.applyPattern(dateFormat);
         String newDateString = sdf.format(dd);
+
+        Encryption encryption= Encryption.getInstance();
+        byte[] enc= {0};
+        try {
+            enc= encryption.encrypt("123456");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+String stam= "123456";
+        String stam2=        new String(enc);
         sql= "INSERT INTO Admin(username, password, mailAddress, dateOfLastChange) VALUES ('admin','123456','admin@gmail.com', '"+
                 newDateString+"' ) ";
+//        System.out.println("sql:  "+sql);
+//        System.out.println("stam2:  "+stam2);
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);;
             pstmt.executeUpdate();
@@ -1507,7 +1521,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public boolean login(String username, String password) throws SQLException {
+    public boolean login(String username, String password) throws Exception {
+        Encryption encryption= Encryption.getInstance();
         String passwordFromDB = "";
         String sql = "SELECT Admin.password "
                 + " FROM Admin"
@@ -1516,7 +1531,11 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         ResultSet rs = stmt.executeQuery(sql);
         if (rs.next()) {
             passwordFromDB = rs.getString(1);
+//            byte[] dec= passwordFromDB.getBytes();
+//            String realPassword =encryption.decrypt(dec);
+//            return realPassword.equals(password);
         }
+//        else return false;
         return passwordFromDB.equals(password);
     }
 
@@ -1525,11 +1544,21 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         SimpleDateFormat sdf= new SimpleDateFormat();
         sdf.applyPattern(dateFormat);
         String newDateString = sdf.format(dd);
+
+        Encryption encryption= Encryption.getInstance();
+//        byte[] enc= {0};
+//        try {
+//            enc= encryption.encrypt("123456");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
         try {
             String sql = "UPDATE Admin "
                     + " SET password=? , dateOfLastChange= ? "
                     + " WHERE username= ? ";
             PreparedStatement pstmt = conn.prepareStatement(sql);
+//            pstmt.setString(1, new String(enc));
             pstmt.setString(1, password);
             pstmt.setString(2, newDateString);
             pstmt.setString(3, username);
