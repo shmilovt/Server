@@ -44,7 +44,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         //System.out.println("Connection to SQLite has been established.");
     }
-    public void disConnect() throws DataBaseFailedException {
+    public void disConnect(){
         try {
             if (conn != null) {
                 conn.close();
@@ -53,8 +53,33 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            throw new DataBaseFailedException(" disconnect to the DataBase ",1);
+//            throw new DataBaseFailedException(" disconnect to the DataBase ",1);
         }
+    }
+    public void connectToTestDB(){
+        disConnect();
+        String url = "jdbc:sqlite:TestBS.db";
+        try {
+            conn = DriverManager.getConnection(url);
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException("disconnect to the DataBase ",1);
+        }
+    }
+    public void disconnectToTestDB(){
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+//            throw new DataBaseFailedException(" disconnect to the DataBase ",1);
+        }
+        connect();
     }
 
     public void resetConstValueTable() throws DataBaseFailedException {
@@ -1303,8 +1328,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         int value=-1;
         try {
             String sql = "SELECT counter FROM UserSuggestions " +
-                    " WHERE apartmentID= " + id+" AND field= "+field+
-                    " AND suggestion= " + suggestion;
+                    " WHERE apartmentID= '" + id+"' AND field= '"+field+
+                    "' AND suggestion= '" + suggestion+ "'";
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
             value= rs.getInt(1);
@@ -1776,18 +1801,18 @@ String stam= "123456";
 
     public static void main(String[] args) throws Exception
     {
-
+/*
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
 //        a.resetSearchRecordsTable();
 //        a.resetAdminTable();
 //        a.resetGroupsTable();
-//        a.resetAllTables();
-//        a.resetConstValueTable();
+        a.resetAllTables();
+        a.resetConstValueTable();
         a.resetUserSuggestionsTable();
         a.disConnect();
-
-/*
+*/
+///*
         ServerController servercontroller=new ServerController();
         //servercontroller
         servercontroller.newPost(new Post("1231C_2476", new Date(new Date().getTime()-1000), "shlomi arzi","השותפה המקסימה שלנו Yarden Peretz עוזבת את הדירה. אני וGal Ben Maman מחפשים מישהי שתחליף את מקומה בחדר. דירת 4 חדרים חדשה משופצת לחלוטין עם חצר ענקית. הדירה באלעזר בן יאיר 16 כרבע שעה מאוניברסיטה. הדירה מרוהטת ויש בה הכל, רק להביא בגדים ולהכנס. עלות 1150 ש\\\"ח. כניסה מיידית :)\\nלפרטים:\\n0526516656\\n", ""));
@@ -1863,6 +1888,6 @@ String stam= "123456";
         servercontroller.newPost(new Post("1231C_22341115", new Date(new Date().getTime()-989523), "margalit zhanani", "להשכרה בדרך מצדה\n₪2,700\n\nכתובת :דרך מצדה 95, קומה 2\n75 מטר נטו.\nמקום שקט ובטוח,יש שערים עם מפתח בכניסה לבניין\nדירת ארבעה חדרים-שלושה חדרי שינה, סלון מרווח ומואר,מטבח וחדר שירות.\nעברה שיפוץ כולל לפני שנה וחצי.\nכניסה מיידית\nמזגן בסלון+בשני חדרי שינה.\nהדירה מושכרת עם תנור משולב כיריים+מקרר חדשים.\nהדירה לא מרוהטת והמחיר לא כולל חשבונות.\nיש וועד בית.\n052-6035054 גיל.\n",""));
         servercontroller.newPost(new Post("1231C_22341116", new Date(new Date().getTime()-976523), "ben osor", "להשכרה במיתר יחידת דיור בשכונת רבין.\n70 מ\"ר + חצר פרטית + מחסן ומזווה חיצוני.\nנמצאת במקום מרכזי, קרובה לבתי הספר ולמרכז המסחרי של הישוב.\nשני חדרי שינה, מטבח, סלון ושני חדרי שירותים.\nיחידה יפה ומושקעת, בית אבן וגינה גדולה, יפה ומטופחת.\n\nמחיר 2700 ₪\nכדאי לראות.\n\nלפרטים -\nמאיר - 0525816460\nכרמלית - 0525816440\n",""));
         servercontroller.newPost(new Post("1231C_22341117", new Date(new Date().getTime()-96523), "rivka tamir", "***להשכרה ברחוב דונקלבלום 1 ב-ו' החדשה***\nדירת 4 חדרים משופצת מהיסוד!!\n-חדר הורים עם שרותים ומקלחת\n-בניין מתוחזק ברמה יוצאת דופן.\n-חניה+מחסן\n-ריהוט: פינת אוכל, 2 מיטות יחיד, 2 ארונות עץ מלא, ארון הזזה עם טריקה שקטה, 2 שידות עץ מלא, כריים, תנור, שולחן סלון, מזנון.\nכניסה: 14/11\nמחיר: 3400\nטלפון לפרטים: 0542054048 יעקב\n",""));
-*/
+//*/
     }
 }

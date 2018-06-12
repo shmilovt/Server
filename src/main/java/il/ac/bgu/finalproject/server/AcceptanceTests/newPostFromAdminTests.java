@@ -1,27 +1,19 @@
 package il.ac.bgu.finalproject.server.AcceptanceTests;
 
 
-import com.google.gson.Gson;
-import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.NewPostDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.NLPHandlers.NLPImp;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class searchApartmentsTests {
+public class newPostFromAdminTests {
     private static ServiceConnector serviceConnector;
-
 
     @BeforeClass
     public static void setup() {
         serviceConnector= new ServiceConnector();
         serviceConnector.getBridge().connectToTestDB();
-    }
-    @Test
-    public void searchByFloor(){
-//        serviceConnector.getBridge().searchApartments()
-
     }
 
     @Test

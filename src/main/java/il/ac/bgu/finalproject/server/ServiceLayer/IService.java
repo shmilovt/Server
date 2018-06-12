@@ -18,7 +18,7 @@ public interface IService {
      int login(String username, String password);
      int changePassword(String username, String password);
      int checkCCUID(String ccuid);
-     String forgotPassword(String userName, String email);
+     int forgotPassword(String userName, String email);
 
      int newPostFromAdmin(String nameOfPublisher, String messege);
      int insertGroup(String groupID);
@@ -44,4 +44,7 @@ public interface IService {
      void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood);
 
     void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException;
+
+     void connectToTestDB();
+     void disconnectToTestDB();
 }

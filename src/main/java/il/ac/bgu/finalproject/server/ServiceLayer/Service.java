@@ -61,7 +61,7 @@ public class Service implements IService {
     }
 
     @Override
-    public String forgotPassword(String username, String email) {
+    public int forgotPassword(String username, String email) {
         return adminClientController.forgotPassword(username, email);
     }
 
@@ -146,6 +146,14 @@ public class Service implements IService {
     @Override
     public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
         regularClientController.addressFieldCase(id, b,  b1, b2, street, numOfBuilding, neighborhood);
+    }
+
+
+    public void connectToTestDB(){
+        regularClientController.connectToTestDB();
+    }
+    public void disconnectToTestDB(){
+        regularClientController.disconnectToTestDB();
     }
 
     public static void main(String[] args) throws Exception

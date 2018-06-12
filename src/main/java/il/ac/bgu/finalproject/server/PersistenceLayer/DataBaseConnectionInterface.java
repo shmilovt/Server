@@ -17,7 +17,9 @@ public interface DataBaseConnectionInterface {
 
     void connect();
 
-    void disConnect() throws DataBaseFailedException;
+    void disConnect();
+    void connectToTestDB();
+    void disconnectToTestDB();
 
     void resetContactsTable() throws DataBaseFailedException;
 

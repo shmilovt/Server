@@ -70,4 +70,10 @@ public class RegularClientController {
         int x=2;
     }
 */
+    public void connectToTestDB(){
+        dataBaseRequestController.connectToTestDB();
+    }
+    public void disconnectToTestDB(){
+        dataBaseRequestController.disconnectToTestDB();
+    }
     }

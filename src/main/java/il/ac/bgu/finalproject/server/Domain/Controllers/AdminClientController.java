@@ -46,11 +46,19 @@ public class AdminClientController {
         return dataBaseRequestController.changePassword(username, password);
     }
 
-    public String forgotPassword(String username, String email) {
-        String uuid= dataBaseRequestController.forgotPassword(username, email);
-        if (uuid!="-1"||uuid!="-2"||uuid!="0")
-            sendEmailToCreateNewPass(uuid,email);
-        return uuid;
+    public int forgotPassword(String username, String email) {
+        String uuid = dataBaseRequestController.forgotPassword(username, email);
+        switch (uuid) {
+            case "0":
+                return 0;
+            case "-1":
+                return -1;
+            case "-2":
+                return -2;
+            default:
+                sendEmailToCreateNewPass(uuid, email);
+                return 1;
+        }
     }
 
     public int checkCCUID(String ccuid) {

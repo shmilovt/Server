@@ -167,7 +167,8 @@ public class DataBaseRequestController {
                     sdf.applyPattern(dateFormat);
                     String newDateString = sdf.format(dd);
                     try {
-                        if (dataBaseConnectionInterface.addToUUIDTable(username, newDateString, email)){return randomUUID;}
+                        if (dataBaseConnectionInterface.addToUUIDTable(username, newDateString, email)){
+                            return randomUUID;}
                         else return "-1";
                     } catch (DataBaseFailedException e) {
                         return "-1";
@@ -276,5 +277,12 @@ public class DataBaseRequestController {
                 dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
             }
         }
+    }
+
+    public void connectToTestDB() {
+        dataBaseConnectionInterface.connectToTestDB();
+    }
+    public void disconnectToTestDB() {
+        dataBaseConnectionInterface.disconnectToTestDB();
     }
 }

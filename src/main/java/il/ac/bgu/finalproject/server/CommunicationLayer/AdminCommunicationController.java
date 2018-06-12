@@ -69,7 +69,7 @@ public class AdminCommunicationController {
     public String forgotPassword(@RequestParam String usernamePasswordString) {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
-        String ans = service.forgotPassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
+        int ans = service.forgotPassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
         String json= gson.toJson(ans);
         return json;
     }

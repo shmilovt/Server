@@ -36,13 +36,16 @@ public class DataBaseConnectionTest {
 
     @BeforeClass
     public static void setup() throws DataBaseFailedException {
-        dbc.connect();
+        dbc.connectToTestDB();
+//        dbc.connect();
 //        dbc.resetAllTables();
     }
 
     @AfterClass
     public static void endup() throws DataBaseFailedException {
+
         dbc.changePassword("admin","123456");
+        dbc.disconnectToTestDB();
 //        dbc.disConnect();
     }
 
@@ -267,7 +270,14 @@ public class DataBaseConnectionTest {
 
     @Test
     public void deleteGroup() throws DataBaseFailedException {
-        dbc.resetUUIDTable();
+//        try {
+//            System.out.println(dbc.isCorrectEmail("admin","admin@gmail.com"));
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        dbc.suggestionChangesApartmentDouble("19","numOfRooms",4.5);
+
+//        dbc.resetUUIDTable();
 //        System.out.println(dbc.userExist("admin"));
 //        dbc.suggestionChangesNeighborhood("0","הפרחים");
 
