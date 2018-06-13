@@ -141,11 +141,11 @@ public class DataBaseRequestController {
         if (dataBaseConnectionInterface.userExist(username)){
             try {
                 if (dataBaseConnectionInterface.login(username, password)){ return 1; }
-                else return -1;
+                else return 0;
             } catch (SQLException e) {
-                return 0;
+                return -1;
             } catch (Exception e) {
-                return 0;
+                return -1;
             }
         }
         else return 0;
