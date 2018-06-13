@@ -10,6 +10,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.Sea
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -97,7 +98,7 @@ public interface DataBaseConnectionInterface {
     boolean changePassword(String username, String password);
     boolean userExist(String username);
     boolean isCorrectEmail(String username, String email) throws SQLException;
-    boolean addToUUIDTable(String username, String newDateString, String email) throws DataBaseFailedException;
+    boolean addToUUIDTable(String username, Date newDateString, String email) throws DataBaseFailedException;
     boolean UUIDExistAndValid(String uuString) throws DataBaseFailedException;
     //    boolean changeEmailAddress(String username, String emailAddress);
 

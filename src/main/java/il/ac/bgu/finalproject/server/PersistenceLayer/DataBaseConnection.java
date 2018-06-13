@@ -1705,12 +1705,14 @@ String stam= "123456";
             throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
-    public boolean addToUUIDTable(String username, String date, String uuString) throws DataBaseFailedException {
+    public boolean addToUUIDTable(String username, Date date, String uuString) throws DataBaseFailedException {
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+        String reportDate = formatter.format(date);
         String sql= "INSERT INTO UUID(username, dateOfRequest, uuString) VALUES (?,?,?) ";
         try {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1,username);
-            pstmt.setString(2,date);
+            pstmt.setString(2,reportDate);
             pstmt.setString(3,uuString);
             pstmt.executeUpdate();
             return true;
@@ -1724,6 +1726,7 @@ String stam= "123456";
     }
 
     public boolean UUIDExistAndValid(String uuString) throws DataBaseFailedException {
+//        SimpleDateFormat
         String sql= "SELECT dateOfRequest FROM UUID WHERE uuString= '"+uuString+"'";
         try {
             Statement stmt  = conn.createStatement();
@@ -1731,7 +1734,8 @@ String stam= "123456";
             if (rs.next()) {
                 SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
                 Date now = new Date();
-                Date gdate = formatter.parse(rs.getString(1));
+                String stringDate = rs.getString(1);
+                Date gdate = formatter.parse(stringDate); //problem
                 long gap = now.getTime() - gdate.getTime();
                 //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
                 return (gap < 86400000); //one day

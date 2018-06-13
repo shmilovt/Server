@@ -281,6 +281,14 @@ public class DataBaseConnectionTest {
     }
 
     @Test
+    public void uuid() throws DataBaseFailedException {
+        dbc.resetUUIDTable();
+        System.out.println(dbc.addToUUIDTable("admin",new Date(),"abababab"));
+        System.out.println(dbc.UUIDExistAndValid("abababab"));
+    }
+
+
+    @Test
     public void deleteGroup() throws DataBaseFailedException, IOException {
 //        try {
 //            System.out.println(dbc.isCorrectEmail("admin","admin@gmail.com"));
