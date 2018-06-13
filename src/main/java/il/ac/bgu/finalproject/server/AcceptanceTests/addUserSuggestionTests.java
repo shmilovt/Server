@@ -18,15 +18,6 @@ public class addUserSuggestionTests {
     public static void setup() {
         serviceConnector= new ServiceConnector();
         serviceConnector.getBridge().connectToTestDB();
-
-//        serviceConnector.getBridge().c
-        //dbc.connect();
-//        dbc.resetAllTables();
-    }
-    @Test
-    public void searchByFloor(){
-//        serviceConnector.getBridge().searchApartments()
-
     }
 
     @Test
@@ -72,28 +63,20 @@ public class addUserSuggestionTests {
         } catch (DataBaseFailedException e) {
             e.printStackTrace();
         }
-        ResultRecord resultRecord= serviceConnector.getBridge().ResultRecordFromDB("12");
+        ResultRecord resultRecord= serviceConnector.getBridge().ResultRecordFromDB("1");
         Assert.assertEquals(resultRecord.getNeighborhood(),"השושנים");
-
     }
 
     @Test
-    public void addressFieldCase(){
+    public void addressFieldCaseAddress(){
         try {
-            serviceConnector.getBridge().addressFieldCase("12",true,true,true,"וינגייט",61,"שכונה ג'");
+            serviceConnector.getBridge().addressFieldCase("12",true,true,false,"אברהם אבינו",26,"שכונה ג'");
         } catch (DataBaseFailedException e) {
             e.printStackTrace();
         }
-//        int count=-1;
-//        while (count>5) {
-//            try {
-//                count = serviceConnector.getBridge().addUserSuggestion("12", "cost", "1100");
-//            } catch (DataBaseFailedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        serviceConnector.getBridge().suggestionChangesApartmentInt("12", "cost", 1100);
-
+        ResultRecord resultRecord= serviceConnector.getBridge().ResultRecordFromDB("12");
+        Assert.assertEquals(resultRecord.getStreet(),"אברהם אבינו");
+        Assert.assertEquals(resultRecord.getNumber(),26);
     }
 
     @AfterClass

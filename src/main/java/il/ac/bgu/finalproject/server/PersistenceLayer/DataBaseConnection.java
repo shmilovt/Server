@@ -1731,17 +1731,17 @@ String stam= "123456";
         try {
             Statement stmt  = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
-            if (rs.next()) {
+            while (rs.next()) {
                 SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
                 Date now = new Date();
                 String stringDate = rs.getString(1);
                 Date gdate = formatter.parse(stringDate); //problem
                 long gap = now.getTime() - gdate.getTime();
                 //   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTime
-                return (gap < 86400000); //one day
+                if (gap < 86400000)
+                    return true; //one day
             }
-            else
-                return false;
+            return false;
         }
         catch(SQLException e){}
         catch (Exception e){

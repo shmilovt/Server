@@ -168,7 +168,7 @@ public class DataBaseRequestController {
                     sdf.applyPattern(dateFormat);
                     String newDateString = sdf.format(dd);
                     try {
-                        if (dataBaseConnectionInterface.addToUUIDTable(username, dd, email)){
+                        if (dataBaseConnectionInterface.addToUUIDTable(username, dd, randomUUID)){
                             return randomUUID;}
                         else return "-1";
                     } catch (DataBaseFailedException e) {

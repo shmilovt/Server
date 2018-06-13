@@ -283,13 +283,13 @@ public class DataBaseConnectionTest {
     @Test
     public void uuid() throws DataBaseFailedException {
         dbc.resetUUIDTable();
-        System.out.println(dbc.addToUUIDTable("admin",new Date(),"abababab"));
-        System.out.println(dbc.UUIDExistAndValid("abababab"));
+        assertTrue(dbc.addToUUIDTable("admin",new Date(),"abababab"));
+        assertTrue(dbc.UUIDExistAndValid("abababab"));
     }
 
 
     @Test
-    public void deleteGroup() throws DataBaseFailedException, IOException {
+    public void deleteGroup() throws DataBaseFailedException, IOException, InvalidKeySpecException {
 //        try {
 //            System.out.println(dbc.isCorrectEmail("admin","admin@gmail.com"));
 //        } catch (SQLException e) {
@@ -373,6 +373,10 @@ public class DataBaseConnectionTest {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        X509EncodedKeySpec publicKeySpec2 = new X509EncodedKeySpec(
+                dataPub);
+        PublicKey publicKey4 = keyFactory.generatePublic(publicKeySpec2);
+
         EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(dataPub);
         PublicKey publicKey2= new PublicKey() {
             @Override
@@ -394,6 +398,7 @@ public class DataBaseConnectionTest {
             publicKey2 = keyFactory.generatePublic(publicKeySpec);
 //            System.out.println(""+publicKey2.getEncoded());
         } catch (InvalidKeySpecException e) {
+            System.out.println("InvalidKeySpecException "+ e.getMessage());
             e.printStackTrace();
         }
         int x=1;

@@ -152,7 +152,6 @@ public class AdminClientController {
         final String username = "apartmentsBS@gmail.com"; // enter your mail id
         final String password = "1Tamir2Shavit3Nofar\n";// enter ur password
 
-
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -174,7 +173,7 @@ public class AdminClientController {
 
             Message message = new MimeMessage(session);
             try {
-                message.setFrom(new InternetAddress("apartmentsBS@gmail.com")); // same email id
+                message.setFrom(new InternetAddress(email)); // same email id
             } catch (MessagingException e) {
                 return false;
             }
