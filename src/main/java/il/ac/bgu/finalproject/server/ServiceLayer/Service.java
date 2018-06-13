@@ -11,6 +11,7 @@ import il.ac.bgu.finalproject.server.Domain.Controllers.AdminClientController;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSuggestionUtils.UserSuggestion;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -154,6 +155,10 @@ public class Service implements IService {
     }
     public void disconnectToTestDB(){
         regularClientController.disconnectToTestDB();
+    }
+
+    public ResultRecord ResultRecordFromDB(String apartmentID){ //just for integration tests
+        return regularClientController.ResultRecordFromDB(apartmentID);
     }
 
     public static void main(String[] args) throws Exception

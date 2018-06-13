@@ -2,6 +2,7 @@ package il.ac.bgu.finalproject.server.Domain.Controllers;
 
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CategoryQuery;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchAlgorithm;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -76,4 +77,8 @@ public class RegularClientController {
     public void disconnectToTestDB(){
         dataBaseRequestController.disconnectToTestDB();
     }
+
+    public ResultRecord ResultRecordFromDB(String apartmentID) {
+        return dataBaseRequestController.ResultRecordFromDB(apartmentID);
     }
+}

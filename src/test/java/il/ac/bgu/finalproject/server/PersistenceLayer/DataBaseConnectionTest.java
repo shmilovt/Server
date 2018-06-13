@@ -16,7 +16,17 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.security.KeyPair;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.*;
+import java.security.spec.EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
@@ -27,6 +37,8 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import java.security.spec.X509EncodedKeySpec;
+
 
 public class DataBaseConnectionTest {
     private static DataBaseConnection dbc = new DataBaseConnection();
@@ -269,13 +281,114 @@ public class DataBaseConnectionTest {
     }
 
     @Test
-    public void deleteGroup() throws DataBaseFailedException {
+    public void deleteGroup() throws DataBaseFailedException, IOException {
 //        try {
 //            System.out.println(dbc.isCorrectEmail("admin","admin@gmail.com"));
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
-        dbc.suggestionChangesApartmentDouble("19","numOfRooms",4.5);
+//        dbc.suggestionChangesApartmentDouble("19","numOfRooms",4.5);
+
+        //CREATE THE PUBLIC & PRIVETE FILES
+        Encryption encryption= Encryption.getInstance();
+        byte[] pri= encryption.getKeyPair().getPrivate().getEncoded();
+        byte[] pub= encryption.getKeyPair().getPrivate().getEncoded();
+        FileOutputStream keyfos = new FileOutputStream("puK");
+        keyfos.write(pub);
+        keyfos.close();
+        FileOutputStream keyfos2 = new FileOutputStream("prK");
+        keyfos2.write(pri);
+        keyfos2.close();
+
+        Path fileLocationPub = Paths.get("puK");
+        byte[] dataPub = Files.readAllBytes(fileLocationPub);
+        Path fileLocationPri = Paths.get("prK");
+        byte[] dataPri = Files.readAllBytes(fileLocationPri);
+
+        KeyFactory keyFactory = null;
+        try {
+            keyFactory = KeyFactory.getInstance("RSA");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(dataPri);
+        PrivateKey privateKey2= new PrivateKey() {
+            @Override
+            public String getAlgorithm() {
+                return null;
+            }
+
+            @Override
+            public String getFormat() {
+                return null;
+            }
+
+            @Override
+            public byte[] getEncoded() {
+                return new byte[0];
+            }
+        };
+        try {
+            privateKey2 = keyFactory.generatePrivate(privateKeySpec);
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            PublicKey publicKey3 = keyFactory.generatePublic(new X509EncodedKeySpec(dataPub));
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+
+
+        PublicKey publicKey= new PublicKey() {
+            @Override
+            public String getAlgorithm() {
+                return null;
+            }
+
+            @Override
+            public String getFormat() {
+                return null;
+            }
+
+            @Override
+            public byte[] getEncoded() {
+                return new byte[0];
+            }
+        };
+        try {
+            publicKey =
+                    KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(dataPub));
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(dataPub);
+        PublicKey publicKey2= new PublicKey() {
+            @Override
+            public String getAlgorithm() {
+                return null;
+            }
+
+            @Override
+            public String getFormat() {
+                return null;
+            }
+
+            @Override
+            public byte[] getEncoded() {
+                return new byte[0];
+            }
+        };
+        try {
+            publicKey2 = keyFactory.generatePublic(publicKeySpec);
+//            System.out.println(""+publicKey2.getEncoded());
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
+        int x=1;
 
 //        dbc.resetUUIDTable();
 //        System.out.println(dbc.userExist("admin"));

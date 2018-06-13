@@ -730,8 +730,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
         ApartmentLocation location= new ApartmentLocation();
         Address address= new Address();
-        String sql = "SELECT AddressDetails.street, AddressDetails.numOfBuilding, AddressDetails.timeFromUni, " +
-                " AddressDetails.neighborhood, AddressDetails.longitude, AddressDetails.latitude " +
+        String sql = "SELECT street, numOfBuilding, timeFromUni, " +
+                " neighborhood, longitude, latitude " +
                 " FROM AddressDetails WHERE addressDetailsNum= '"  + addressDetilsID +"'" ;
         try {
             Statement stmt = conn.createStatement();
@@ -911,6 +911,60 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         SearchResults searchResults= new SearchResults(results);
         return searchResults;
+    }
+
+    public ResultRecord ResultRecordFromDB (String apartmentIDString) {
+        ResultRecord temp= new ResultRecord();
+        try {
+            String sql = "SELECT Apartment.apartmentID , Apartment.addressDetailsID, floor, cost, Apartment.size, balcony, " +
+                    "garden, animal, warehouse, protectedSpace, furniture, numOfRooms, numberOfMates, "
+                    + "dateOfPublish, postText"
+                    + " FROM Apartment"
+                    + " JOIN Posts P ON Apartment.apartmentID = P.apartmentID" +
+                    " WHERE Apartment.apartmentID= '" + apartmentIDString +"'" ;
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                Set<Contact> contacts = getApartmentContacts(rs.getString(1));
+                ApartmentLocation location = getAddressDetils(rs.getInt(2));
+
+                temp = new ResultRecord();
+                temp.setStreet(location.getAddress().getStreet());
+                temp.setNumber(location.getAddress().getNumber());
+                temp.setNeighborhood(location.getNeighborhood());
+                temp.setFloor(rs.getInt(3));
+                temp.setDistanceFromUniversity(location.getDistanceFromUniversity());
+                temp.setCost(rs.getInt(4));
+                temp.setSize(rs.getInt(5));
+                temp.setBalcony(rs.getInt(6));
+                temp.setYard(rs.getInt(7));
+                temp.setAnimals(rs.getInt(8));
+                temp.setWarehouse(rs.getInt(9));
+                temp.setProtectedSpace(rs.getInt(10));
+                temp.setFurniture(rs.getInt(11));
+                temp.setNumberOfRooms(rs.getDouble(12));
+                temp.setNumberOfRoomates(rs.getInt(13));
+                rs.getString(14);
+                temp.setDateOfPublish(rs.getString(14));
+                temp.setText(rs.getString(15));
+                temp.setApartmentID("" + rs.getInt(1));
+                Contact[] contactsArray = new Contact[contacts.size()];
+                int i = 0;
+                for (Contact con : contacts) {
+                    contactsArray[i] = con;
+                    i++;
+                }
+                temp.setContacts(contactsArray);
+                temp.setLat(location.getLatitude());
+                temp.setLon(location.getLongitude());
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        } catch (Exception e) {
+            MyLogger.getInstance().log(Level.SEVERE, e.getMessage(), e);
+        }
+        return temp;
     }
 
     public List<Apartment> allApartmentFromDB () {
@@ -1171,12 +1225,12 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
 
     public void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException {
         try {
-            String sql = "UPDATE Apartment SET addressDetailsID=? " +
-                    "WHERE apartmentID=? ";
+            String sql = "UPDATE Apartment SET addressDetailsID= '" +addressDetailsNum+ "' "+
+                    "WHERE apartmentID= '" +apartmentid+"'";
 
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1,apartmentid);
-            pstmt.setInt(2,addressDetailsNum);
+//            pstmt.setString(1,apartmentid);
+//            pstmt.setInt(2,addressDetailsNum);
             pstmt.executeUpdate();
         }
         catch(SQLException e){}
@@ -1375,17 +1429,17 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
-    public int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException {
-        int counter=getUserSuggestionsNum(id,field,suggestion);
-        if (counter==-1) {
-            insertUserSuggestionsRecord(id, field, suggestion);
-            return 1;
-        }
-        else {
-            setUserSuggestionsCounter(id,field,suggestion,counter+1);
-            return counter+1;
-        }
-    }
+//    public int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException {
+//        int counter=getUserSuggestionsNum(id,field,suggestion);
+//        if (counter==-1) {
+//            insertUserSuggestionsRecord(id, field, suggestion);
+//            return 1;
+//        }
+//        else {
+//            setUserSuggestionsCounter(id,field,suggestion,counter+1);
+//            return counter+1;
+//        }
+//    }
 
     public void suggestionChangesApartmentInt(String id, String field, int suggest){
         try {
@@ -1464,8 +1518,8 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
             try {
                 String sql = "UPDATE AddressDetails SET neighborhood = ?  WHERE addressDetailsNum= ?";
                 PreparedStatement pstmt = conn.prepareStatement(sql);
-                pstmt.setInt(2, addressDetailsNum);
                 pstmt.setString(1, suggestion);
+                pstmt.setInt(2, addressDetailsNum);
                 pstmt.executeUpdate();
             } catch (SQLException e) {
             } catch (Exception e) {
@@ -1659,6 +1713,7 @@ String stam= "123456";
             pstmt.setString(2,date);
             pstmt.setString(3,uuString);
             pstmt.executeUpdate();
+            return true;
         }
         catch(SQLException e){}
         catch (Exception e){

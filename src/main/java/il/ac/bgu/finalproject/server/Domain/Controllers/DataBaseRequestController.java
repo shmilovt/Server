@@ -8,6 +8,7 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartme
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.ApartmentLocation;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.Encryption;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.PersistenceLayer.DataBaseConnection;
@@ -284,5 +285,9 @@ public class DataBaseRequestController {
     }
     public void disconnectToTestDB() {
         dataBaseConnectionInterface.disconnectToTestDB();
+    }
+
+    public ResultRecord ResultRecordFromDB(String apartmentID) {
+        return dataBaseConnectionInterface.ResultRecordFromDB(apartmentID);
     }
 }

@@ -5,6 +5,7 @@ import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartment;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Contact;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Post;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.ResultRecord;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
@@ -77,7 +78,7 @@ public interface DataBaseConnectionInterface {
     void updateApartmentDerivatives(Apartment apartment,String postID) throws DataBaseFailedException;
     SearchResults allResultsFromDB ();
 
-    int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException;
+//    int insertUserSuggestionsNum (String id, String field, String suggestion) throws DataBaseFailedException;
     int isAddressDetailsExist(String street, int number);
 
     int getUserSuggestionsNum (String id, String field, String suggestion);
@@ -109,6 +110,7 @@ public interface DataBaseConnectionInterface {
     List<GroupDTO> GetAllGroups();
 
     List<SearchRecordDTO> getAllUserSearches();
+    public ResultRecord ResultRecordFromDB (String apartmentIDString);
 }
 
 

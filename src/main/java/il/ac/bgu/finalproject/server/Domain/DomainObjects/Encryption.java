@@ -8,6 +8,7 @@ import java.util.logging.Level;
 
 public class Encryption {
     // generate public and private keys
+//    private final KeyPair keyPair= new KeyPair("","");
     private final KeyPair keyPair= buildKeyPair();
 //    private PublicKey pubKey;
 //    private PrivateKey privateKey;
