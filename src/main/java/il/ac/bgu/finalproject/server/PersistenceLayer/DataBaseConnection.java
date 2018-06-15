@@ -643,7 +643,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
         return ""+t;
     }
-    public String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
+    public int addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                                      int size, int cost, int addressDetailsID,
                                      int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                                      int balcony, int furniture, int numberOfMates
@@ -680,9 +680,9 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            return e.toString();
+            throw e;
         }
-        return ""+t;
+        return t;
     }
 
     public void deleteApartmentRecord(String id) throws DataBaseFailedException {
@@ -1287,10 +1287,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         return -1;
     }
 
-    public void addApartmentDerivatives(Apartment apartment, String postID) throws DataBaseFailedException {
+    public int addApartmentDerivatives(Apartment apartment, String postID) throws DataBaseFailedException {
         int tempForAddressDetaileNum= isAddressDetailsExist(apartment.getApartmentLocation().getAddress().getStreet(),
                 apartment.getApartmentLocation().getAddress().getNumber());
-        String tempForApartment;
+        int tempForApartment;
         if (tempForAddressDetaileNum==-1) {
             //TODO: calc longitude, latitude, neighborhood
             tempForAddressDetaileNum = addAddressDetailsRecord(
@@ -1318,9 +1318,10 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         Set<Contact> contacts= apartment.getContacts();
         for(Contact eachContact: contacts){
             addContactsRecord(eachContact.getPhone(),eachContact.getName());
-            addApartmentContactsRecord(tempForApartment,eachContact.getPhone());
+            addApartmentContactsRecord(""+tempForApartment,eachContact.getPhone());
         }
         updateApartmentIDInPostRecord(postID,""+tempForApartment);
+        return tempForApartment;
     }
 
     public void updateApartmentIDInPostRecord(String postID, String apartmentID) throws DataBaseFailedException {

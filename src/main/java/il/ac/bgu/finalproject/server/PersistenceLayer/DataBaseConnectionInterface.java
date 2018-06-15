@@ -60,7 +60,7 @@ public interface DataBaseConnectionInterface {
 
     void addApartmentContactsRecord(String apartmentID, String phoneNumber) throws DataBaseFailedException;
 
-    String addApartmentRecord(String apartmentID, double numOfRooms, int floor,
+    int addApartmentRecord(String apartmentID, double numOfRooms, int floor,
                               int size, int cost, int addressDetailsID,
                               int garden, int gardenSize, int protectedSpace, int warehouse, int animal,
                               int balcony, int furniture, int numberOfMates
@@ -75,7 +75,7 @@ public interface DataBaseConnectionInterface {
                                 String sizeMin, String sizeMax, String furnitures, String numOfRoomes, String numOfMates,
                                 int protectedSpace,  int garden, int balcony, int pets, int warehouse) throws DataBaseFailedException;    void updateApartmentRecord(Apartment apartment, String apartmentid) throws DataBaseFailedException;
     int isApartmentExist(Apartment apartment) throws DataBaseFailedException;
-    void addApartmentDerivatives(Apartment apartment, String post) throws DataBaseFailedException;
+    int addApartmentDerivatives(Apartment apartment, String post) throws DataBaseFailedException;
     void updateApartmentDerivatives(Apartment apartment,String postID) throws DataBaseFailedException;
     SearchResults allResultsFromDB ();
 

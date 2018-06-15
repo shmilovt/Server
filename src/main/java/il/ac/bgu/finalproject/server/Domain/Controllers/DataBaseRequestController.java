@@ -34,12 +34,13 @@ public class DataBaseRequestController {
     public void connect() throws DataBaseFailedException {dataBaseConnectionInterface.connect();}
     public void disconnect() throws DataBaseFailedException {dataBaseConnectionInterface.disConnect();}
 
-    public void manageApartment(Apartment apartment, String postID) throws DataBaseFailedException {
+    public int manageApartment(Apartment apartment, String postID) throws DataBaseFailedException {
         int apartmentId=dataBaseConnectionInterface.isApartmentExist(apartment);
         if (apartmentId!=-1) {
             dataBaseConnectionInterface.updateApartmentDerivatives(apartment, ""+apartmentId);
+            return apartmentId;
         } else {
-            dataBaseConnectionInterface.addApartmentDerivatives(apartment, postID);
+            return dataBaseConnectionInterface.addApartmentDerivatives(apartment, postID);
         }
     }
 

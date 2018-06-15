@@ -15,22 +15,31 @@ public class MustHaveQuery extends CategoryQuery{
 
     @Override
     public boolean mainQuery(ResultRecord apartment) {
-        if (thing == MustHaveThing.balcony) {
-            if (apartment.getBalcony()==1)
-                return true;
-        } else if (thing == MustHaveThing.garden) {
-            if (apartment.getYard()==1)
-                return true;
-        } else if (thing == MustHaveThing.pets) {
-            if (apartment.getAnimals()==1)
-                return true;
-        } else if (thing == MustHaveThing.protectedSpace) {
-            if (apartment.getProtectedSpace()==1)
-                return true;
-        } else if (thing == MustHaveThing.warehouse) {
-            if (apartment.getWarehouse()==1)
-                return true;
+        switch (thing) {
+            case warehouse:
+                return apartment.getWarehouse() == 1;
+            case garden:
+                return apartment.getYard() == 1;
+            case pets:
+                return apartment.getAnimals() == 1;
+            case balcony:
+                return apartment.getBalcony() == 1;
+            case protectedSpace:
+                return apartment.getProtectedSpace() == 1;
+            default:
+                return false;
         }
-        return false;
+//        if (thing == MustHaveThing.balcony) {
+//            return apartment.getBalcony()==1;
+//        } else if (thing == MustHaveThing.garden) {
+//            return apartment.getYard()==1;
+//        } else if (thing == MustHaveThing.pets) {
+//            return apartment.getAnimals()==1;
+//        } else if (thing == MustHaveThing.protectedSpace) {
+//            return apartment.getProtectedSpace()==1;
+//        } else if (thing == MustHaveThing.warehouse) {
+//            return apartment.getWarehouse()==1;
+//        }
+//        return false;
     }
 }

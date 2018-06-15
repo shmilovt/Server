@@ -37,7 +37,7 @@ public class ServerController {
         if (apartment.getApartmentLocation().getAddress().getStreet()==""||apartment.getApartmentLocation().getAddress().getNumber()==-1)
             return -3;
         if(apartment!=null)
-            dbController.manageApartment(apartment, ourPost.getID());
+            return dbController.manageApartment(apartment, ourPost.getID());
         return 1;
 //        dbController.disconnect();
     }

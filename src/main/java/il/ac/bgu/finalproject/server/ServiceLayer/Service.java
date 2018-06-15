@@ -139,10 +139,10 @@ public class Service implements IService {
         regularClientController.suggestionChangesApartmentDouble(id, field, suggest);
     }
 
-    @Override
-    public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
-        regularClientController.suggestionChangesAddress(id, field, street, numB, neighborhood);
-    }
+//    @Override
+//    public void suggestionChangesAddress(String id, String field, String street, int numB, String neighborhood){
+//        regularClientController.suggestionChangesAddress(id, field, street, numB, neighborhood);
+//    }
 
     @Override
     public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
@@ -150,6 +150,7 @@ public class Service implements IService {
     }
 
 
+    //functions for integration tests:
     public void connectToTestDB(){
         regularClientController.connectToTestDB();
     }
