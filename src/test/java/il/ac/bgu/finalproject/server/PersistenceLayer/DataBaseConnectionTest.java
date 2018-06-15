@@ -249,6 +249,10 @@ public class DataBaseConnectionTest {
         dbc.changePassword("admin","12345");
         assertTrue(dbc.login("admin","12345"));
         assertFalse(dbc.login("admin","123456"));
+
+        dbc.changeUsername("admin","admina");
+        assertFalse(dbc.login("admina","123456"));
+        dbc.changeUsername("admina","admin");
     }
 
     @Test

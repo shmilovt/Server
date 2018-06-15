@@ -16,12 +16,16 @@ public class loginAndChangePasswordTests {
     public static void setup() {
         serviceConnector= new ServiceConnector();
         serviceConnector.getBridge().connectToTestDB();
-        serviceConnector.getBridge().changePassword("admin","123456");
+//        serviceConnector.getBridge().changePassword("admin","123456");
     }
 
 
     @Test
     public void loginAndChangePasswordTest(){
+
+        Assert.assertEquals(serviceConnector.getBridge().login("admin","123456"),1);
+        Assert.assertEquals(serviceConnector.getBridge().login("admin","12346"),0);
+        Assert.assertEquals(serviceConnector.getBridge().login("admina","123456"),0);
         Assert.assertEquals(serviceConnector.getBridge().login("admin","123456"),1);
         serviceConnector.getBridge().changePassword("admin","12345");
         Assert.assertEquals(serviceConnector.getBridge().login("admin","12345"),1);

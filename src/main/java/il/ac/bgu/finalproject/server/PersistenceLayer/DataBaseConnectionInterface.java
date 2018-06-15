@@ -111,7 +111,8 @@ public interface DataBaseConnectionInterface {
     List<GroupDTO> GetAllGroups();
 
     List<SearchRecordDTO> getAllUserSearches();
-    public ResultRecord ResultRecordFromDB (String apartmentIDString);
+    ResultRecord ResultRecordFromDB (String apartmentIDString);
+    boolean changeUsername(String username, String newUsername);
 }
 
 

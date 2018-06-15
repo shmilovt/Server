@@ -1653,6 +1653,24 @@ String stam= "123456";
 //        return false;
     }
 
+    public boolean changeUsername(String username, String newUsername){
+        try {
+            String sql = "UPDATE Admin "
+                    + " SET username= ? "
+                    + " WHERE username= ? ";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newUsername);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+            return true;
+        }
+        catch(SQLException e){}
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+        return false;
+    }
+
     public boolean isCorrectEmail(String username, String email) throws SQLException {
         String sql = "SELECT mailAddress FROM Admin "
                 + " WHERE username= '" + username + "'";
