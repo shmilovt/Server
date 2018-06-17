@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 public class NewPostDTO {
     private String publisherName;
     private String messege;
+    private TokenDTO tokenDTO;
 
     public NewPostDTO(){}
 
@@ -20,6 +21,7 @@ public class NewPostDTO {
         return messege;
     }
 
+
     public void setMessege(String messege) {
         this.messege = messege;
     }
@@ -33,5 +35,13 @@ public class NewPostDTO {
         NewPostDTO newPostDTO = gson.fromJson(newPostDTOString, NewPostDTO.class);
         return newPostDTO;
 
+    }
+
+    public TokenDTO getTokenDTO() {
+        return tokenDTO;
+    }
+
+    public void setTokenDTO(TokenDTO tokenDTO) {
+        this.tokenDTO = tokenDTO;
     }
 }

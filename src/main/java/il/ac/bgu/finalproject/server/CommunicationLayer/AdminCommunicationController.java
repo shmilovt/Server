@@ -59,8 +59,10 @@ public class AdminCommunicationController {
     public String changePassword(@RequestParam String usernamePasswordString) {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
-        int ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
-        String json= gson.toJson(ans);
+        int ans = 0;
+        if (usernamePasswordDTO.getTokenDTO()!=null&&service.login(usernamePasswordDTO.getTokenDTO().getUserName(), usernamePasswordDTO.getTokenDTO().getPassword()) == 1)
+            ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
+        String json = gson.toJson(ans);
         return json;
 //        return normalizeAnsWithStatus(ans);
     }
@@ -86,8 +88,10 @@ public class AdminCommunicationController {
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
     public String newPostFromAdmin(@RequestParam String newPostString) {
         Gson gson = new Gson();
+        int ans = 0;
         NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
-        int ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+        if (newPostDTO.getTokenDTO()!=null&&service.login(newPostDTO.getTokenDTO().getUserName(), newPostDTO.getTokenDTO().getPassword()) == 1)
+            ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
         String json = gson.toJson(ans);
         return json;
     }
@@ -101,38 +105,49 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/getAllUserSearches", method = {RequestMethod.POST, RequestMethod.GET})
-    public String search2() {
-        List<SearchRecordDTO> SearchRecordDTOs = service.getAllUserSearches();
+    public String search2(@RequestParam String tokenDTOstring) {
         Gson gson = new Gson();
+        TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
+        List<SearchRecordDTO> SearchRecordDTOs = null;
+        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), tokenDTO.getPassword()) == 1)
+            SearchRecordDTOs = service.getAllUserSearches();
         String json = gson.toJson(SearchRecordDTOs);
         return json;
     }
 
     @RequestMapping(value = "/getCalculator", method = {RequestMethod.POST, RequestMethod.GET})
-    public String getCalculator() {
-        CalculatorDTO calculatorDTO = service.getCalcCosts();
-        calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
+    public String getCalculator(@RequestParam String tokenDTOstring) {
         Gson gson = new Gson();
+        TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
+        CalculatorDTO calculatorDTO =null;
+        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), tokenDTO.getPassword()) == 1) {
+            calculatorDTO = service.getCalcCosts();
+            calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
+        }
         String json = gson.toJson(calculatorDTO);
         return json;
     }
 
     @RequestMapping(value = "/insertGroup", method = {RequestMethod.POST, RequestMethod.GET})
-    public String insertGroup(@RequestParam String groupIdString) {
+    public String insertGroup(@RequestParam String manageGroupsString) {
         Gson gson = new Gson();
-        String groupID = gson.fromJson(groupIdString, String.class);
-        int t= service.insertGroup(groupID);
-        String json= gson.toJson(t);
+        ManageGroupsDTO manageGroupsDTO = ManageGroupsDTO.fromJSON(manageGroupsString);
+        int t = 0;
+        if (manageGroupsDTO.getTokenDTO()!=null&&service.login(manageGroupsDTO.getTokenDTO().getUserName(), manageGroupsDTO.getTokenDTO().getPassword()) == 1)
+            t = service.insertGroup(manageGroupsDTO.getGroupID());
+        String json = gson.toJson(t);
         return json;
 //        return normalizeAnsWithStatus(t);
     }
 
     @RequestMapping(value = "/deleteGroup", method = {RequestMethod.POST, RequestMethod.GET})
-    public String deleteGroup(@RequestParam String groupIdString) {
+    public String deleteGroup(@RequestParam String manageGroupsString) {
         Gson gson = new Gson();
-        String groupID = gson.fromJson(groupIdString, String.class);
-        int t= service.deleteGroup(groupID);
-        String json= gson.toJson(t);
+        ManageGroupsDTO manageGroupsDTO = ManageGroupsDTO.fromJSON(manageGroupsString);
+        int t = 0;
+        if (manageGroupsDTO.getTokenDTO()!=null&&service.login(manageGroupsDTO.getTokenDTO().getUserName(), manageGroupsDTO.getTokenDTO().getPassword()) == 1)
+            t = service.deleteGroup(manageGroupsDTO.getGroupID());
+        String json = gson.toJson(t);
         return json;
 //        return normalizeAnsWithStatus(t);
     }
@@ -151,18 +166,20 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
 //        String json;
         CalculatorDTO calculatorDTO = gson.fromJson(calcolatorString, CalculatorDTO.class);
-        if (calculatorDTO.isLegal()) {
-            service.setNewCalculator(calculatorDTO.getProtectedSpaceCost(), calculatorDTO.getTimeFromUniCost_10(),
-                    calculatorDTO.getTimeFromUniCost_20(), calculatorDTO.getTimeFromUniCost_G_20(), calculatorDTO.getNeighborhoodCost_B_Ramot(),
-                    calculatorDTO.getNeighborhoodCost_oldV_Wingate(), calculatorDTO.getNeighborhoodCost_D(), calculatorDTO.getNeighborhoodCost_G(),
-                    calculatorDTO.getFurnitureCost_full(), calculatorDTO.getFurnitureCost_half(), calculatorDTO.getFurnitureCost_none(),
-                    calculatorDTO.getSizeCost_25(), calculatorDTO.getSizeCost_30(), calculatorDTO.getSizeCost_35(), calculatorDTO.getSizeCost_35_up(),
-                    calculatorDTO.getRoomatesCost_1(), calculatorDTO.getRoomatesCost_2(), calculatorDTO.getRoomatesCost_3(), calculatorDTO.getRoomatesCost_4(),
-                    calculatorDTO.getRoomatesCost_5(), calculatorDTO.getRoomatesCost_6(), calculatorDTO.getGardenCost(), calculatorDTO.getBalconyCost());
-            CalculatorCosts.basicCost=calculatorDTO.getBasicCost();
-            return gson.toJson(true);
+        if (calculatorDTO.getTokenDTO()!=null&&service.login(calculatorDTO.getTokenDTO().getUserName(),calculatorDTO.getTokenDTO().getPassword())==1) {
+            if (calculatorDTO.isLegal()) {
+                service.setNewCalculator(calculatorDTO.getProtectedSpaceCost(), calculatorDTO.getTimeFromUniCost_10(),
+                        calculatorDTO.getTimeFromUniCost_20(), calculatorDTO.getTimeFromUniCost_G_20(), calculatorDTO.getNeighborhoodCost_B_Ramot(),
+                        calculatorDTO.getNeighborhoodCost_oldV_Wingate(), calculatorDTO.getNeighborhoodCost_D(), calculatorDTO.getNeighborhoodCost_G(),
+                        calculatorDTO.getFurnitureCost_full(), calculatorDTO.getFurnitureCost_half(), calculatorDTO.getFurnitureCost_none(),
+                        calculatorDTO.getSizeCost_25(), calculatorDTO.getSizeCost_30(), calculatorDTO.getSizeCost_35(), calculatorDTO.getSizeCost_35_up(),
+                        calculatorDTO.getRoomatesCost_1(), calculatorDTO.getRoomatesCost_2(), calculatorDTO.getRoomatesCost_3(), calculatorDTO.getRoomatesCost_4(),
+                        calculatorDTO.getRoomatesCost_5(), calculatorDTO.getRoomatesCost_6(), calculatorDTO.getGardenCost(), calculatorDTO.getBalconyCost());
+                CalculatorCosts.basicCost = calculatorDTO.getBasicCost();
+                return gson.toJson(true);
+            }
         }
-        else
+//        else
             return gson.toJson(false);
 //        return json;
     }

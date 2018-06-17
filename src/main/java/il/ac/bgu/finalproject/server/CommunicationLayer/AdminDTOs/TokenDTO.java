@@ -2,12 +2,11 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs;
 
 import com.google.gson.Gson;
 
-public class UsernamePasswordDTO {
+public class TokenDTO {
     private String userName;
     private String password;
-    private TokenDTO tokenDTO;
 
-    public UsernamePasswordDTO(){}
+    public TokenDTO(){}
 
     public String getUserName() {
         return userName;
@@ -35,14 +34,5 @@ public class UsernamePasswordDTO {
         UsernamePasswordDTO userSearchDTO = gson.fromJson(userSearchDTOString, UsernamePasswordDTO.class);
         return userSearchDTO;
 
-    }
-
-
-    public void setTokenDTO(TokenDTO tokenDTO) {
-        this.tokenDTO = tokenDTO;
-    }
-
-    public TokenDTO getTokenDTO() {
-        return tokenDTO;
     }
 }

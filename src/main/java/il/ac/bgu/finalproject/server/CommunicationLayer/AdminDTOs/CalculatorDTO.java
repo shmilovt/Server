@@ -3,6 +3,8 @@ package il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs;
 import com.google.gson.Gson;
 
 public class CalculatorDTO {
+    private TokenDTO tokenDTO;
+
     private int protectedSpaceCost;
     private int timeFromUniCost_10;
     private int timeFromUniCost_20;
@@ -242,5 +244,13 @@ public class CalculatorDTO {
 
     public void setBasicCost(int basicCost) {
         this.basicCost = basicCost;
+    }
+
+    public TokenDTO getTokenDTO() {
+        return tokenDTO;
+    }
+
+    public void setTokenDTO(TokenDTO tokenDTO) {
+        this.tokenDTO = tokenDTO;
     }
 }
