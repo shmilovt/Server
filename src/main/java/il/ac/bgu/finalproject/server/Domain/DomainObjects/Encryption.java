@@ -1,6 +1,7 @@
 package il.ac.bgu.finalproject.server.Domain.DomainObjects;
 
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
@@ -14,11 +15,12 @@ public class Encryption {
 //    private PublicKey pubKey;
 //    private PrivateKey privateKey;
 
-    public static String hashPass(String original) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] encodedhash = digest.digest(
-                original.getBytes(StandardCharsets.UTF_8));
-        return new String(encodedhash);
+    public static String hashPass(String original){
+        return DigestUtils.sha256Hex(original);
+//        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+//        byte[] encodedhash = digest.digest(
+//                original.getBytes(StandardCharsets.UTF_8));
+//        return new String(encodedhash);
     }
 
     private static Encryption instance = null;

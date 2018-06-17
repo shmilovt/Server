@@ -302,7 +302,8 @@ public class DataBaseConnectionTest {
 //        dbc.suggestionChangesApartmentDouble("19","numOfRooms",4.5);
 
 //        System.out.println(dbc.changePassword("admin",Encryption.hashPass("123456")));
-        dbc.disconnectToTestDB();
+//        dbc.disconnectToTestDB();
+        //?–ןnֺ׃ֲ:b’€ז†ֿ?]Z†¯ףֺ’:l’
 
 //        try {
 //            System.out.println(dbc.login("admin","����n��:b����?]Z�����:�l�"));
@@ -314,9 +315,9 @@ public class DataBaseConnectionTest {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        dbc.changePassword("admin",Encryption.hashPass("123456"));
-        dbc.connectToTestDB();
-        int x=1;
+//        dbc.changePassword("admin",Encryption.hashPass("123456"));
+//        dbc.connectToTestDB();
+//        int x=1;
 //        try {
 //            System.out.println(Encryption.hashPass("123456"));
 //        } catch (NoSuchAlgorithmException e) {

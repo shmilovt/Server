@@ -52,14 +52,11 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = 0;
-        try {
-            MyLogger.getInstance().log(Level.SEVERE,usernamePasswordDTO.getPassword(),"original");
-            MyLogger.getInstance().log(Level.SEVERE,Encryption.hashPass(usernamePasswordDTO.getPassword()),"encrypted");
-            ans = service.login(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
-        } catch (NoSuchAlgorithmException e) {
-            ans = -1;
-        }
-        String json= gson.toJson(ans);
+        MyLogger.getInstance().log(Level.SEVERE, usernamePasswordDTO.getPassword(), "original");
+        MyLogger.getInstance().log(Level.SEVERE, Encryption.hashPass(usernamePasswordDTO.getPassword()), "encrypted");
+        ans = service.login(usernamePasswordDTO.getUserName(),
+                Encryption.hashPass(usernamePasswordDTO.getPassword()));
+        String json = gson.toJson(ans);
         return json;
 //        return normalizeAnsWithStatus(ans);
     }
@@ -70,11 +67,7 @@ public class AdminCommunicationController {
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = 0;
         if (usernamePasswordDTO.getTokenDTO()!=null&&service.login(usernamePasswordDTO.getTokenDTO().getUserName(), usernamePasswordDTO.getTokenDTO().getPassword()) == 1) {
-            try {
-                ans = service.changePassword(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
-            } catch (NoSuchAlgorithmException e) {
-                ans = -1;
-            }
+            ans = service.changePassword(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
         }
         String json = gson.toJson(ans);
         return json;
@@ -86,10 +79,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = 0;
-        try {
-            ans = service.forgotPassword(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
-        } catch (NoSuchAlgorithmException e) {
-        }
+        ans = service.forgotPassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
         String json= gson.toJson(ans);
         return json;
     }
@@ -119,12 +109,8 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         List<GroupDTO> groupDTOList =null;
-        try {
-            if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
-                groupDTOList = service.GetAllGroups();
-        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-        }
+        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
+            groupDTOList = service.GetAllGroups();
         String json = gson.toJson(groupDTOList);
         return json;
     }
@@ -134,12 +120,8 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         List<SearchRecordDTO> SearchRecordDTOs = null;
-        try {
-            if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
-                SearchRecordDTOs = service.getAllUserSearches();
-        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-        }
+        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
+            SearchRecordDTOs = service.getAllUserSearches();
         String json = gson.toJson(SearchRecordDTOs);
         return json;
     }
@@ -149,13 +131,9 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         CalculatorDTO calculatorDTO =null;
-        try {
-            if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1) {
-                calculatorDTO = service.getCalcCosts();
-                calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
-            }
-        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
+        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1) {
+            calculatorDTO = service.getCalcCosts();
+            calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
         }
         String json = gson.toJson(calculatorDTO);
         return json;
@@ -166,7 +144,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         ManageGroupsDTO manageGroupsDTO = ManageGroupsDTO.fromJSON(manageGroupsString);
         int t = 0;
-        if (manageGroupsDTO.getTokenDTO()!=null&&service.login(manageGroupsDTO.getTokenDTO().getUserName(), manageGroupsDTO.getTokenDTO().getPassword()) == 1)
+        if (manageGroupsDTO.getTokenDTO()!=null&&service.login(manageGroupsDTO.getTokenDTO().getUserName(), Encryption.hashPass(manageGroupsDTO.getTokenDTO().getPassword())) == 1)
             t = service.insertGroup(manageGroupsDTO.getGroupID());
         String json = gson.toJson(t);
         return json;
@@ -178,7 +156,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         ManageGroupsDTO manageGroupsDTO = ManageGroupsDTO.fromJSON(manageGroupsString);
         int t = 0;
-        if (manageGroupsDTO.getTokenDTO()!=null&&service.login(manageGroupsDTO.getTokenDTO().getUserName(), manageGroupsDTO.getTokenDTO().getPassword()) == 1)
+        if (manageGroupsDTO.getTokenDTO()!=null&&service.login(manageGroupsDTO.getTokenDTO().getUserName(), Encryption.hashPass(manageGroupsDTO.getTokenDTO().getPassword())) == 1)
             t = service.deleteGroup(manageGroupsDTO.getGroupID());
         String json = gson.toJson(t);
         return json;
