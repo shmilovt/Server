@@ -53,6 +53,8 @@ public class AdminCommunicationController {
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = 0;
         try {
+            MyLogger.getInstance().log(Level.SEVERE,usernamePasswordDTO.getPassword(),"original");
+            MyLogger.getInstance().log(Level.SEVERE,Encryption.hashPass(usernamePasswordDTO.getPassword()),"encrypted");
             ans = service.login(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
         } catch (NoSuchAlgorithmException e) {
             ans = -1;

@@ -302,9 +302,20 @@ public class DataBaseConnectionTest {
 //        dbc.suggestionChangesApartmentDouble("19","numOfRooms",4.5);
 
 //        System.out.println(dbc.changePassword("admin",Encryption.hashPass("123456")));
-//        dbc.disconnectToTestDB();
-        dbc.changePassword("admin","123456");
-//        dbc.connectToTestDB();
+        dbc.disconnectToTestDB();
+
+//        try {
+//            System.out.println(dbc.login("admin","����n��:b����?]Z�����:�l�"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+////            System.out.println(dbc.login("admin",Encryption.hashPass("123456")));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        dbc.changePassword("admin",Encryption.hashPass("123456"));
+        dbc.connectToTestDB();
         int x=1;
 //        try {
 //            System.out.println(Encryption.hashPass("123456"));
