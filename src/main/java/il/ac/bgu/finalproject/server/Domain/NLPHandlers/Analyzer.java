@@ -44,6 +44,10 @@ public class  Analyzer {
     private static boolean isLoaded = false;
 
 
+    public static void reload()
+    {
+        isLoaded = false;
+    }
 
     public Analyzer(AnalyzedDS aDS,DataBaseNlp db) {
         this.aDS = aDS;

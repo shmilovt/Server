@@ -5,5 +5,6 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.ApartmentUtils.Apartme
 public interface NLPInterface {
 
      Apartment extractApartment(String str);
+     void setStreetNeigh(String s,String n);
 
 }

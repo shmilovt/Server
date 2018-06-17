@@ -97,9 +97,12 @@ public class AdminCommunicationController {
     }
 
     @RequestMapping(value = "/getAllGroups", method = {RequestMethod.POST, RequestMethod.GET})
-    public String search1() {
-        List<GroupDTO> groupDTOList = service.GetAllGroups();
+    public String search1(@RequestParam String tokenDTOstring) {
         Gson gson = new Gson();
+        TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
+        List<GroupDTO> groupDTOList =null;
+        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), tokenDTO.getPassword()) == 1)
+            groupDTOList = service.GetAllGroups();
         String json = gson.toJson(groupDTOList);
         return json;
     }
@@ -176,11 +179,13 @@ public class AdminCommunicationController {
                         calculatorDTO.getRoomatesCost_1(), calculatorDTO.getRoomatesCost_2(), calculatorDTO.getRoomatesCost_3(), calculatorDTO.getRoomatesCost_4(),
                         calculatorDTO.getRoomatesCost_5(), calculatorDTO.getRoomatesCost_6(), calculatorDTO.getGardenCost(), calculatorDTO.getBalconyCost());
                 CalculatorCosts.basicCost = calculatorDTO.getBasicCost();
-                return gson.toJson(true);
+                return gson.toJson(1);
             }
+            else return gson.toJson(0);
+
         }
-//        else
-            return gson.toJson(false);
+        else
+            return gson.toJson(-1);
 //        return json;
     }
 }

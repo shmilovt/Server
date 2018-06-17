@@ -28,6 +28,11 @@ public class NLPImp implements NLPInterface {
         load_street_neighborhood_dic();
     }
 
+    public void setStreetNeigh(String s,String n)
+    {
+        street_neighborhood_dic.put(s,n);
+    }
+
     private static boolean rootAndWord (String root, String word){
        // root=root.replaceAll("[*)(!@#$%^&_/-/+=~`]","");
         String reg="ו?(הו?|מו?|א|י|תו?|נ)?"+root.charAt(0);

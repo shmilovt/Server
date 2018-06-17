@@ -50,6 +50,22 @@ public class DataBaseNlp {
             }
     }
 
+    public void updateValuesNeigh_Street(String n,String s) {
+        try {
+            String sql = "UPDATE neigh_street SET Street= ? "+
+                    " WHERE Neighborhood= ?";
+
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, n);
+            pstmt.setString(2, s);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e){
+            MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
+        }
+    }
+
+
     public void addValuesNeigh_Street(String n,String s) {
         try {
             String sql = "INSERT INTO neigh_street (Neighborhood, Street)"+

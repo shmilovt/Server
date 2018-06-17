@@ -13,8 +13,10 @@ import java.util.List;
 public class RegularClientController {
 
     DataBaseRequestController dataBaseRequestController;
+    ServerController serverController;
     public RegularClientController() {
         dataBaseRequestController = new DataBaseRequestController();
+        serverController= new ServerController();
     }
 
 
@@ -60,8 +62,45 @@ public class RegularClientController {
         dataBaseRequestController.addSearchRecord(neighborhood, timeFromUni, costMin, costMax, floorMin, floorMax, sizeMin, sizeMax, furnitures,numOfRoomes, numOfMates, protectedSpace,  garden, balcony, pets, warehouse);
     }
 
-    public void addressFieldCase(String id, boolean b, boolean b1, boolean b2, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
-        dataBaseRequestController.addressFieldCase(id, b,  b1, b2, street, numOfBuilding, neighborhood);
+    public void addressFieldCase(String apartmentId, boolean streetBool, boolean numBuildingBool, boolean neighborhoodBool, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
+        ResultRecord resultRecord= dataBaseRequestController.ResultRecordFromDB(apartmentId);
+        if (streetBool||numBuildingBool){
+            //address has changed
+            if (!(streetBool && street!=null && street!=""))
+                street=resultRecord.getStreet();
+            if (!(numBuildingBool && numOfBuilding!= -1))
+                numOfBuilding=resultRecord.getNumber();
+            int addressDetailsId= dataBaseRequestController.isAddressDetailsExist(street,numOfBuilding);
+            if (addressDetailsId!= -1) {//exist
+                if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
+                    dataBaseRequestController.suggestionChangesNeighborhood(apartmentId, neighborhood);
+//                    serverController.changeNeighborhoodStreetRecord(neighborhood,resultRecord.getStreet());
+                }
+            }
+            else { // addressDetails need to be created
+                GoogleMapsController googleMapsController= new GoogleMapsController();
+                if (!street.isEmpty() && numOfBuilding> 0) {
+                    int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, numOfBuilding);
+                    double[] locationPoint = googleMapsController.getCoordinates(street, numOfBuilding);
+                    if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
+                        neighborhood = resultRecord.getNeighborhood();
+                    }
+                    if (locationPoint[0]!=-1&&locationPoint[1]!=-1) {
+                        addressDetailsId = dataBaseRequestController.addAddressDetailsRecord(
+                                street, numOfBuilding + "",
+                                timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
+                        serverController.addStreet(street,neighborhood);
+                    }
+                }
+            }
+            dataBaseRequestController.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
+        }
+        else{
+            if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
+                dataBaseRequestController.suggestionChangesNeighborhood(apartmentId, neighborhood);
+                serverController.changeNeighborhoodStreetRecord(neighborhood,resultRecord.getStreet());
+            }
+        }
     }
 /*
     public static void main(String[] args) throws Exception {

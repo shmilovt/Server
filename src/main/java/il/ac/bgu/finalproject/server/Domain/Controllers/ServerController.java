@@ -37,7 +37,7 @@ public class ServerController {
         if (apartment.getApartmentLocation().getAddress().getStreet()==""||apartment.getApartmentLocation().getAddress().getNumber()==-1)
             return -3;
         if(apartment!=null)
-            return dbController.manageApartment(apartment, ourPost.getID());
+            dbController.manageApartment(apartment, ourPost.getID());
         return 1;
 //        dbController.disconnect();
     }
@@ -64,4 +64,11 @@ public class ServerController {
         return postsID;
     }
 
+    public void changeNeighborhoodStreetRecord(String neighborhood, String street) {
+        nlpController.changeNeighborhoodStreetRecord(neighborhood, street);
+    }
+
+    public void addStreet(String street, String neighborhood) {
+        nlpController.addStreet(street, neighborhood);
+    }
 }

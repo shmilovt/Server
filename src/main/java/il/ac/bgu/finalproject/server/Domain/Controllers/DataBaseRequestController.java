@@ -34,13 +34,12 @@ public class DataBaseRequestController {
     public void connect() throws DataBaseFailedException {dataBaseConnectionInterface.connect();}
     public void disconnect() throws DataBaseFailedException {dataBaseConnectionInterface.disConnect();}
 
-    public int manageApartment(Apartment apartment, String postID) throws DataBaseFailedException {
+    public void manageApartment(Apartment apartment, String postID) throws DataBaseFailedException {
         int apartmentId=dataBaseConnectionInterface.isApartmentExist(apartment);
         if (apartmentId!=-1) {
             dataBaseConnectionInterface.updateApartmentDerivatives(apartment, ""+apartmentId);
-            return apartmentId;
         } else {
-            return dataBaseConnectionInterface.addApartmentDerivatives(apartment, postID);
+            dataBaseConnectionInterface.addApartmentDerivatives(apartment, postID);
         }
     }
 
@@ -242,44 +241,44 @@ public class DataBaseRequestController {
 //        return arraySearchRecordDTO;
     }
 
-    public void addressFieldCase(String apartmentId, boolean streetBool, boolean numBuildingBool, boolean neighborhoodBool, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
-        if (streetBool||numBuildingBool){
-            //address has changed
-            Apartment apartment= dataBaseConnectionInterface.getApartmentRecordTBD(apartmentId);
-            if (!(streetBool && street!=null && street!=""))
-                street=apartment.getApartmentLocation().getAddress().getStreet();
-            if (!(numBuildingBool && numOfBuilding!= -1))
-                numOfBuilding=apartment.getApartmentLocation().getAddress().getNumber();
-            int addressDetailsId= dataBaseConnectionInterface.isAddressDetailsExist(street,numOfBuilding);
-            if (addressDetailsId!= -1) {//exist
-                if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
-                    dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
-                }
-            }
-            else { // addressDetails need to be created
-                GoogleMapsController googleMapsController= new GoogleMapsController();
-
-                if (!street.isEmpty() && numOfBuilding> 0) {
-                    int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, numOfBuilding);
-                    double[] locationPoint = googleMapsController.getCoordinates(street, numOfBuilding);
-                    if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
-                        neighborhood = apartment.getApartmentLocation().getNeighborhood();
-                    }
-                    if (locationPoint[0]!=-1&&locationPoint[1]!=-1) {
-                        addressDetailsId = dataBaseConnectionInterface.addAddressDetailsRecord(
-                                street, numOfBuilding + "",
-                                timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
-                    }
-                }
-            }
-            dataBaseConnectionInterface.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
-        }
-        else{
-            if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
-                dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
-            }
-        }
-    }
+//    public void addressFieldCase(String apartmentId, boolean streetBool, boolean numBuildingBool, boolean neighborhoodBool, String street, int numOfBuilding, String neighborhood) throws DataBaseFailedException {
+//        if (streetBool||numBuildingBool){
+//            //address has changed
+//            Apartment apartment= dataBaseConnectionInterface.getApartmentRecordTBD(apartmentId);
+//            if (!(streetBool && street!=null && street!=""))
+//                street=apartment.getApartmentLocation().getAddress().getStreet();
+//            if (!(numBuildingBool && numOfBuilding!= -1))
+//                numOfBuilding=apartment.getApartmentLocation().getAddress().getNumber();
+//            int addressDetailsId= dataBaseConnectionInterface.isAddressDetailsExist(street,numOfBuilding);
+//            if (addressDetailsId!= -1) {//exist
+//                if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
+//                    dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
+//                }
+//            }
+//            else { // addressDetails need to be created
+//                GoogleMapsController googleMapsController= new GoogleMapsController();
+//
+//                if (!street.isEmpty() && numOfBuilding> 0) {
+//                    int timeToUni = googleMapsController.getTimeWalkingFromUniByMin(street, numOfBuilding);
+//                    double[] locationPoint = googleMapsController.getCoordinates(street, numOfBuilding);
+//                    if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
+//                        neighborhood = apartment.getApartmentLocation().getNeighborhood();
+//                    }
+//                    if (locationPoint[0]!=-1&&locationPoint[1]!=-1) {
+//                        addressDetailsId = dataBaseConnectionInterface.addAddressDetailsRecord(
+//                                street, numOfBuilding + "",
+//                                timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
+//                    }
+//                }
+//            }
+//            dataBaseConnectionInterface.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
+//        }
+//        else{
+//            if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
+//                dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
+//            }
+//        }
+//    }
 
     public void connectToTestDB() {
         dataBaseConnectionInterface.connectToTestDB();
@@ -290,5 +289,21 @@ public class DataBaseRequestController {
 
     public ResultRecord ResultRecordFromDB(String apartmentID) {
         return dataBaseConnectionInterface.ResultRecordFromDB(apartmentID);
+    }
+
+    public int isAddressDetailsExist(String street, int numOfBuilding) {
+        return dataBaseConnectionInterface.isAddressDetailsExist(street, numOfBuilding);
+    }
+
+    public void suggestionChangesNeighborhood(String apartmentId, String neighborhood) {
+        dataBaseConnectionInterface.suggestionChangesNeighborhood(apartmentId, neighborhood);
+    }
+
+    public int addAddressDetailsRecord(String street, String s, int timeToUni, String neighborhood, double v, double v1) {
+        return addAddressDetailsRecord(street, s, timeToUni, neighborhood, v, v1);
+    }
+
+    public void changeAddresDetailsForApartment(String apartmentId, int addressDetailsId) {
+        changeAddresDetailsForApartment(apartmentId, addressDetailsId);
     }
 }
