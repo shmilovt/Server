@@ -293,7 +293,7 @@ public class DataBaseConnectionTest {
 
 
     @Test
-    public void deleteGroup() throws DataBaseFailedException, IOException, InvalidKeySpecException {
+    public void deleteGroup() throws DataBaseFailedException, IOException, InvalidKeySpecException, NoSuchAlgorithmException {
 //        try {
 //            System.out.println(dbc.isCorrectEmail("admin","admin@gmail.com"));
 //        } catch (SQLException e) {
@@ -301,111 +301,16 @@ public class DataBaseConnectionTest {
 //        }
 //        dbc.suggestionChangesApartmentDouble("19","numOfRooms",4.5);
 
-        //CREATE THE PUBLIC & PRIVETE FILES
-        Encryption encryption= Encryption.getInstance();
-        byte[] pri= encryption.getKeyPair().getPrivate().getEncoded();
-        byte[] pub= encryption.getKeyPair().getPrivate().getEncoded();
-        FileOutputStream keyfos = new FileOutputStream("puK");
-        keyfos.write(pub);
-        keyfos.close();
-        FileOutputStream keyfos2 = new FileOutputStream("prK");
-        keyfos2.write(pri);
-        keyfos2.close();
-
-        Path fileLocationPub = Paths.get("puK");
-        byte[] dataPub = Files.readAllBytes(fileLocationPub);
-        Path fileLocationPri = Paths.get("prK");
-        byte[] dataPri = Files.readAllBytes(fileLocationPri);
-
-        KeyFactory keyFactory = null;
-        try {
-            keyFactory = KeyFactory.getInstance("RSA");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(dataPri);
-        PrivateKey privateKey2= new PrivateKey() {
-            @Override
-            public String getAlgorithm() {
-                return null;
-            }
-
-            @Override
-            public String getFormat() {
-                return null;
-            }
-
-            @Override
-            public byte[] getEncoded() {
-                return new byte[0];
-            }
-        };
-        try {
-            privateKey2 = keyFactory.generatePrivate(privateKeySpec);
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            PublicKey publicKey3 = keyFactory.generatePublic(new X509EncodedKeySpec(dataPub));
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-
-
-        PublicKey publicKey= new PublicKey() {
-            @Override
-            public String getAlgorithm() {
-                return null;
-            }
-
-            @Override
-            public String getFormat() {
-                return null;
-            }
-
-            @Override
-            public byte[] getEncoded() {
-                return new byte[0];
-            }
-        };
-        try {
-            publicKey =
-                    KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(dataPub));
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        X509EncodedKeySpec publicKeySpec2 = new X509EncodedKeySpec(
-                dataPub);
-        PublicKey publicKey4 = keyFactory.generatePublic(publicKeySpec2);
-
-        EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(dataPub);
-        PublicKey publicKey2= new PublicKey() {
-            @Override
-            public String getAlgorithm() {
-                return null;
-            }
-
-            @Override
-            public String getFormat() {
-                return null;
-            }
-
-            @Override
-            public byte[] getEncoded() {
-                return new byte[0];
-            }
-        };
-        try {
-            publicKey2 = keyFactory.generatePublic(publicKeySpec);
-//            System.out.println(""+publicKey2.getEncoded());
-        } catch (InvalidKeySpecException e) {
-            System.out.println("InvalidKeySpecException "+ e.getMessage());
-            e.printStackTrace();
-        }
+//        System.out.println(dbc.changePassword("admin",Encryption.hashPass("123456")));
+//        dbc.disconnectToTestDB();
+        dbc.changePassword("admin","123456");
+//        dbc.connectToTestDB();
         int x=1;
+//        try {
+//            System.out.println(Encryption.hashPass("123456"));
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
 
 //        dbc.resetUUIDTable();
 //        System.out.println(dbc.userExist("admin"));

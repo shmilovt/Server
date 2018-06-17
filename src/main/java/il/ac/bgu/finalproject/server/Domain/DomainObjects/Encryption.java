@@ -3,6 +3,7 @@ package il.ac.bgu.finalproject.server.Domain.DomainObjects;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 
 import javax.crypto.Cipher;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.logging.Level;
 
@@ -12,6 +13,13 @@ public class Encryption {
     private final KeyPair keyPair= buildKeyPair();
 //    private PublicKey pubKey;
 //    private PrivateKey privateKey;
+
+    public static String hashPass(String original) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedhash = digest.digest(
+                original.getBytes(StandardCharsets.UTF_8));
+        return new String(encodedhash);
+    }
 
     private static Encryption instance = null;
     public static Encryption getInstance() { //retuns null in case of NoSuchAlgorithmException

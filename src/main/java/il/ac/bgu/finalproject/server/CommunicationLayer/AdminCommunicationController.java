@@ -7,6 +7,7 @@ import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.SearchResultsDTO;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.UserSearchDTO;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
+import il.ac.bgu.finalproject.server.Domain.DomainObjects.Encryption;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CalculatorCosts;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -49,7 +51,12 @@ public class AdminCommunicationController {
     public String login(@RequestParam String usernamePasswordString) {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
-        int ans = service.login(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
+        int ans = 0;
+        try {
+            ans = service.login(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+            ans = -1;
+        }
         String json= gson.toJson(ans);
         return json;
 //        return normalizeAnsWithStatus(ans);
@@ -60,8 +67,13 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = 0;
-        if (usernamePasswordDTO.getTokenDTO()!=null&&service.login(usernamePasswordDTO.getTokenDTO().getUserName(), usernamePasswordDTO.getTokenDTO().getPassword()) == 1)
-            ans = service.changePassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
+        if (usernamePasswordDTO.getTokenDTO()!=null&&service.login(usernamePasswordDTO.getTokenDTO().getUserName(), usernamePasswordDTO.getTokenDTO().getPassword()) == 1) {
+            try {
+                ans = service.changePassword(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
+            } catch (NoSuchAlgorithmException e) {
+                ans = -1;
+            }
+        }
         String json = gson.toJson(ans);
         return json;
 //        return normalizeAnsWithStatus(ans);
@@ -71,7 +83,11 @@ public class AdminCommunicationController {
     public String forgotPassword(@RequestParam String usernamePasswordString) {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
-        int ans = service.forgotPassword(usernamePasswordDTO.getUserName(), usernamePasswordDTO.getPassword());
+        int ans = 0;
+        try {
+            ans = service.forgotPassword(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
+        } catch (NoSuchAlgorithmException e) {
+        }
         String json= gson.toJson(ans);
         return json;
     }
@@ -101,8 +117,12 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         List<GroupDTO> groupDTOList =null;
-        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), tokenDTO.getPassword()) == 1)
-            groupDTOList = service.GetAllGroups();
+        try {
+            if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
+                groupDTOList = service.GetAllGroups();
+        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+        }
         String json = gson.toJson(groupDTOList);
         return json;
     }
@@ -112,8 +132,12 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         List<SearchRecordDTO> SearchRecordDTOs = null;
-        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), tokenDTO.getPassword()) == 1)
-            SearchRecordDTOs = service.getAllUserSearches();
+        try {
+            if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
+                SearchRecordDTOs = service.getAllUserSearches();
+        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+        }
         String json = gson.toJson(SearchRecordDTOs);
         return json;
     }
@@ -123,9 +147,13 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         CalculatorDTO calculatorDTO =null;
-        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), tokenDTO.getPassword()) == 1) {
-            calculatorDTO = service.getCalcCosts();
-            calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
+        try {
+            if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1) {
+                calculatorDTO = service.getCalcCosts();
+                calculatorDTO.setBasicCost(CalculatorCosts.basicCost);
+            }
+        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
         }
         String json = gson.toJson(calculatorDTO);
         return json;
