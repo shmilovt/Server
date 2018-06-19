@@ -1,11 +1,10 @@
 package il.ac.bgu.finalproject.server.Domain.NLPHandlers;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -21,22 +20,26 @@ public class AnalyzerTest {
     private static List<String> neighborhoodList;
     private static List<String> wordPriceList;
     String notToIncludeStreetRegex = "[*!@#'$%^&)]";
+    private static DataBaseNlp db= new DataBaseNlp();
 
-
-    //@Test
     @BeforeClass
     public static void setup(){
         env = new EnvList("להשכרה דירה מהממת ברחוב ברנפלד 13, בעל דירה מדהים! הדירה מרוהטת קומפלט, 4 חדרים, כולל מטבח מאובזר, רק 900 שח בחודש! כדאי מאוד! לפרטים, נופר- 053-3391800, לתיאום לראות את הדירה: נועה- 053-3311010, אגב דירה ממש שווה- 10 דקות מהאוניברסיטה ו100 מ\"ר");
         ds = new AnalyzedDS(env);
         env2 = new EnvList("להשכרה דירה מהממת ברחוב ברנפלד 13, בעל דירה מדהים! הדירה מרוהטת קומפלט, 4 חדרים, כולל מטבח מאובזר, רק 900 שח בחודש! כדאי מאוד! לפרטים, נופר- 053-3391800, לתיאום לראות את הדירה: נועה- 053-3311010, אגב דירה ממש שווה- 10 דקות מהאוניברסיטה ו100 מ\"ר שכונה ג");
         ds2 = new AnalyzedDS(env2);
-
-        DataBaseNlp db = new DataBaseNlp();
+//        db = new DataBaseNlp();
+        db.connect();
         ana = new Analyzer(ds,db);
         firstNamesList=db.getValuesOneCol("firstNames");
-        streetsList= db.getValuesOneCol("streets.txt");
+        streetsList= db.getValuesOneCol("streets");
         neighborhoodList = db.getValuesOneCol("neighborhood");
         wordPriceList= db.getValuesOneCol("price");
+    }
+
+    @AfterClass
+    public static void endup(){
+        db.disConnect();
     }
 
     @Test
@@ -48,7 +51,7 @@ public class AnalyzerTest {
 
     @Test
     public void fullName() {
-        assertEquals( "אוסטרובסקי גרשון",Analyzer.fullName("*אוסטרובסקי", streetsList));
+        assertEquals( "יוספטל גיורא",Analyzer.fullName("*יוספטל", streetsList));
         assertEquals( "אבן ארי מיכאל",Analyzer.fullName("*אבן ארי", streetsList));
         assertEquals( "רייק חביבה",Analyzer.fullName("*רייק", streetsList));
     }

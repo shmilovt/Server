@@ -1577,16 +1577,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         sdf.applyPattern(dateFormat);
         String newDateString = sdf.format(dd);
 
-        Encryption encryption= Encryption.getInstance();
-        byte[] enc= {0};
-        try {
-            enc= encryption.encrypt("123456");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-String stam= "123456";
-        String stam2=        new String(enc);
-        sql= "INSERT INTO Admin(username, password, mailAddress, dateOfLastChange) VALUES ('admin','123456','admin@gmail.com', '"+
+        sql= "INSERT INTO Admin(username, password, mailAddress, dateOfLastChange) VALUES ('admin','"+Encryption.hashPass("123456")+"','admin@gmail.com', '"+
                 newDateString+"' ) ";
 //        System.out.println("sql:  "+sql);
 //        System.out.println("stam2:  "+stam2);
@@ -1885,9 +1876,9 @@ String stam= "123456";
 //        a.resetSearchRecordsTable();
 //        a.resetAdminTable();
 //        a.resetGroupsTable();
-        a.resetUUIDTable();
-//        a.resetAllTables();
-//        a.resetConstValueTable();
+//        a.resetUUIDTable();
+        a.resetAllTables();
+        a.resetConstValueTable();
 //        a.resetUserSuggestionsTable();
         a.disConnect();
 //*/

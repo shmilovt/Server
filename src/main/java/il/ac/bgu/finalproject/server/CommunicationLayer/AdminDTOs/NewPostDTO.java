@@ -20,9 +20,7 @@ public class NewPostDTO {
     public String getMessege() {
         return messege;
     }
-
-
-    public void setMessege(String messege) {
+    public void setMessege1(String messege) {
         this.messege = messege;
     }
     public static String toJSON(NewPostDTO newPostDTO) {

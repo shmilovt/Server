@@ -4,13 +4,10 @@ import com.google.gson.Gson;
 import il.ac.bgu.finalproject.server.CommunicationLayer.AdminDTOs.*;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.Converter;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.GroupDTO;
-import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.SearchResultsDTO;
-import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.UserSearchDTO;
 import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.Encryption;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.CalculatorCosts;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.SearchResults;
-import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -66,7 +62,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         UsernamePasswordDTO usernamePasswordDTO = UsernamePasswordDTO.fromJSON(usernamePasswordString);
         int ans = 0;
-        if (usernamePasswordDTO.getTokenDTO()!=null&&service.login(usernamePasswordDTO.getTokenDTO().getUserName(), usernamePasswordDTO.getTokenDTO().getPassword()) == 1) {
+        if (usernamePasswordDTO.getTokenDTO()!=null&&service.login(usernamePasswordDTO.getTokenDTO().getUserName(), Encryption.hashPass(usernamePasswordDTO.getTokenDTO().getPassword())) == 1) {
             ans = service.changePassword(usernamePasswordDTO.getUserName(), Encryption.hashPass(usernamePasswordDTO.getPassword()));
         }
         String json = gson.toJson(ans);
@@ -95,11 +91,24 @@ public class AdminCommunicationController {
 
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
     public String newPostFromAdmin(@RequestParam String newPostString) {
+        MyLogger.getInstance().log(Level.SEVERE,"hello","hg");
+//        MyLogger.getInstance().log(Level.SEVERE,newPostString,"hg");
         Gson gson = new Gson();
         int ans = 0;
-        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
-        if (newPostDTO.getTokenDTO()!=null&&service.login(newPostDTO.getTokenDTO().getUserName(), newPostDTO.getTokenDTO().getPassword()) == 1)
-            ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+//        try {
+            NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+            if ((newPostDTO.getTokenDTO() != null) &&
+                    (service.login(newPostDTO.getTokenDTO().getUserName(), Encryption.hashPass(newPostDTO.getTokenDTO().getPassword())) == 1)) {
+                ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+            }
+//        }
+//        catch (Exception e){
+//            MyLogger.getInstance().log(Level.SEVERE,"weeee haveee a problemmmmmm","hj");
+//
+//            MyLogger.getInstance().log(Level.SEVERE,newPostString,"hj");
+//            gson.toJson(e.getStackTrace());
+//            MyLogger.getInstance().log(Level.SEVERE, e.getStackTrace()+"","");
+//        }
         String json = gson.toJson(ans);
         return json;
     }
@@ -109,7 +118,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         List<GroupDTO> groupDTOList =null;
-        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
+        if ((tokenDTO!=null) && (service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1))
             groupDTOList = service.GetAllGroups();
         String json = gson.toJson(groupDTOList);
         return json;
@@ -120,7 +129,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         TokenDTO tokenDTO = gson.fromJson(tokenDTOstring, TokenDTO.class);
         List<SearchRecordDTO> SearchRecordDTOs = null;
-        if (tokenDTO!=null&&service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1)
+        if ((tokenDTO!=null) && (service.login(tokenDTO.getUserName(), Encryption.hashPass(tokenDTO.getPassword())) == 1))
             SearchRecordDTOs = service.getAllUserSearches();
         String json = gson.toJson(SearchRecordDTOs);
         return json;
@@ -177,7 +186,7 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
 //        String json;
         CalculatorDTO calculatorDTO = gson.fromJson(calcolatorString, CalculatorDTO.class);
-        if (calculatorDTO.getTokenDTO()!=null&&service.login(calculatorDTO.getTokenDTO().getUserName(),calculatorDTO.getTokenDTO().getPassword())==1) {
+        if (calculatorDTO.getTokenDTO()!=null&&service.login(calculatorDTO.getTokenDTO().getUserName(),Encryption.hashPass(calculatorDTO.getTokenDTO().getPassword()))==1) {
             if (calculatorDTO.isLegal()) {
                 service.setNewCalculator(calculatorDTO.getProtectedSpaceCost(), calculatorDTO.getTimeFromUniCost_10(),
                         calculatorDTO.getTimeFromUniCost_20(), calculatorDTO.getTimeFromUniCost_G_20(), calculatorDTO.getNeighborhoodCost_B_Ramot(),

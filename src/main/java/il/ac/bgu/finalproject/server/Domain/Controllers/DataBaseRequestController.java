@@ -57,7 +57,7 @@ public class DataBaseRequestController {
         SimpleDateFormat sdf= new SimpleDateFormat();
         sdf.applyPattern(dateFormat);
         String newDateString = sdf.format(dd);
-        dataBaseConnectionInterface.addPost(post.getID(),newDateString,post.getPublisherName(),post.getText(),post.getApartmentID());
+        dataBaseConnectionInterface.addPost(post.getID(),newDateString,post.getPublisherName(),post.getText(),"-1");
     }
 
 

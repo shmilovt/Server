@@ -45,6 +45,9 @@ public class loginAndChangePasswordTests {
         Assert.assertEquals(serviceConnector.getBridge().login("admin",Encryption.hashPass("123456")),0);
         serviceConnector.getBridge().changePassword("admin", Encryption.hashPass("123456"));
 
+//        serviceConnector.getBridge().disconnectToTestDB();
+//        Assert.assertEquals(serviceConnector.getBridge().login("admin",Encryption.hashPass("123456")),1);
+//        serviceConnector.getBridge().connectToTestDB();
     }
 
     @AfterClass

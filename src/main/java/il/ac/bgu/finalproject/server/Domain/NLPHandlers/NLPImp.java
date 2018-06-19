@@ -519,7 +519,8 @@ public class NLPImp implements NLPInterface {
         List<Integer> streetList = ads.GetEnvsIndex(Classify.STREET);
         List<Integer> roomList = ads.GetEnvsIndex(Classify.ROOM_DES);
         roomList.addAll(ads.GetEnvsIndex(Classify.ROOMS_DES));
-        apartmentNumberList = intersectList(minusList(apartmentNumberList,phoneList),streetList);
+       // apartmentNumberList = intersectList(minusList(apartmentNumberList,phoneList),streetList);
+        apartmentNumberList = intersectList(apartmentNumberList,streetList);
         if(!apartmentNumberList.isEmpty())
         {
             List<String> ans = new LinkedList<>();
@@ -540,9 +541,6 @@ public class NLPImp implements NLPInterface {
                 return Integer.parseInt(ans.get(0));
 
         }
-
-
-
             return -1;
     }
 
