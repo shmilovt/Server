@@ -2,6 +2,7 @@ package il.ac.bgu.finalproject.server.CommunicationLayer;
 
 import com.google.gson.Gson;
 import il.ac.bgu.finalproject.server.CommunicationLayer.DTOs.*;
+import il.ac.bgu.finalproject.server.Domain.Controllers.MyLogger;
 import il.ac.bgu.finalproject.server.Domain.Controllers.RegularClientController;
 import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.*;
 import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 
 @RestController
@@ -103,34 +105,43 @@ public class RegularClientCommunicationController {
 
     @RequestMapping(value = "/addUserReport", method = {RequestMethod.POST, RequestMethod.GET})
     public String addUserReport(@RequestParam String report) {
+        MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport case","");
+        MyLogger.getInstance().log(Level.SEVERE,"the gson: "+report,"");
         Gson gson = new Gson();
         ReportDTO reportDTO = ReportDTO.fromJSON(report);
         int count = 0;
         int count2,count3;
         try {
             if (reportDTO.getField() == ReportDTO.Field.address) {
+                MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport address case","");
                 AddressDTO addressDTO= AddressDTO.fromJSON(reportDTO.getContentInGson());
                 count = service.addUserSuggestion(reportDTO.getApartmentID(), "street" , addressDTO.getStreet());
                 count2 = service.addUserSuggestion(reportDTO.getApartmentID(), "numOfBuilding" , ""+addressDTO.getNumOfBuilding());
                 count3 = service.addUserSuggestion(reportDTO.getApartmentID(), "neighborhood" , addressDTO.getNeighborhood());
 
                 service.addressFieldCase(reportDTO.getApartmentID(),count>5,count2>5,count3>5,addressDTO.getStreet(),addressDTO.getNumOfBuilding(), addressDTO.getNeighborhood());
+                MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport count>5: successfully address changed","");
             } else {
+                MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport apartment field case","");
                 count = service.addUserSuggestion(reportDTO.getApartmentID(), "" + reportDTO.getField(), reportDTO.getContentInGson());
             }
         } catch (DataBaseFailedException e) {
+            MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport field case: "+ e.getMessage(),"");
             e.printStackTrace();
         }
 
         if (count > 5) {
+            MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport count>5: ","");
             switch (reportDTO.getField()) {
                 case size:
                     double t1 = gson.fromJson(reportDTO.getContentInGson(), Double.class);
                     service.suggestionChangesApartmentDouble(reportDTO.getApartmentID(), "" + reportDTO.getField(), t1);
+                    MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport count>5: successfully size changed","");
                     break;
                 case numOfRooms:
                     double t2 = gson.fromJson(reportDTO.getContentInGson(), Double.class);
                     service.suggestionChangesApartmentDouble(reportDTO.getApartmentID(), "" + reportDTO.getField(), t2);
+                    MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport count>5: successfully numOfrooms changed","");
                     break;
 
                 case address:
@@ -141,6 +152,7 @@ public class RegularClientCommunicationController {
                 default:
                     int t3 = gson.fromJson(reportDTO.getContentInGson(), Integer.class);
                     service.suggestionChangesApartmentInt(reportDTO.getApartmentID(), "" + reportDTO.getField(), t3);
+                    MyLogger.getInstance().log(Level.SEVERE,"im in addUserReport count>5: successfully int changed","");
                     break;
             }
         }

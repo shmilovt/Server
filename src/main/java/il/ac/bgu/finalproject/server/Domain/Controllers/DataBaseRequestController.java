@@ -300,10 +300,10 @@ public class DataBaseRequestController {
     }
 
     public int addAddressDetailsRecord(String street, String s, int timeToUni, String neighborhood, double v, double v1) {
-        return addAddressDetailsRecord(street, s, timeToUni, neighborhood, v, v1);
+        return dataBaseConnectionInterface.addAddressDetailsRecord(street, s, timeToUni, neighborhood, v, v1);
     }
 
     public void changeAddresDetailsForApartment(String apartmentId, int addressDetailsId) {
-        changeAddresDetailsForApartment(apartmentId, addressDetailsId);
+        dataBaseConnectionInterface.changeAddresDetailsForApartment(apartmentId, addressDetailsId);
     }
 }

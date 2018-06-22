@@ -9,6 +9,7 @@ import il.ac.bgu.finalproject.server.Domain.Exceptions.DataBaseFailedException;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class RegularClientController {
 
@@ -66,15 +67,16 @@ public class RegularClientController {
         ResultRecord resultRecord= dataBaseRequestController.ResultRecordFromDB(apartmentId);
         if (streetBool||numBuildingBool){
             //address has changed
-            if (!(streetBool && street!=null && street!=""))
+            if (!streetBool || street==null || street=="")
                 street=resultRecord.getStreet();
-            if (!(numBuildingBool && numOfBuilding!= -1))
+            if (!numBuildingBool || numOfBuilding== -1)
                 numOfBuilding=resultRecord.getNumber();
             int addressDetailsId= dataBaseRequestController.isAddressDetailsExist(street,numOfBuilding);
             if (addressDetailsId!= -1) {//exist
+                dataBaseRequestController.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
                 if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
                     dataBaseRequestController.suggestionChangesNeighborhood(apartmentId, neighborhood);
-//                    serverController.changeNeighborhoodStreetRecord(neighborhood,resultRecord.getStreet());
+                    serverController.changeNeighborhoodStreetRecord(neighborhood,street);
                 }
             }
             else { // addressDetails need to be created
@@ -85,20 +87,23 @@ public class RegularClientController {
                     if (!neighborhoodBool || neighborhood == null || neighborhood == "") {
                         neighborhood = resultRecord.getNeighborhood();
                     }
-                    if (locationPoint[0]!=-1&&locationPoint[1]!=-1) {
+                    if (locationPoint[0]!=-1&&locationPoint[1]!=-1&&neighborhood!=null&&street!=null&&numOfBuilding!=-1) {
                         addressDetailsId = dataBaseRequestController.addAddressDetailsRecord(
                                 street, numOfBuilding + "",
-                                timeToUni, neighborhood, locationPoint[0], locationPoint[1]);
+                                timeToUni, neighborhood, locationPoint[1], locationPoint[0]);
                         serverController.addStreet(street,neighborhood);
+                        dataBaseRequestController.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
+                    }
+                    else {
+                        MyLogger.getInstance().log(Level.SEVERE,"address is not found bu google. (street: "+street+", numOfBuilding: "+ numOfBuilding+") good lock");
                     }
                 }
             }
-            dataBaseRequestController.changeAddresDetailsForApartment(apartmentId,addressDetailsId);
         }
         else{
             if (neighborhoodBool && neighborhood!=null && neighborhood!=""){
                 dataBaseRequestController.suggestionChangesNeighborhood(apartmentId, neighborhood);
-                serverController.changeNeighborhoodStreetRecord(neighborhood,resultRecord.getStreet());
+                serverController.changeNeighborhoodStreetRecord(neighborhood,street);
             }
         }
     }

@@ -4,7 +4,7 @@ public class TimeFromUniQuery extends CategoryQuery {
     private int max;
 
     public TimeFromUniQuery(int max){
-        max=max;
+        this.max=max;
     }
 
     public boolean mainQuery(ResultRecord apartment){

@@ -494,7 +494,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
     }
 
     ///===========ADDRESS DETAILS TABLE==============///
-    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) throws DataBaseFailedException {
+    public int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) {
         int t;
         try {
             String sql = "INSERT INTO AddressDetails(street, numOfBuilding, timeFromUni, "+
@@ -1223,7 +1223,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         }
     }
 
-    public void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException {
+    public void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) {
         try {
             String sql = "UPDATE Apartment SET addressDetailsID= '" +addressDetailsNum+ "' "+
                     "WHERE apartmentID= '" +apartmentid+"'";
@@ -1236,7 +1236,7 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         catch(SQLException e){}
         catch (Exception e){
             MyLogger.getInstance().log(Level.SEVERE,e.getMessage(),e);
-            throw new DataBaseFailedException("drop th contacts table",4);
+//            throw new DataBaseFailedException("drop th contacts table",4);
         }
     }
 
@@ -1874,12 +1874,14 @@ public class DataBaseConnection implements DataBaseConnectionInterface {
         DataBaseConnection a=new DataBaseConnection();
         a.connect();
 //        a.resetSearchRecordsTable();
-//        a.resetAdminTable();
 //        a.resetGroupsTable();
 //        a.resetUUIDTable();
         a.resetAllTables();
         a.resetConstValueTable();
-//        a.resetUserSuggestionsTable();
+        a.resetUserSuggestionsTable();
+        a.insertGroup("1234567","Boaz for apartments");
+        a.insertGroup("5454545","good apartment in fair rent");
+        a.insertGroup("9888988","Beer Sheva apartments");
         a.disConnect();
 //*/
 /*

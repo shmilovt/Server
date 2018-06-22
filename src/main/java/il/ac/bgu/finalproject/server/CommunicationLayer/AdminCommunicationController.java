@@ -11,13 +11,20 @@ import il.ac.bgu.finalproject.server.Domain.DomainObjects.UserSearchingUtils.Sea
 import il.ac.bgu.finalproject.server.ServiceLayer.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
+//import javax.annotation.PostConstruct;
+//import javax.ws.rs.Consumes;
+//import javax.ws.rs.GET;
+//import javax.ws.rs.POST;
+//import javax.ws.rs.Path;
+//import javax.ws.rs.Produces;
+//import javax.ws.rs.core.MediaType;
+//import javax.ws.rs.core.Response;
+//@Path("/hello")
 
 @RestController
 public class AdminCommunicationController {
@@ -43,6 +50,7 @@ public class AdminCommunicationController {
         return json;
     }
 
+//    @POST
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     public String login(@RequestParam String usernamePasswordString) {
         Gson gson = new Gson();
@@ -89,6 +97,38 @@ public class AdminCommunicationController {
         return json;
     }
 
+//    @POST
+
+    @RequestMapping(value = "/publishPost", method = {RequestMethod.POST, RequestMethod.GET})
+    public String publishPost(@RequestParam String newPostString) {
+        MyLogger.getInstance().log(Level.SEVERE, "publishPost", "hg");
+        Gson gson = new Gson();
+        int ans = 0;
+        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+        if ((newPostDTO.getTokenDTO() != null) &&
+                (service.login(newPostDTO.getTokenDTO().getUserName(), Encryption.hashPass(newPostDTO.getTokenDTO().getPassword())) == 1)) {
+            ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+        }
+        String json = gson.toJson(ans);
+        return json;
+    }
+
+    @PostMapping("/nofar")
+    public int nofar(@RequestBody Map<String,String> body) {
+        MyLogger.getInstance().log(Level.SEVERE, "hello Nofar", "hg");
+        MyLogger.getInstance().log(Level.SEVERE, "body: "+body.get("text"), "hg");
+//        Gson gson = new Gson();
+//        int ans = 0;
+//        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+//        if ((newPostDTO.getTokenDTO() != null) &&
+//                (service.login(newPostDTO.getTokenDTO().getUserName(), Encryption.hashPass(newPostDTO.getTokenDTO().getPassword())) == 1)) {
+//            ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+//        }
+//        String json = gson.toJson(ans);
+//        return json;
+        return 1;
+    }
+
     @RequestMapping(value = "/newPostFromAdmin", method = {RequestMethod.POST, RequestMethod.GET})
     public String newPostFromAdmin(@RequestParam String newPostString) {
         MyLogger.getInstance().log(Level.SEVERE,"hello","hg");
@@ -96,19 +136,19 @@ public class AdminCommunicationController {
         Gson gson = new Gson();
         int ans = 0;
 //        try {
-            NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
-            if ((newPostDTO.getTokenDTO() != null) &&
-                    (service.login(newPostDTO.getTokenDTO().getUserName(), Encryption.hashPass(newPostDTO.getTokenDTO().getPassword())) == 1)) {
-                ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
-            }
-//        }
-//        catch (Exception e){
-//            MyLogger.getInstance().log(Level.SEVERE,"weeee haveee a problemmmmmm","hj");
-//
-//            MyLogger.getInstance().log(Level.SEVERE,newPostString,"hj");
-//            gson.toJson(e.getStackTrace());
-//            MyLogger.getInstance().log(Level.SEVERE, e.getStackTrace()+"","");
-//        }
+        NewPostDTO newPostDTO = NewPostDTO.fromJSON(newPostString);
+        if ((newPostDTO.getTokenDTO() != null) &&
+                (service.login(newPostDTO.getTokenDTO().getUserName(), Encryption.hashPass(newPostDTO.getTokenDTO().getPassword())) == 1)) {
+            ans = service.newPostFromAdmin(newPostDTO.getPublisherName(), newPostDTO.getMessege());
+        }
+////        }
+////        catch (Exception e){
+////            MyLogger.getInstance().log(Level.SEVERE,"weeee haveee a problemmmmmm","hj");
+////
+////            MyLogger.getInstance().log(Level.SEVERE,newPostString,"hj");
+////            gson.toJson(e.getStackTrace());
+////            MyLogger.getInstance().log(Level.SEVERE, e.getStackTrace()+"","");
+////        }
         String json = gson.toJson(ans);
         return json;
     }

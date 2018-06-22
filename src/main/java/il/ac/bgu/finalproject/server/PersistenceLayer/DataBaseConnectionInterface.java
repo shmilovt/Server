@@ -47,7 +47,7 @@ public interface DataBaseConnectionInterface {
 
     List<String> GetAllPostsId();
 
-    int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude) throws DataBaseFailedException;
+    int addAddressDetailsRecord(String street, String numOfBuilding, double timeFromUni, String neighborhood, double longitude, double latitude);
 
     List<Apartment> allApartmentFromDB();
 
@@ -93,7 +93,7 @@ public interface DataBaseConnectionInterface {
     void suggestionChangesNeighborhood(String apartmentID, String suggestion);
 
 
-    void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum) throws DataBaseFailedException;
+    void changeAddresDetailsForApartment(String apartmentid, int addressDetailsNum);
     boolean login(String username, String password) throws Exception;
     boolean changePassword(String username, String password);
     boolean userExist(String username);

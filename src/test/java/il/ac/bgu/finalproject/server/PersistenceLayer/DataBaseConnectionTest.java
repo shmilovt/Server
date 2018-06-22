@@ -151,6 +151,7 @@ public class DataBaseConnectionTest {
 
     }
 
+
 //    getAddressDetils, getApartmentRecordTBD, getApartmentContacts, addApartmentDerivatives, allResultsFromDB, isApartmentExist
 
     @Test
@@ -166,6 +167,14 @@ public class DataBaseConnectionTest {
 
         dbc.addApartmentDerivatives(apartment,"");
         assertTrue(dbc.isApartmentExist(apartment)!=-1);
+    }
+
+
+    @Test
+    public void isAddressDetails() throws DataBaseFailedException {
+        System.out.println(dbc.isAddressDetailsExist( "בצלאל",20));
+        System.out.println(dbc.addAddressDetailsRecord("יו","23",13.0,"א",13.0,13.0));
+        dbc.changeAddresDetailsForApartment("3",26);
     }
 
     @Test

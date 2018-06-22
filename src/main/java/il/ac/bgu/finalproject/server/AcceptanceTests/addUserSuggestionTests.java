@@ -91,6 +91,18 @@ public class addUserSuggestionTests {
         Assert.assertEquals(resultRecord.getNumber(),26);
     }
 
+    @Test
+    public void addressFieldCaseFullAddress(){
+        serviceConnector.getBridge().disconnectToTestDB();
+        try {
+            serviceConnector.getBridge().addressFieldCase("12",true,true,true,"מילוס",12,"שכונה א'");
+        } catch (DataBaseFailedException e) {
+            e.printStackTrace();
+        }
+        ResultRecord resultRecord= serviceConnector.getBridge().ResultRecordFromDB("12");
+        serviceConnector.getBridge().connectToTestDB();
+    }
+
     @AfterClass
     public static void endup() {
         serviceConnector.getBridge().disconnectToTestDB();

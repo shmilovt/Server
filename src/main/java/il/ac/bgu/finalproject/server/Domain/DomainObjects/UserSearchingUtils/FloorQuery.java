@@ -5,8 +5,8 @@ public class FloorQuery extends CategoryQuery{
     private int max;
 
     public FloorQuery(int min, int max){
-        min= min;
-        max=max;
+        this.min= min;
+        this.max=max;
     }
 
     @Override
